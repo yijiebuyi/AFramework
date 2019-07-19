@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.callme.platform"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <application>
+        <activity android:name="com.callme.platform.widget.crop.CropTestActivity" />
+
+        <activity
+            android:name="com.callme.platform.widget.crop.SelectionPictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTranslucentTheme" />
+
+        <activity
+            android:name="com.callme.platform.widget.crop.SimpleCropActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.callme.platform.widget.crop.EnhanceCropActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.callme.platform.widget.crop.ImageViewActivity"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>

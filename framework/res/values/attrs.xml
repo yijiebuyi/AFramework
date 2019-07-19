@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LoadingView">
+        <attr name="frame_count" format="integer" />
+        <attr name="frame_interval" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="BadgeView">
+        <attr name="badge_padding_top" format="dimension" />
+        <attr name="badge_padding_right" format="dimension" />
+        <attr name="badge_count" format="integer" />
+        <attr name="badge_none_show" format="boolean" />
+        <attr name="badge_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressBar">
+        <attr name="inner_radius" format="dimension" />
+        <attr name="background_color" format="color" />
+        <attr name="progress_color" format="color" />
+        <attr name="progress_stoke_width" format="dimension" />
+        <attr name="show_arrow" format="boolean" />
+        <attr name="enable_circle_background" format="boolean" />
+        <attr name="arrow_width" format="dimension" />
+        <attr name="arrow_height" format="dimension" />
+        <attr name="progress" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <!--<attr name="progress_text_offset" format="dimension"/>-->
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="NsRefreshLayout">
+        <!--Loading视图背景颜色-->
+        <attr name="load_view_bg_color" format="color|reference" />
+        <!--进度条颜色-->
+        <attr name="progress_bar_color" format="color|reference" />
+        <!--进度条背景色-->
+        <attr name="progress_bg_color" format="color|reference" />
+        <!--Loading视图中文字颜色-->
+        <attr name="load_text_color" format="color|reference" />
+        <!--下拉刷新问题描述-->
+        <attr name="pull_refresh_text" format="string|reference" />
+        <!--上拉加载文字描述-->
+        <attr name="pull_load_text" format="string|reference" />
+        <!--是否自动触发加载更多-->
+        <attr name="auto_load_more" format="boolean" />
+        <!--下拉刷新是否可用-->
+        <attr name="pull_refresh_enable" format="boolean" />
+        <!--上拉加载是否可用-->
+        <attr name="pull_load_enable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SlidingMenu">
+        <attr name="mode">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="viewAbove" format="reference" />
+        <attr name="viewBehind" format="reference" />
+        <attr name="behindOffset" format="dimension" />
+        <attr name="behindWidth" format="dimension" />
+        <attr name="behindScrollScale" format="float" />
+        <attr name="touchModeAbove">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="touchModeBehind">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowWidth" format="dimension" />
+        <attr name="fadeEnabled" format="boolean" />
+        <attr name="fadeDegree" format="float" />
+        <attr name="selectorEnabled" format="boolean" />
+        <attr name="selectorDrawable" format="reference" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,132 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="common_dial_telephone">拨打</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_sure">确定</string>
+    <string name="common_finish">完成</string>
+    <string name="complete_">完成</string>
+    <string name="save">保存</string>
+    <string name="yes">是</string>
+    <string name="confirm">确定</string>
+    <string name="no">否</string>
+    <string name="cancel">取消</string>
+    <string name="finish">完成</string>
+    <string name="sorry">抱歉</string>
+    <string name="re_login">请重新登录</string>
+    <string name="no_current_data">暂时没有对应数据</string>
+    <string name="list_delete">删除</string>
+    <string name="base_head_net_notify">网络请求失败，请检查您的网络</string>
+    <string name="get_data_error">数据加载失败了,请检查一下网络，再重新加载</string>
+    <string name="no_data">无更多数据</string>
+    <string name="base_failed_content">点击重试</string>
+    <string name="base_load_failed_title">页面请求失败，请稍后再试</string>
+    <string name="base_load_failed_des">失败原因可能是:\n1.本页面内容已不存在\n2.本页面加载失败\n3.您的网络异常，请检查网络</string>
+    <string name="login_auth_failure">登录失效,请重新登录!</string>
+    <string name="kindly_tips">温馨提示</string>
+    <string name="i_know">我知道了</string>
+    <string name="i_know_l">知道啦</string>
+
+    <!-- toast 网络情况 -->
+    <string name="toast_no_net">网络不给力，请检查后重试</string>
+    <string name="toast_net_wifi">已连接到Wi-Fi</string>
+    <string name="toast_net_2g">已连接到移动数据网络</string>
+    <!-- 无网络提示界面 -->
+    <string name="no_network_title">无网络连接</string>
+    <string name="no_network_sub_title_one">请设置您的网络</string>
+    <string name="no_network_sub_title_two">如果您已经连接Wi-Fi网络</string>
+    <string name="no_network_des_one">1.打开设备的“系统设置”>“无线和网络”>“移动网络”</string>
+    <string name="no_network_des_two">2.打开设备的“系统设置”>“WLAN”>“启动WLAN”后从中选择一个可用的热点连接</string>
+    <string name="no_network_des_three">请确认您所接入的Wi-Fi网络已经接入互联网，或者确认您的设备是否被允许访问该热点</string>
+    <!-- image viewer -->
+    <string name="image_view_error">图片路径错误或未找到对应图片</string>
+    <string name="error_tip_title">出错啦</string>
+    <string name="not_find_image">未找到图片，请重新选择</string>
+
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
+    <string name="second">秒</string>
+
+    <string name="re_logining">请重新登录</string>
+
+
+    <string name="_year">年</string>
+    <string name="_month">月</string>
+    <string name="_week">周</string>
+    <string name="_day">日</string>
+    <string name="_hour">点</string>
+    <string name="_minute">分</string>
+    <string name="_second">秒</string>
+    <string name="_today">今天</string>
+    <string name="_tomorrow">明天</string>
+    <string name="_after_tomorrow">后天</string>
+    <string name="_this_year">今年</string>
+    <string name="_next_year">明年</string>
+    <string name="chose_time">选择您要查询的时间</string>
+
+    <!--裁剪-->
+    <string name="app_name">图片裁剪</string>
+    <string name="details_ms">%1$02d:%2$02d</string>
+    <string name="details_hms">%1$d:%2$02d:%3$02d</string>
+    <string name="save_as">另存为</string>
+    <string name="if_remain_original_file">保存图片?</string>
+    <string name="overwrite">覆盖</string>
+    <string name="rotate">旋转</string>
+    <string name="input_crop_size">输入裁剪尺寸</string>
+    <string name="crop_width_text">宽</string>
+    <string name="crop_height_text">高</string>
+    <string name="crop_width_unacceptable_minsize">裁剪的宽度不能小于1</string>
+    <string name="crop_height_unacceptable_minsize">裁剪的高度不能小于1</string>
+    <string name="crop_width_exceed">裁剪的宽度不能大于<tools:g id="SIZE">%s</tools:g></string>
+    <string name="crop_height_exceed">裁剪的高度不能大于<tools:g id="SIZE">%s</tools:g></string>
+    <string name="select_image">选择照片</string>
+
+    <string name="freely_crop_aspect">无限制</string>
+    <string name="one_one_crop_aspect">1:1</string>
+    <string name="three_two_crop_aspect">3:2</string>
+    <string name="four_three_crop_aspect">4:3</string>
+    <string name="sixteen_nine_crop_aspect">16:9</string>
+    <string name="custom_crop_aspect">自定义</string>
+
+    <string name="save_failure">保存失败</string>
+    <string name="load_bmp_failure">图片加载失败</string>
+    <string name="sd_unavailable">SD卡不可用</string>
+    <string name="save_crop_succ">保存裁剪成功</string>
+
+    <!--下拉刷新-->
+    <string name="default_pull_refresh_text">下滑刷新数据</string>
+    <string name="default_pull_load_text">上拉加载更多</string>
+    <string name="refresh_text">更新中……</string>
+    <string name="load_text">正在努力加载</string>
+    <string name="release_to_refresh">释放立即刷新</string>
+    <string name="release_to_load">松手加载更多</string>
+
+    <!--权限-->
+    <string name="permission_cancel">取消</string>
+    <string name="permission_message_permission_failed">我们需要的一些权限被您拒绝或者系统发生错误申请失败，请您到设置页面手动授权，否则功能无法正常使用！</string>
+    <string name="permission_message_permission_rationale">您已经拒绝过我们申请授权，请您同意授权，否则功能无法正常使用！</string>
+    <string name="permission_resume">继续</string>
+    <string name="permission_setting">去设置</string>
+    <string name="permission_title_permission_failed">权限申请失败</string>
+    <string name="permission_title_permission_rationale">权限已被拒绝</string>
+    <string name="permission_name_calendar">日历</string>
+    <string name="permission_name_camera">相机</string>
+    <string name="permission_name_contacts">通讯录</string>
+    <string name="permission_name_location">位置信息</string>
+    <string name="permission_name_microphone">麦克风</string>
+    <string name="permission_name_phone">电话</string>
+    <string name="permission_name_sensors">身体传感器</string>
+    <string name="permission_name_sms">短信</string>
+    <string name="permission_name_storage">存储空间</string>
+    <string name="authorization_failed">权限授权失败,是否打开设置界面?</string>
+    <string name="permissions">权限</string>
+    <string name="system_alert_window">悬浮窗</string>
+    <string name="setting">设置</string>
+    <string name="location_info">位置信息</string>
+    <string name="is_setting_location_info">呼我司机需要获取位置信息,是否去设置?</string>
+    <string name="is_gps_location_info">为更好的为您提供服务，建议您打开手机GPS定位服务!</string>
+
+    <string name="modify_date">修改日期</string>
+</resources>
