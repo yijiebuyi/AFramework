@@ -576,7 +576,7 @@ public class FileUtil {
 	/**
 	 * 删除 directoryPath目录下的所有文件，包括删除删除文件夹
 	 * 
-	 * @param directoryPath
+	 * @param dir
 	 */
 	public static void deleteDirectory(File dir) {
 		if (dir.isDirectory()) {
@@ -964,6 +964,24 @@ public class FileUtil {
 			}
 		}).start();
 	}
+	
+	  /**
+     * 获取没有后缀名的文件名
+     *
+     * @return
+     */
+    public static String getFileNameWithoutSuffix(String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            return fileName;
+        }
+
+        int index = fileName.lastIndexOf(".");
+        if (index < 0) {
+            return fileName;
+        }
+
+        return fileName.substring(0, index);
+    }
 
 	/**
 	 * 获取图片名称，前面带'/'，/name

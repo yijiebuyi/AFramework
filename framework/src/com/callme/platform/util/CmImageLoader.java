@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.callme.platform.util.bitmap.ImageLoader;
 
 import java.io.File;
@@ -110,6 +111,16 @@ public class CmImageLoader {
             return;
         }
         Glide.with(ctx).load(url).into(view);
+    }
+
+    public static void displayImageNoCache(Context ctx, String url, ImageView view) {
+        if (!isCanLoadGlideImg(ctx, view)) {
+            return;
+        }
+        Glide.with(ctx)
+                .load(url)
+                .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
+                .into(view);
     }
 
     public static void displayLocalImage(Context ctx, String path, ImageView view, int placeHolderResId, int errorResId) {

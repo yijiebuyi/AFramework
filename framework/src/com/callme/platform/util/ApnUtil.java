@@ -530,11 +530,11 @@ public class ApnUtil {
 	 * @return
 	 */
 	public static boolean isNetworkAvailable(Context ctx) {
-		ConnectivityManager manager = (ConnectivityManager) ctx
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager manager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		if (manager == null)
+		if (manager == null) {
 			return false;
+         }
 
 		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 

@@ -170,8 +170,9 @@ public class DevicesUtil {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo n = cm.getActiveNetworkInfo();
-            if (n != null)
-                return n.isAvailable();
+            if (n != null) {
+                return n.isConnected() || n.isAvailable();
+            }
         }
 
         return false;

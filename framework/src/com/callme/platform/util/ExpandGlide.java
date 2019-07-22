@@ -66,7 +66,7 @@ public class ExpandGlide {
             return;
         }
         if (mIsLoaded && imageView.getTag() != null) {
-            if (TextUtils.equals(mUri.toString(), imageView.getTag().toString())) {
+            if (TextUtils.equals(mUri.getPath(), imageView.getTag().toString())) {
                 return;
             }
         }
@@ -106,7 +106,7 @@ public class ExpandGlide {
                         }
                         imageView.setImageBitmap(bitmap);
                         if (mIsLoaded) {
-                            imageView.setTag(mUri.toString());
+                            imageView.setTag(mUri.getPath());
                         }
                     } else {
                         imageView.setImageResource(mErrorResId);

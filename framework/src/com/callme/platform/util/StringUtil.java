@@ -104,6 +104,22 @@ public class StringUtil {
     }
 
     /**
+     * 功能：判断字符串是否为数字
+     *
+     * @param str
+     * @return
+     */
+    private static boolean isNumeric(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if (isNum.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
      * 是否同时包含字母和数字
      *
      * @param text
