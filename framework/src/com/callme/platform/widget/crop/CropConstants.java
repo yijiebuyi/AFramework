@@ -38,6 +38,7 @@ public interface CropConstants {
     public static final String KEY_CROP_MODE = "crop-mode";
     /**
      * 选择图片的动作
+     *
      * @see SelectionPictureActivity#NEED_DELETE
      * @see SelectionPictureActivity#NEED_LOOK
      * @see SelectionPictureActivity#NEED_COVER
@@ -56,6 +57,10 @@ public interface CropConstants {
      * 待裁剪图片的比例值Y方向 裁剪比例=KEY_ASPECT_X/KEY_ASPECT_Y
      */
     public static final String KEY_ASPECT_Y = "aspectY";
+    /**
+     * 待裁剪图片的比例值 X方向/Y方向
+     */
+    public static final String KEY_ASPECT = "aspect";
 
     /**
      * 图片显示的中心偏移值，默认是0

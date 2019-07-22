@@ -325,11 +325,18 @@ public abstract class BaseCropActivity extends FragmentActivity implements CropC
         if (extras == null) {
             return;
         }
-        int aspectX = extras.getInt(KEY_ASPECT_X, 0);
-        int aspectY = extras.getInt(KEY_ASPECT_Y, 0);
-        if (aspectX != 0 && aspectY != 0) {
+        float aspect = extras.getFloat(KEY_ASPECT, 0);
+        if (aspect <= 0) {
+            int aspectX = extras.getInt(KEY_ASPECT_X, 0);
+            int aspectY = extras.getInt(KEY_ASPECT_Y, 0);
+            if (aspectX > 0 && aspectY > 0) {
+                aspect = (float) aspectX / aspectY;
+            }
+        }
+
+        if (aspect > 0) {
             mFlippable = false;
-            mCropView.setAspectRatio((float) aspectX / aspectY);
+            mCropView.setAspectRatio(aspect);
             mCurrentAspect = getAspect();
         } else {
             mFlippable = true;
@@ -403,7 +410,7 @@ public abstract class BaseCropActivity extends FragmentActivity implements CropC
                 break;
             case MSG_SAVE_COMPLETE:
                 dismissLoadingProgressDialog();
-                Toast.makeText(BaseCropActivity.this, R.string.save_crop_succ, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BaseCropActivity.this, R.string.save_crop_succ, Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK, (Intent) message.obj);
                 finishActivityNoAnimation();
                 break;
@@ -570,9 +577,9 @@ public abstract class BaseCropActivity extends FragmentActivity implements CropC
             result.putExtra(KEY_CROPPED_RECT, rect);
 
             String outputPath = result.getStringExtra(KEY_OUTPUT_PATH);
-            String requestFormat = result.getStringExtra(KEY_COMPRESS_FORMAT);
-            String fileExtension = CropBusiness.getFileExtension(requestFormat, mMediaItem);
             if (TextUtils.isEmpty(outputPath)) {
+                String requestFormat = result.getStringExtra(KEY_COMPRESS_FORMAT);
+                String fileExtension = CropBusiness.getFileExtension(requestFormat, mMediaItem);
                 outputPath = CropBusiness.generateCropOutputDir(BaseCropActivity.this, true, fileExtension);
                 result.putExtra(KEY_OUTPUT_PATH, outputPath);
             }

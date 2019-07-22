@@ -259,6 +259,9 @@ public class CropBusiness {
             FileOutputStream fos = new FileOutputStream(candidate);
             try {
                 saveBitmapToOutputStream(jc, cropped, convertExtensionToCompressFormat(fileExtension), fos);
+                if (save.exists()) {
+                    save.delete();
+                }
                 candidate.renameTo(save);
                 candidate.delete();
             } finally {

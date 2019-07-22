@@ -60,8 +60,12 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
     public static final int RESULT_LOOK = RESULT_OK + 2;
     public static final int RESULT_COVER = RESULT_OK + 3;
 
-    private int mWidth = 300;
-    private int mHeight = 300;
+    private static final int DEFAULT_W = 300;
+    private static final int DEFAULT_H = 300;
+
+    private int mWidth;
+    private int mHeight;
+    private float mAspect;
 
     private int mSelectionPicAction;
     private boolean mNeedCrop;
@@ -70,7 +74,7 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
     private Handler mHandler;
 
     private int mCropMode;
-    private ImmersionBar mImmersionBar;
+    private String mOutPath;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,19 +82,24 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.barColor(R.color.black_title_bg)
+        ImmersionBar immersionBar = ImmersionBar.with(this);
+        immersionBar.barColor(R.color.black_title_bg)
                 .navigationBarColor(R.color.black)
                 .init();
 
         mContext = this;
         Intent intent = getIntent();
         if (intent != null) {
-            mWidth = intent.getIntExtra(KEY_OUTPUT_X, 300);
-            mHeight = intent.getIntExtra(KEY_OUTPUT_Y, 300);
+            mWidth = intent.getIntExtra(KEY_OUTPUT_X, DEFAULT_W);
+            mHeight = intent.getIntExtra(KEY_OUTPUT_Y, DEFAULT_H);
+            mAspect = intent.getIntExtra(KEY_ASPECT, 0);
+            if (mAspect <= 0 && mHeight != 0) {
+                mAspect = (float) mWidth / mHeight;
+            }
             mSelectionPicAction = intent.getIntExtra(KEY_SELECTION_PIC_ACTION, 0);
             mNeedCrop = intent.getBooleanExtra(KEY_NEED_CROP, false);
             mCropMode = intent.getIntExtra(KEY_CROP_MODE, MODE_SIMPLE_CROP);
+            mOutPath = intent.getStringExtra(KEY_OUTPUT_PATH);
         }
 
         showCropImageDialog();
@@ -269,10 +278,6 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }
-
-        if (mImmersionBar != null) {
-            mImmersionBar.destroy();
-        }
     }
 
     @Override
@@ -424,12 +429,13 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
                     intent.setClass(this, SimpleCropActivity.class);
                     intent.putExtra(KEY_OUTPUT_X, mWidth);
                     intent.putExtra(KEY_OUTPUT_Y, mHeight);
-                    intent.putExtra(KEY_ASPECT_X, 1);
-                    intent.putExtra(KEY_ASPECT_Y, 1);
+                    intent.putExtra(KEY_ASPECT, mAspect);
+                    intent.putExtra(KEY_OUTPUT_PATH, mOutPath);
                     intent.putExtra(CropConstants.KEY_SCALE_UP_IF_NEEDED, true);
                     startActivityForResult(intent, CROP_IMAGE_REQUEST_CODE);
                 } else {
                     intent.setClass(this, EnhanceCropActivity.class);
+                    intent.putExtra(KEY_OUTPUT_PATH, mOutPath);
                     startActivityForResult(intent, CROP_IMAGE_REQUEST_CODE);
                 }
             } else {
@@ -476,6 +482,25 @@ public class SelectionPictureActivity extends BaseSelectionPictureActivity imple
     public static void start(Context context, boolean needCrop, int requestCode) {
         Intent intent = new Intent(context, SelectionPictureActivity.class);
         intent.putExtra(CropConstants.KEY_NEED_CROP, needCrop);
+        if (context instanceof Activity) {
+            ((Activity) context).startActivityForResult(intent, requestCode);
+            ((Activity) context).overridePendingTransition(0, 0);
+        } else {
+            context.startActivity(intent);
+        }
+    }
+
+    /**
+     * 启动当前activity
+     *
+     * @param context
+     * @param needCrop 是否需要裁剪
+     */
+    public static void start(Context context, boolean needCrop, int width, int height, int requestCode) {
+        Intent intent = new Intent(context, SelectionPictureActivity.class);
+        intent.putExtra(CropConstants.KEY_NEED_CROP, needCrop);
+        intent.putExtra(CropConstants.KEY_OUTPUT_X, width);
+        intent.putExtra(CropConstants.KEY_OUTPUT_Y, height);
         if (context instanceof Activity) {
             ((Activity) context).startActivityForResult(intent, requestCode);
             ((Activity) context).overridePendingTransition(0, 0);
