@@ -36,6 +36,7 @@ import com.callme.platform.common.activity.NoNetworkGuideActivity;
 import com.callme.platform.common.dialog.CmDialog;
 import com.callme.platform.common.dialog.CmDialog.DialogOnClickListener;
 import com.callme.platform.common.dialog.LoadingProgressDialog;
+import com.callme.platform.util.AppCompatUtil;
 import com.callme.platform.util.CmActivityManager;
 import com.callme.platform.util.LogUtil;
 import com.callme.platform.util.StatisticsUtil;
@@ -121,6 +122,9 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (AppCompatUtil.isTranslucentOrFloating(this)) {
+            AppCompatUtil.fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
         mIsDestroyed = false;
         CmActivityManager.getInstance().addActivity(this);
@@ -203,6 +207,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (needRegisterEventBus() && EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        closeProgressDialog();
         CmActivityManager.getInstance().removeActivity(this);
     }
 
@@ -275,7 +280,10 @@ public abstract class BaseActivity extends FragmentActivity {
                 mBaseContent.removeAllViews();
                 mBaseContent.addView(view);
             }
-            mUnbinder = ButterKnife.bind(this);
+            if (!delayBind()) {
+                mUnbinder = ButterKnife.bind(this);
+            }
+
         } else {
             try {
                 throw new Exception("content view can not be null");
@@ -283,6 +291,10 @@ public abstract class BaseActivity extends FragmentActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    protected boolean delayBind() {
+        return false;
     }
 
     /**
@@ -409,12 +421,14 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param res
      */
     @Override
-    public final void setTitle(int res) {
+    public void setTitle(int res) {
         if (res > 0) {
             setTitle(getResources().getText(res));
         } else {
             mTvTitle.setVisibility(View.INVISIBLE);
         }
+
+        setActTitle(res);
     }
 
     /**
@@ -431,6 +445,26 @@ public abstract class BaseActivity extends FragmentActivity {
         } else {
             mTvTitle.setVisibility(View.INVISIBLE);
         }
+
+        setActTitle(title);
+    }
+
+    /**
+     * 设置Activity的页面title
+     *
+     * @param res
+     */
+    protected final void setActTitle(int res) {
+        super.setTitle(res);
+    }
+
+    /**
+     * 设置Activity的页面title
+     *
+     * @param title
+     */
+    protected void setActTitle(CharSequence title) {
+        super.setTitle(title);
     }
 
     /**
@@ -568,11 +602,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param show
      */
     protected final void showRightDot(boolean show) {
-        if (show) {
-            mRightDot.setVisibility(View.VISIBLE);
-        } else {
-            mRightDot.setVisibility(View.GONE);
-        }
+        mRightDot.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -581,11 +611,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param show
      */
     protected final void showLeftDot(boolean show) {
-        if (show) {
-            mLeftDot.setVisibility(View.VISIBLE);
-        } else {
-            mLeftDot.setVisibility(View.GONE);
-        }
+        mLeftDot.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -598,6 +624,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+
 
     /**
      * 显示对话框形式的加载提示
@@ -656,6 +683,7 @@ public abstract class BaseActivity extends FragmentActivity {
             public void onCancel(DialogInterface dialog) {
                 //cancelSingleRequest(handlerId);
                 mIsCancelable = false;
+
             }
         });
         if (!isDestroyed() && !isFinishing() && !mLoadingProgressDialog.isShowing()) {
@@ -828,7 +856,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * 注册网络变化监听器
      */
     private void registerNetReceiver() {
-        if (!mNetChangeReceiverFlag) {
+        if (!mNetChangeReceiverFlag && needRegisterNetChange()) {
             mNetChangeReceiverFlag = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -840,7 +868,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * 释放网络变化监听器
      */
     private void unregisterNetReceiver() {
-        if (mNetChangeReceiverFlag) {
+        if (mNetChangeReceiverFlag && needRegisterNetChange()) {
             mNetChangeReceiverFlag = false;
             unregisterReceiver(mNetReceiver);
         }
@@ -896,6 +924,9 @@ public abstract class BaseActivity extends FragmentActivity {
         return false;
     }
 
+    protected boolean needRegisterNetChange() {
+        return true;
+    }
 
     /**
      * 设置状态栏背景
@@ -965,8 +996,26 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-//        BugtagsUtil.onDispatchTouchEvent(this, ev, BuildConfig.type);
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * @param stringId
+     * @see #showToast(String msg)
+     */
+    public void showToast(int stringId) {
+        showToast(getString(stringId));
+    }
+
+    /**
+     * 统一调用，统一非空判断
+     *
+     * @param msg
+     */
+    public void showToast(String msg) {
+        if (!TextUtils.isEmpty(msg)) {
+            ToastUtil.showCustomViewToast(this, msg);
+        }
     }
 
     /**
@@ -976,6 +1025,15 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     protected boolean needSetBackground() {
         return true;
+    }
+
+
+    @Override
+    public void setRequestedOrientation(int requestedOrientation) {
+        if (AppCompatUtil.isTranslucentOrFloating(this)) {
+            return;
+        }
+        super.setRequestedOrientation(requestedOrientation);
     }
 
     @Override
