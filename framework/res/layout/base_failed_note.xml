@@ -42,7 +42,7 @@
         android:layout_marginTop="@dimen/px12"
         android:drawablePadding="@dimen/px4"
         android:gravity="center_vertical"
-        android:text="@string/failed_content"
+        android:text="@string/base_failed_content"
         android:textColor="#2882dc"
         android:textSize="@dimen/font_30px" />
 
