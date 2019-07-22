@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.callme.platform.util.LogUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +25,10 @@ import java.util.List;
  * 修改日期
  */
 public abstract class LocalDataManager extends SQLiteOpenHelper {
+    private final String TAG = "LocalDataManager";
     protected SQLiteOpenHelper mDbHelper;
     protected List<Class<? extends Entry>> mTableCls;
+    protected List<Class<? extends Entry>> mExcludeTableClsOnUpgrade;
     private IDataChangedListener mDataChangedListener;
     private HashMap<String, EntrySchema> mEntrySchemaMap;
 
@@ -33,6 +37,7 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
         mDbHelper = this;
         mEntrySchemaMap = new HashMap<String, EntrySchema>();
         mTableCls = getTableClazz();
+        mExcludeTableClsOnUpgrade = getExcludeTableClazzOnUpgrade();
     }
 
     protected EntrySchema getEntrySchema(Entry entry) {
@@ -112,33 +117,43 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
     }
 
     public int deleteBySelectionArgs(Class<? extends Entry> clazz, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        EntrySchema schema = getEntrySchema(clazz);
-        return schema.deleteBySelectionArgs(db, selection, selectionArgs);
+        try {
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            EntrySchema schema = getEntrySchema(clazz);
+            return schema.deleteBySelectionArgs(db, selection, selectionArgs);
+        } catch (Exception e) {
+            LogUtil.e(TAG, e.getLocalizedMessage());
+            return 0;
+        }
     }
 
     public List<? extends Entry> queryAll(Class<? extends Entry> clazz) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         EntrySchema schema = getEntrySchema(clazz);
+        Cursor cursor = null;
+        ArrayList<Entry> entries;
 
-        Cursor cursor = schema.queryAll(db);
-        if (cursor == null || cursor.getCount() == 0) {
-            return null;
-        }
-
-        ArrayList<Entry> entries = new ArrayList<Entry>();
         try {
+            cursor = schema.queryAll(db);
+            if (cursor == null || cursor.getCount() == 0) {
+                return null;
+            }
+
+            entries = new ArrayList<Entry>();
             while (cursor.moveToNext()) {
                 Entry entry = clazz.newInstance();
                 schema.cursorToObject(cursor, entry);
                 entries.add(entry);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
+            return null;
         }
 
         //close cursor
-        cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
 
         return entries;
     }
@@ -147,13 +162,15 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         EntrySchema schema = getEntrySchema(clazz);
 
-        Cursor cursor = schema.queryBySelectionArgs(db, selection, selectionArgs);
-        if (cursor == null || cursor.getCount() == 0) {
-            return null;
-        }
-
-        ArrayList<Entry> entries = new ArrayList<Entry>();
+        Cursor cursor = null;
+        ArrayList<Entry> entries = null;
         try {
+            cursor = schema.queryBySelectionArgs(db, selection, selectionArgs);
+            if (cursor == null || cursor.getCount() == 0) {
+                return null;
+            }
+
+            entries = new ArrayList<Entry>();
             while (cursor.moveToNext()) {
                 Entry entry = clazz.newInstance();
                 schema.cursorToObject(cursor, entry);
@@ -164,7 +181,9 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
         }
 
         //close cursor
-        cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
 
         return entries;
     }
@@ -225,7 +244,7 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
         return values;
     }
 
-    public void createTables(Class<? extends Entry> clazz, SQLiteDatabase db) {
+    protected void createTables(Class<? extends Entry> clazz, SQLiteDatabase db) {
         EntrySchema schema = getEntrySchema(clazz);
         schema.createTables(db);
     }
@@ -255,14 +274,55 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        List<Class<? extends Entry>> mTempTableCls = new ArrayList<Class<? extends Entry>>();
         if (mTableCls != null && !mTableCls.isEmpty()) {
             for (Class<? extends Entry> tableCls : mTableCls) {
-                dropTables(tableCls, db);
+                if (isDropTableCls(tableCls)) {
+                    dropTables(tableCls, db);
+                    mTempTableCls.add(tableCls);
+                }
             }
+        }
 
-            onCreate(db);
+        if (mTempTableCls != null && !mTempTableCls.isEmpty()) {
+            for (Class<? extends Entry> tableCls : mTempTableCls) {
+                createTables(tableCls, db);
+            }
+            mTempTableCls.clear();
         }
     }
 
+    /**
+     * 当前表是否需要删除
+     *
+     * @param tableCls
+     * @return
+     */
+    private boolean isDropTableCls(Class<? extends Entry> tableCls) {
+        if (mExcludeTableClsOnUpgrade != null) {
+            for (Class<? extends Entry> excludeTableCls : mExcludeTableClsOnUpgrade) {
+                if (excludeTableCls == tableCls) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 需要创建表的class类
+     *
+     * @return
+     */
     protected abstract List<Class<? extends Entry>> getTableClazz();
+
+    /**
+     * 升级时不需要删除的表(即不需要升级的表)
+     *
+     * @return
+     */
+    protected List<Class<? extends Entry>> getExcludeTableClazzOnUpgrade() {
+        return null;
+    }
 }
