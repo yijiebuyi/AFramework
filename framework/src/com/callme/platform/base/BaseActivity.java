@@ -97,7 +97,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
     private LoadingProgressDialog mLoadingProgressDialog;
 
-    private boolean isCancelable = false;
+    private boolean mIsCancelable = false;
     private List<String> mRequestList;
     private boolean mShowNetDefault = true;
     private boolean mNetNotConnect = false;
@@ -139,16 +139,16 @@ public abstract class BaseActivity extends FragmentActivity {
         }
         setContentView(R.layout.base_activity);
 
-        //1.设置状态栏样式
+        //1.初始化view
+        initView();
+        //2.设置状态栏样式
         if (!supportFullScr) {
             setStatusBarStyle();
         }
-        //2.设置是否屏幕常亮
+        //3.设置是否屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //3.初始化http请求request集合，保证在activity结束的时候终止http请求
+        //4.初始化http请求request集合，保证在activity结束的时候终止http请求
         mRequestList = new ArrayList<String>();
-        //4.初始化view
-        initView();
         //5.添加view到content容器中，子类实现
         addIntoContent(getContentView());
         //6.初始化view，设置onclick监听器
@@ -360,7 +360,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param cancelable
      */
     public final void showProgress(boolean cancelable) {
-        isCancelable = cancelable;
+        mIsCancelable = cancelable;
         mFailedView.setVisibility(View.GONE);
         mProgressBar.getBackground().setAlpha(100);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -374,7 +374,7 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     public final void showProgress(String handlerId, boolean cancelable) {
         mRequestList.add(handlerId);
-        isCancelable = cancelable;
+        mIsCancelable = cancelable;
         mFailedView.setVisibility(View.GONE);
         mProgressBar.getBackground().setAlpha(100);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -384,7 +384,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * 关闭对话框进度
      */
     public final void closeProgress() {
-        isCancelable = false;
+        mIsCancelable = false;
         mProgressBar.setVisibility(View.GONE);
         mFailedView.setVisibility(View.GONE);
     }
@@ -395,7 +395,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param listener
      */
     public final void showFailedView(OnClickListener listener) {
-        isCancelable = false;
+        mIsCancelable = false;
         mProgressBar.setVisibility(View.GONE);
         mFailedView.setVisibility(View.VISIBLE);
         if (listener != null) {
@@ -590,8 +590,8 @@ public abstract class BaseActivity extends FragmentActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (isCancelable && keyCode == KeyEvent.KEYCODE_BACK) {
-            isCancelable = false;
+        if (mIsCancelable && keyCode == KeyEvent.KEYCODE_BACK) {
+            mIsCancelable = false;
             closeProgress();
             return true;
         }
@@ -605,23 +605,23 @@ public abstract class BaseActivity extends FragmentActivity {
      * @param cancelable 是否可以取消请求
      */
     public final void showProgressDialog(boolean cancelable) {
-        isCancelable = cancelable;
+        mIsCancelable = cancelable;
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
         }
-        mLoadingProgressDialog.setCancelable(isCancelable);
+        mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
-                isCancelable = false;
+                mIsCancelable = false;
             }
         });
         mLoadingProgressDialog.setOnCancelListener(new OnCancelListener() {
 
             @Override
             public void onCancel(DialogInterface dialog) {
-                isCancelable = false;
+                mIsCancelable = false;
             }
         });
         if (!isDestroyed() && !isFinishing() && !mLoadingProgressDialog.isShowing()) {
@@ -637,17 +637,17 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     public final void showProgressDialog(final String handlerId, boolean cancelable) {
         mRequestList.add(handlerId);
-        isCancelable = cancelable;
+        mIsCancelable = cancelable;
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
         }
-        mLoadingProgressDialog.setCancelable(isCancelable);
+        mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
 
             @Override
             public void onDismiss(DialogInterface dialog) {
                 //cancelSingleRequest(handlerId);
-                isCancelable = false;
+                mIsCancelable = false;
             }
         });
         mLoadingProgressDialog.setOnCancelListener(new OnCancelListener() {
@@ -655,7 +655,7 @@ public abstract class BaseActivity extends FragmentActivity {
             @Override
             public void onCancel(DialogInterface dialog) {
                 //cancelSingleRequest(handlerId);
-                isCancelable = false;
+                mIsCancelable = false;
             }
         });
         if (!isDestroyed() && !isFinishing() && !mLoadingProgressDialog.isShowing()) {
@@ -667,7 +667,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * 取消加载对话框
      */
     public final void closeProgressDialog() {
-        isCancelable = false;
+        mIsCancelable = false;
         if (!isDestroyed() && !isFinishing() && mLoadingProgressDialog != null
                 && mLoadingProgressDialog.isShowing()) {
             mLoadingProgressDialog.dismiss();

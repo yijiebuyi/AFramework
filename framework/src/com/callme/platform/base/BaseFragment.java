@@ -161,6 +161,20 @@ public abstract class BaseFragment extends Fragment {
 	}
 
 	/**
+	 * 以view的形式显示加载提示
+	 *
+	 *            数据访问的handler
+	 * @param cancelable
+	 *            是否可以取消请求
+	 */
+	public final void showProgress(boolean cancelable) {
+		Activity activity = getActivity();
+		if (activity instanceof BaseActivity) {
+			((BaseActivity) activity).showProgress(cancelable);
+		}
+	}
+
+	/**
 	 * 关闭view形式的加载提示
 	 */
 	public final void closeProgress() {
