@@ -2,7 +2,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#efeff4"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -37,11 +36,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dip"
                 android:layout_marginTop="-2dip"
-                android:background="@color/blue_light_deep"
+                android:background="@drawable/shape_blue_light"
                 android:contentDescription="@null" />
 
             <View
                 style="@style/divider_horizontal"
+                android:layout_marginTop="@dimen/px4"
                 android:background="#eeeeee"
                 android:layout_width="match_parent" />
 

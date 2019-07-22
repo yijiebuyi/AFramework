@@ -26,6 +26,7 @@ import com.callme.platform.util.ResourcesUtil;
 import com.callme.platform.widget.LazyViewPager;
 import com.callme.platform.widget.LazyViewPager.OnPageChangeListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
 
     private int mStartDelta;// 用于保存红色横线动画的起始位置
     private int mInitPosition;// 初始化的时候红色横线的位置
+    private List<TextView> mCounts;
 
     public void setInitPosition(int initPosition) {
         mInitPosition = initPosition;
@@ -139,6 +141,7 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
                         return true;
                     }
                 });
+        mCounts = new ArrayList<>();
     }
 
     /**
@@ -340,18 +343,33 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
         }
     }
 
+    public void updateText(int pos, int count) {
+        if (pos >= 0 && pos < mTxtTitles.length && count > 0) {
+            String value = String.valueOf(count);
+            if (count > 99) {
+                value = "99+";
+            }
+            TextView t = mCounts.get(pos);
+            t.setVisibility(View.VISIBLE);
+            t.setText(value);
+        } else {
+            TextView t = mCounts.get(pos);
+            t.setVisibility(View.GONE);
+        }
+    }
+
     public void changeText(int position) {
         for (int i = 0; i < mTxtTitles.length; i++) {
             TextView textView = (TextView) mTxtContent.getChildAt(i)
                     .findViewById(R.id.title_item_text);
             if (position == i) {
                 textView.setTextColor(ResourcesUtil
-                        .getColor(R.color.blue_light_deep));
+                        .getColor(R.color.common_black_bg_color));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                        ResourcesUtil.getDimension(R.dimen.font_34px));
+                        ResourcesUtil.getDimension(R.dimen.font_28px));
             } else {
                 textView.setTextColor(ResourcesUtil
-                        .getColor(R.color.gray_common));
+                        .getColor(R.color.common_black_bg_color));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
                         ResourcesUtil.getDimension(R.dimen.font_28px));
             }
@@ -363,21 +381,11 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         LayoutParams params = (LayoutParams) mIvLine.getLayoutParams();
-        mEachItemWidth = dm.widthPixels / mTxtTitles.length;
-
-        if (mTxtTitles.length == 2) {
-            params.width = mEachItemWidth
-                    - ResourcesUtil.getDimensionPixelOffset(R.dimen.px60);
-        } else {
-            params.width = mEachItemWidth;
-        }
-
+        mEachItemWidth = ResourcesUtil.getDimensionPixelSize(R.dimen.px50);
+        params.width = mEachItemWidth;
         mIvLine.setLayoutParams(params);
 
-        int itemSpacing = 0;
-        itemSpacing = (mEachItemWidth - params.width) / 2;
-
-        int endDelta = itemSpacing + mInitPosition * mEachItemWidth;
+        int endDelta = dm.widthPixels / (mTxtTitles.length * 2) - mEachItemWidth / 2;
         Animation animation = new TranslateAnimation(endDelta, endDelta, 0, 0);
         animation.setFillAfter(true);
         mIvLine.startAnimation(animation);
@@ -386,9 +394,12 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
 
     // 切换viewpager的时候调用
     private void setImagePosition(int position) {
-        LayoutParams params = (LayoutParams) mIvLine.getLayoutParams();
-        int endDelta = mEachItemWidth * position
-                + (mEachItemWidth - params.width) / 2;
+        int itemWidth = ResourcesUtil.getScreenWidth() / mTxtTitles.length;
+        int curr = position + 1;
+        int before = (curr - 1) * itemWidth;
+        int after = itemWidth / 2 - mEachItemWidth / 2;
+
+        int endDelta = before + after;
         Animation animation = new TranslateAnimation(mStartDelta, endDelta, 0,
                 0);
         animation.setFillAfter(true);
@@ -479,6 +490,8 @@ public abstract class BaseTabActivity extends BaseActivity implements OnCheckedC
             View view = inflater.inflate(R.layout.base_layout_tab_title_item, null);
             TextView txtView = (TextView) view
                     .findViewById(R.id.title_item_text);
+            TextView count = view.findViewById(R.id.title_count);
+            mCounts.add(count);
             txtView.setText(mTxtTitles[i]);
             LayoutParams params = new LayoutParams(0,
                     ViewGroup.LayoutParams.MATCH_PARENT, 1);
