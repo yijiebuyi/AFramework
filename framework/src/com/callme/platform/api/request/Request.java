@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.callme.platform.api.Util;
+import com.callme.platform.api.callback.BaseCallback;
 import com.callme.platform.api.callback.GeneralRequestCallback;
 import com.callme.platform.api.callback.RequestCallback;
 import com.callme.platform.common.HttpResponseUi;
@@ -36,7 +37,7 @@ import retrofit2.Call;
  * 修改描述：
  * 修改日期
  */
-public class Request<T> implements RequestLifecycle, Handler.Callback {
+public class Request implements RequestLifecycle, Handler.Callback {
     private static final String TAG = "Request";
     private static final String FRAGMENT_TAG = "com.hywalk.callme.manager";
 
@@ -49,11 +50,11 @@ public class Request<T> implements RequestLifecycle, Handler.Callback {
     /**
      * retrofit call
      */
-    private Call<T> mCall;
+    private Call mCall;
     /**
      * http callback
      */
-    private CmRequestImpListener<T> mListener;
+    private CmRequestImpListener mListener;
 
     /**
      * Pending adds for RequestManagerFragments.
@@ -75,7 +76,7 @@ public class Request<T> implements RequestLifecycle, Handler.Callback {
      * @param call
      * @param listener
      */
-    public Request(Context context, Handler handler, final Call<T> call, CmRequestImpListener<T> listener) {
+    public <T> Request(Context context, Handler handler, final Call call, CmRequestImpListener<T> listener) {
         mHandler = handler;
 
         mCall = call;
@@ -91,10 +92,9 @@ public class Request<T> implements RequestLifecycle, Handler.Callback {
      * @param handler
      * @param call
      */
-    public Request(Context context, Handler handler, final Call<T> call) {
+    public <T> Request(Context context, Handler handler, final Call call) {
         mHandler = handler;
         mCall = call;
-
         get(context);
     }
 
@@ -249,13 +249,13 @@ public class Request<T> implements RequestLifecycle, Handler.Callback {
 
     public void enqueue() {
         if (mCall != null) {
-            mCall.enqueue(new RequestCallback<>(this, mListener, mLifeCycle));
+            mCall.enqueue(new RequestCallback(this, mListener, mLifeCycle));
         }
     }
 
     public void enqueue(HttpResponseUi responseUi) {
         if (mCall != null) {
-            RequestCallback callback = new RequestCallback<>(this, mListener, mLifeCycle);
+            RequestCallback callback = new RequestCallback(this, mListener, mLifeCycle);
             callback.setHttpResponseUi(responseUi);
             mCall.enqueue(callback);
         }
@@ -268,7 +268,7 @@ public class Request<T> implements RequestLifecycle, Handler.Callback {
      * @param listener
      * @param callback
      */
-    public void enqueue(HttpResponseUi responseUi, CmRequestImpListener listener, GeneralRequestCallback callback) {
+    public void enqueue(HttpResponseUi responseUi, CmRequestImpListener listener, BaseCallback callback) {
         if (mCall != null) {
             callback.setHttpResponseUi(responseUi);
             callback.setRequest(this);

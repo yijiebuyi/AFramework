@@ -32,6 +32,9 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api 'com.squareup.okhttp3:okhttp:3.3.1'
 
+    //logger
+    compile 'com.orhanobut:logger:2.2.0'
+
     //友盟
     api 'com.umeng.umsdk:analytics:7.5.4'
     api 'com.umeng.umsdk:common:1.5.4'

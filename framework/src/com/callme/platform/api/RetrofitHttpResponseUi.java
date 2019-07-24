@@ -6,15 +6,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.callme.platform.R;
-import com.callme.platform.api.callback.RequestCallback;
+import com.callme.platform.api.callback.ErrorCode;
 import com.callme.platform.base.BaseActivity;
 import com.callme.platform.base.BaseFragment;
 import com.callme.platform.common.HttpGlobalListener;
 import com.callme.platform.common.HttpResponseUi;
 import com.callme.platform.util.CmRequestImpListener;
-import com.callme.platform.util.CmRequestListener;
-
-import java.util.Map;
 
 import retrofit2.Call;
 
@@ -31,20 +28,6 @@ import retrofit2.Call;
  * 修改日期
  */
 public class RetrofitHttpResponseUi implements HttpResponseUi {
-    /**
-     * http响应，ui对应的flag
-     */
-    public final static String RESPONSE_UI_FLAG = "response_ui_flag";
-
-    /**
-     * 更新
-     */
-    private final static int CODE_UPDATE = RequestCallback.CODE_UPDATE;
-    /**
-     * token无效
-     */
-    private final static int CODE_INVALID = RequestCallback.CODE_INVALID;
-
     /**
      * 当前请求自什么页面，是谁调用
      * 如果mComeFrom是Activity，或者Fragment，这是将会有对话框显示，失败占位view有关
@@ -78,17 +61,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
     }
 
     @Override
-    public void setRequestParams(Object comeFrom, String url, int method, CmRequestListener listener) {
-        //do nothing
-    }
-
-    @Override
-    public void setRequestHeaders(Map<String, String> headers) {
-
-    }
-
-    @Override
-    public void onPreStart(String handler) {
+    public void onPreStart() {
         //显示加载进度条
         boolean showProgressDialog = (mResponseUiFlag & FLAG_SHOW_PROGRESS_DIALOG) != 0;
         boolean showProgressView = (mResponseUiFlag & FLAG_SHOW_PROGRESS_VIEW) != 0;
@@ -98,22 +71,22 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         if (mComeFrom != null && mBeShownProgress) {
             if (mComeFrom instanceof BaseActivity) {
                 if (showProgressDialog) {
-                    ((BaseActivity) mComeFrom).showProgressDialog(handler, cancelable);
+                    ((BaseActivity) mComeFrom).showProgressDialog(cancelable);
                 } else {
-                    ((BaseActivity) mComeFrom).showProgress(handler, cancelable);
+                    ((BaseActivity) mComeFrom).showProgress(cancelable);
                 }
             } else if (mComeFrom instanceof BaseFragment) {
                 if (showProgressDialog) {
-                    ((BaseFragment) mComeFrom).showProgressDialog(handler, cancelable);
+                    ((BaseFragment) mComeFrom).showProgressDialog(cancelable);
                 } else {
-                    ((BaseFragment) mComeFrom).showProgress(handler, cancelable);
+                    ((BaseFragment) mComeFrom).showProgress(cancelable);
                 }
             }
         }
     }
 
     @Override
-    public void onStart(String handler) {
+    public void onStart() {
         //do nothing
     }
 
@@ -144,7 +117,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         }
 
         switch (code) {
-            case CODE_INVALID:
+            case ErrorCode.TOKEN_INVALID:
                 String msg = "登录失效,请重新登录!";
                 if (mComeFrom instanceof Context) {
                     Context appCxt = ((Context) mComeFrom).getApplicationContext();
@@ -152,7 +125,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
                 }
                 loginAuthFailure(code, msg);
                 break;
-            case CODE_UPDATE:
+            case ErrorCode.APP_UPGRADE:
                 break;
         }
         if (code != 0) {
@@ -165,7 +138,6 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         sendErrorLog(errorCode, msg);
 
         closeLoadingProgress();
-
         boolean canShowFailureView = (mResponseUiFlag & FLAG_SHOW_LOAD_FAIL_VIEW) != 0;
         boolean showToast = true;
         if (mComeFrom != null && canShowFailureView) {
@@ -181,7 +153,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
             showToast = mListener.onError(errorCode, msg);
         }
 
-        if (RequestCallback.CODE_INVALID == errorCode) {
+        if (ErrorCode.TOKEN_INVALID == errorCode) {
             //未授权，需要重新登录
             loginAuthFailure(errorCode, msg);
         } else {
@@ -190,6 +162,16 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
                 showToast(R.string.toast_no_net);
             }
         }
+    }
+
+    @Override
+    public void onFailure(int errorCode, String msg, boolean httpError) {
+        onError(errorCode, msg);
+    }
+
+    @Override
+    public void onCancelled() {
+        closeLoadingProgress();
     }
 
     private View.OnClickListener mFailedViewClickLister = new View.OnClickListener() {

@@ -1,22 +1,20 @@
 package com.callme.platform.api.callback;
 
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.callme.platform.BuildConfig;
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.common.HttpResponseUi;
 import com.callme.platform.util.CmRequestImpListener;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：
+ * 功能描述：普通数据接口回调
  * 作者：huangyong
  * 创建时间：2018/8/29
  * <p>
@@ -24,69 +22,43 @@ import retrofit2.Response;
  * 修改描述：
  * 修改日期
  */
-public class RequestCallback<T> implements Callback {
-    public static final int CODE_INVALID = 501;
-    /**
-     * CODE未指定
-     */
-    public static final int CODE_UNSPECIFIED = -1000000;
-    /**
-     * CODE未知
-     */
-    public static final int CODE_UNKNOWN = -1000001;
+public class RequestCallback extends BaseCallback {
+    private final static String DATA_EX_MSG = "获取数据失败，请重试！";
 
-    public static final int CODE_HTTP_EX = -1;
-    public static final int CODE_CAST_EX = -2;
-
-    public static final int CODE_SUCCESS = 0;
-    public static final int CODE_FAILED = 1;
-
-    public static final int CODE_UPDATE = -10;
-
-    private CmRequestImpListener mRequestImpListener;
-    private HttpResponseUi mHttpResponseUi;
-
-    private Request<T> mRequest;
-    private LifeCycle mLifeCycle;
-    private String mDefaultMsg = "数据请求失败！";
-
-    public RequestCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
-        mRequest = request;
-        mRequestImpListener = listener;
-        mLifeCycle = lifeCycle;
+    public <T> RequestCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
+        super(request, listener, lifeCycle);
     }
 
-    public RequestCallback(CmRequestImpListener<T> listener) {
-        mRequestImpListener = listener;
-    }
-
-    public void setHttpResponseUi(HttpResponseUi responseUi) {
-        mHttpResponseUi = responseUi;
+    public <T> RequestCallback(CmRequestImpListener<T> listener) {
+        super(listener);
     }
 
     @Override
     public void onResponse(Call call, Response response) {
-        if (response != null && response.isSuccessful()) {
+        if (response != null && response.code() == 200) {
             try {
-                ResultBean<T> result = (ResultBean<T>) response.body();
-                int errorCode = getErrorCode(response);
-                String errorMsg = getErrorMsg(response);
-                if (mRequestImpListener != null) {
+                ResultBean result = (ResultBean) response.body();
+                int errorCode = ParseUtil.getErrorCode(response);
+                String errorMsg = ParseUtil.getErrorMsg(response);
+                if (mRequestListener != null) {
                     switch (errorCode) {
-                        case CODE_SUCCESS:
-                            mRequestImpListener.onSuccess(result);
+                        case ErrorCode.SUCCESS:
+                            mRequestListener.onSuccess(result);
                             break;
-                        case CODE_FAILED:
-                            mRequestImpListener.onFailure(errorCode, errorMsg);
-                            break;
-                        case CODE_UPDATE:
-                            mRequestImpListener.onFailure(errorCode, errorMsg);
-                            break;
-                        case CODE_UNKNOWN:
-                            mRequestImpListener.onFailure(errorCode, errorMsg);
-                            break;
+                        case ErrorCode.FAILURE:
+                        case ErrorCode.APP_UPGRADE:
+                        case ErrorCode.HTTP_UNKNOWN:
+                        case ErrorCode.HTTP_UNSPECIFIC:
                         default:
-                            mRequestImpListener.onFailure(errorCode, errorMsg);
+                            if (TextUtils.isEmpty(errorMsg)) {
+                                errorMsg = mDefaultMsg;
+                            } else if (errorMsg.contains("exception") || errorMsg.contains("Exception")) {
+                                if (!BuildConfig.DEBUG) {
+                                    errorMsg = mDefaultMsg;
+                                }
+                            }
+                            onFailureCallback(errorCode, errorMsg, false);
+                            CallRequestHelper.onFailure(call, response);
                             break;
                     }
                 }
@@ -96,115 +68,35 @@ public class RequestCallback<T> implements Callback {
                 }
             } catch (ClassCastException e) {
                 String msg = mDefaultMsg;
-                if (mRequestImpListener != null) {
-                    mRequestImpListener.onFailure(CODE_CAST_EX, msg);
-                }
-                if (mHttpResponseUi != null) {
-                    mHttpResponseUi.onError(CODE_CAST_EX, msg);
-                }
+                onFailureCallback(ErrorCode.CAST_EX, msg, false);
+                CallRequestHelper.onFailure(call, ErrorCode.CAST_EX, e);
+            } catch (Exception e) {
+                String msg = DATA_EX_MSG;
+                onFailureCallback(ErrorCode.HTTP_UNSPECIFIC, msg, false);
+                CallRequestHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
             }
         } else {
+            boolean httpError = response == null;
+            int code = httpError ? ErrorCode.HTTP_EX : response.code() ;
             String msg = mDefaultMsg;
-            int code = response.code();
-            switch (code) {
-                case CODE_INVALID:
-                    //token 失效
-                    break;
-            }
-
-            if (mRequestImpListener != null) {
-                mRequestImpListener.onError(response.code(), msg);
-            }
-            if (mHttpResponseUi != null) {
-                mHttpResponseUi.onError(response.code(), msg);
-            }
+            onFailureCallback(code, msg, httpError);
+            CallRequestHelper.onFailure(call, response);
         }
 
-        if (mRequestImpListener != null) {
-            mRequestImpListener.onLoadComplete();
-        }
-
-        if (mLifeCycle != null && mRequest != null) {
-            mLifeCycle.removeRequestLifecycle(mRequest);
-        }
+        onLoadComplete();
     }
 
     @Override
     public void onFailure(Call call, Throwable t) {
-        String msg = mDefaultMsg;
-        if (mRequestImpListener != null) {
-            mRequestImpListener.onError(CODE_HTTP_EX, msg);
-            //mRequestImpListener.onError(-1, "数据请求失败！");
-
-            mRequestImpListener.onLoadComplete();
+        if (call.isCanceled()) {
+            onCancelCallback();
+        } else {
+            String msg = mDefaultMsg;
+            onFailureCallback(ErrorCode.HTTP_EX, msg, true);
         }
+        CallRequestHelper.onFailure(call, ErrorCode.HTTP_EX, t);
 
-        if (mLifeCycle != null) {
-            mLifeCycle.removeRequestLifecycle(mRequest);
-        }
-
-        if (mHttpResponseUi != null) {
-            mHttpResponseUi.onError(CODE_HTTP_EX, msg);
-        }
-
-        msg = t != null ? t.getLocalizedMessage() : "msg is null";
-        if (TextUtils.isEmpty(msg)) {
-            msg = mDefaultMsg;
-        }
-        Log.i("RequestCallback", msg);
+        onLoadComplete();
     }
 
-    /**
-     * 获取错误码(版本间的兼容)
-     * 3.0之前的接口，使用error字段
-     * 3.0只有的接口，使用code字段
-     *
-     * @param response
-     * @return
-     */
-    private int getErrorCode(Response response) {
-        Object body = null;
-        if (response == null || (body = response.body()) == null) {
-            return CODE_UNKNOWN;
-        }
-
-        if (body instanceof ResultBean) {
-            int error = ((ResultBean) body).error;
-            if (error != CODE_UNSPECIFIED) {
-                return error;
-            } else if (TextUtils.equals("0", ((ResultBean) body).result)) {
-                return 0;
-            }
-
-            return ((ResultBean) body).code;
-        }
-
-        return CODE_UNKNOWN;
-    }
-
-    /**
-     * 获取错误码(版本间的兼容)
-     * 3.0以前认证接口，使用result字段
-     * 其他使用message
-     *
-     * @param response
-     * @return
-     */
-    private String getErrorMsg(Response response) {
-        Object body = null;
-        if (response == null || (body = response.body()) == null) {
-            return "";
-        }
-
-        if (body instanceof ResultBean) {
-            String result = ((ResultBean) body).result;
-            if (!TextUtils.isEmpty(result)) {
-                return result;
-            } else {
-                return ((ResultBean) body).message;
-            }
-        }
-
-        return "";
-    }
 }

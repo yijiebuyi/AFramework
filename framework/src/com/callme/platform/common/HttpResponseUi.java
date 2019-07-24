@@ -1,9 +1,5 @@
 package com.callme.platform.common;
 
-import com.callme.platform.util.CmRequestListener;
-
-import java.util.Map;
-
 /**
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
@@ -17,7 +13,15 @@ import java.util.Map;
  * 修改日期
  */
 public interface HttpResponseUi {
+    /**
+     * http响应，ui对应的flag
+     */
+    public final static String RESPONSE_UI_FLAG = "response_ui_flag";
 
+
+    /**
+     * none
+     */
     public final static int FLAG_NONE = 0;
 
     /**
@@ -51,18 +55,25 @@ public interface HttpResponseUi {
     //public final static int FLAG_LOAD_FAIL_RETRYABLE = 1 << 6;
 
     /**
-     * http请求开始前
-     *
-     * @param handler http请求前会生成的唯一字符串，标识http的唯一
+     * @param flag
+     * @see #FLAG_NONE
+     * @see #FLAG_PROGRESS_DIALOG_NONCANCELABLE
+     * @see #FLAG_PROGRESS_MANUAL_CLOSE
+     * @see #FLAG_SHOW_LOAD_FAIL_VIEW
+     * @see #FLAG_SHOW_PROGRESS_DIALOG
+     * @see #FLAG_SHOW_PROGRESS_VIEW
      */
-    public void onPreStart(String handler);
+    public void setHttpResponseUi(int flag);
+
+    /**
+     * http请求开始前
+     */
+    public void onPreStart();
 
     /**
      * http请求开始
-     *
-     * @param handler http请求运行时会生成的唯一字符串，标识http的唯一,（运行在线程池中的线程）
      */
-    public void onStart(String handler);
+    public void onStart();
 
     /**
      * http成功响应
@@ -80,19 +91,16 @@ public interface HttpResponseUi {
     public void onError(int errorCode, String msg);
 
     /**
-     * 设置http请求参数，只针对于加载失败后，点击页面重新加载请求
+     * 处理错误
      *
-     * @param url      请求url
-     * @param method   请求方法
-     * @param listener http请求回调
+     * @param errorCode
+     * @param msg
+     * @param httpError 如：401(访问拒绝) 500(服务器内部错误)
      */
-    public void setRequestParams(Object comeFrom, String url, int method,
-                                 CmRequestListener listener);
+    public void onFailure(int errorCode, String msg, boolean httpError);
 
     /**
-     * 请求头参数
-     *
-     * @param headers
+     * 接口被取消
      */
-    public void setRequestHeaders(Map<String, String> headers);
+    public void onCancelled();
 }

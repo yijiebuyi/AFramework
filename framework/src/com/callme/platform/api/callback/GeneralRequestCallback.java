@@ -1,19 +1,10 @@
 package com.callme.platform.api.callback;
 
-import android.support.annotation.CallSuper;
-import android.text.TextUtils;
-
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.common.HttpResponseUi;
 import com.callme.platform.util.CmRequestImpListener;
-import com.callme.platform.util.JsonUtils;
-
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -28,65 +19,46 @@ import retrofit2.Response;
  * 修改描述：
  * 修改日期
  */
-public class GeneralRequestCallback<T> implements Callback {
-    private CmRequestImpListener mRequestImpListener;
-    private HttpResponseUi mHttpResponseUi;
-    private Request<T> mRequest;
-    private LifeCycle mLifeCycle;
-    private String mDefaultMsg = "获取数据失败，请检查您的网络连接！";
-
-    public GeneralRequestCallback(Request request, CmRequestImpListener<T> listener) {
-        mRequest = request;
-        mRequestImpListener = listener;
+public class GeneralRequestCallback extends BaseCallback {
+    public <T> GeneralRequestCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
+        super(request, listener, lifeCycle);
     }
 
-    public GeneralRequestCallback() {
+    public <T> GeneralRequestCallback(CmRequestImpListener<T> listener) {
+        super(listener);
+    }
+
+    public <T> GeneralRequestCallback() {
         super();
-    }
-
-    @CallSuper
-    public void setRequest(Request request) {
-        mRequest = request;
-    }
-
-    @CallSuper
-    public void setLifeCycle(LifeCycle lifeCycle) {
-        mLifeCycle = lifeCycle;
-    }
-
-    @CallSuper
-    public void setRequestListener(CmRequestImpListener listener) {
-        mRequestImpListener = listener;
-    }
-
-    public void setHttpResponseUi(HttpResponseUi responseUi) {
-        mHttpResponseUi = responseUi;
     }
 
     @Override
     public void onResponse(Call call, Response response) {
         if (response != null && response.code() == 200) {
             try {
-                Object result = parseData(response.body());
-                if (mRequestImpListener != null) {
-                    mRequestImpListener.onSuccess(result);
+                Object result = ParseUtil.parseData(response.body(), mRequestListener);
+                if (mRequestListener != null) {
+                    mRequestListener.onSuccess(result);
                 }
             } catch (ClassCastException e) {
                 String msg = mDefaultMsg;
-                onFailureCallback(RequestCallback.CODE_CAST_EX, msg);
+                onFailureCallback(ErrorCode.CAST_EX, msg, false);
+                CallRequestHelper.onFailure(call, ErrorCode.CAST_EX, e);
             } catch (Exception e) {
                 String msg = mDefaultMsg;
-                onFailureCallback(RequestCallback.CODE_UNSPECIFIED, msg);
+                onFailureCallback(ErrorCode.HTTP_UNSPECIFIC, msg, false);
+                CallRequestHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
             } finally {
                 if (mHttpResponseUi != null) {
-                    mHttpResponseUi.onSuccess(RequestCallback.CODE_SUCCESS);
+                    mHttpResponseUi.onSuccess(ErrorCode.SUCCESS);
                 }
             }
         } else {
             boolean httpError = response == null;
-            int code = httpError ? RequestCallback.CODE_HTTP_EX : response.code();
+            int code = httpError ? ErrorCode.HTTP_EX : response.code();
             String msg = mDefaultMsg;
-            onFailureCallback(code, msg);
+            onFailureCallback(code, msg, httpError);
+            CallRequestHelper.onFailure(call, response);
         }
 
         onLoadComplete();
@@ -98,74 +70,11 @@ public class GeneralRequestCallback<T> implements Callback {
             onCancelCallback();
         } else {
             String msg = mDefaultMsg;
-            onFailureCallback(RequestCallback.CODE_HTTP_EX, msg);
+            onFailureCallback(ErrorCode.HTTP_EX, msg, true);
         }
+        CallRequestHelper.onFailure(call, ErrorCode.HTTP_EX, t);
 
         onLoadComplete();
     }
 
-    /**
-     * 解析data数据
-     *
-     * @param data
-     * @return
-     */
-    protected Object parseData(Object data) {
-        if (data == null || TextUtils.isEmpty(data.toString())) {
-            return null;
-        }
-
-        Type type = null;
-        try {
-            Type[] dataTypes = mRequestImpListener != null ? ((ParameterizedType) mRequestImpListener.getClass()
-                    .getGenericSuperclass()).getActualTypeArguments() : null;
-            type = dataTypes != null && dataTypes.length > 0 ? dataTypes[0] : null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (JsonUtils.isCanParsableJsonObject(type, data)) {
-            data = JsonUtils.parseObject(data.toString(), type);
-        }
-
-        return data;
-    }
-
-    /**
-     * 取消处理
-     */
-    protected void onCancelCallback() {
-        if (mRequestImpListener != null) {
-            mRequestImpListener.onCancelled();
-        }
-    }
-
-    /**
-     * 失败处理
-     *
-     * @param code
-     * @param msg
-     */
-    protected void onFailureCallback(int code, String msg) {
-        if (mRequestImpListener != null) {
-            mRequestImpListener.onFailure(code, msg);
-        }
-
-        if (mHttpResponseUi != null) {
-            mRequestImpListener.onFailure(code, msg);
-        }
-    }
-
-
-    /**
-     * 加载完成
-     */
-    protected void onLoadComplete() {
-        if (mRequestImpListener != null) {
-            mRequestImpListener.onLoadComplete();
-        }
-        if (mLifeCycle != null && mRequest != null) {
-            mLifeCycle.removeRequestLifecycle(mRequest);
-        }
-    }
 }

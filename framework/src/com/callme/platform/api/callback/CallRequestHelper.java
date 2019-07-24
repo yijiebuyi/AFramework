@@ -1,18 +1,28 @@
 package com.callme.platform.api.callback;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.callme.platform.BuildConfig;
 import com.callme.platform.util.IOUtils;
+import com.callme.platform.util.StackTraceUtil;
+import com.callme.platform.util.TimeUtil;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
 import java.io.EOFException;
 import java.lang.reflect.Field;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
@@ -28,6 +38,119 @@ import retrofit2.Call;
  */
 public class CallRequestHelper {
     private final static Charset UTF8 = Charset.forName("UTF-8");
+
+    /**
+     * 接口错误时处理日志
+     *
+     * @param call
+     * @see #loggerOnFailure(Call, int, String, StackTraceElement[], boolean)
+     */
+    public static void onFailure(Call call, Response response) {
+        if (response == null) {
+            loggerOnFailure(call, ErrorCode.HTTP_EX, "未知错误", null, false);
+            return;
+        }
+
+        String msg = null;
+        StackTraceElement[] exStack = null;
+        int code = ErrorCode.HTTP_UNKNOWN;
+        try {
+            if (response.code() == 200) {
+                code = ParseUtil.getErrorCode(response);
+                msg = ParseUtil.getErrorMsg(response);
+            } else {
+                ResponseBody errBody = response.errorBody();
+                msg = errBody != null ? errBody.string() : "";
+            }
+        } catch (Exception e) {
+            msg = e.getLocalizedMessage();
+            exStack = e.getStackTrace();
+        }
+
+        if (TextUtils.isEmpty(msg)) {
+            msg = response.message();
+        }
+        if (TextUtils.isEmpty(msg)) {
+            msg = "未知错误";
+        }
+
+        loggerOnFailure(call, code, msg, exStack, false);
+    }
+
+    /**
+     * 接口错误时处理日志
+     *
+     * @param call
+     * @param code
+     * @see #loggerOnFailure(Call, int, String, StackTraceElement[], boolean)
+     */
+    public static void onFailure(Call call, int code, Throwable t) {
+        boolean connectEx = t instanceof ConnectException || t instanceof SocketTimeoutException;
+        loggerOnFailure(call, code, t.getMessage(), t.getStackTrace(), connectEx);
+    }
+
+    /**
+     * 接口错误时处理日志
+     *
+     * @param call
+     * @param code
+     * @param msg
+     */
+    private static void loggerOnFailure(Call call, int code, String msg, StackTraceElement[] exStackTrace,
+                                        boolean connectEx) {
+        try {
+            Request request = call != null ? call.request() : null;
+            if (request == null) {
+                request = getRequest(call);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            String errorMsg = "--> code: " + code + ",  msg: " + msg;
+            if (request != null) {
+                String requestInfo = "==> " + request.method() + " " + request.url() + " \n";
+                String requestBody = readContent(request);
+                if (requestBody == null) {
+                    requestBody = getContent(request);
+                }
+                requestBody = "--> requestBody: " + requestBody + " \n";
+                sb.append(requestInfo);
+                sb.append(requestBody);
+            }
+            sb.append(errorMsg);
+
+            handleLog(sb, exStackTrace, connectEx);
+            sb = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("CallRequestHelper", "" + e.getMessage());
+        }
+    }
+
+    /**
+     * 处理日志
+     *
+     * @param sb
+     */
+    private final static void handleLog(StringBuilder sb, StackTraceElement[] exStackTrace, boolean connectEx) {
+        StackTraceElement[] callSackTrace = Thread.currentThread().getStackTrace();
+        String lineInfo = StackTraceUtil.getStackMsg(callSackTrace, CallRequestHelper.class,
+                1, 0, exStackTrace);
+
+        long millis = System.currentTimeMillis();
+        String time = TimeUtil.formatDate(millis, TimeUtil.TIME_YYYY_MM_DD_HH_MM_SS) + ", ts:" + millis + "\n";
+        sb.insert(0, lineInfo);
+        sb.insert(0, time);
+        String logBody = sb.toString();
+
+        if (BuildConfig.DEBUG) {
+            Logger.clearLogAdapters();
+            Logger.addLogAdapter(new AndroidLogAdapter());
+            Logger.w(logBody);
+        } else {
+            //TODO
+
+        }
+    }
 
     /**
      * 获取请求(反射)
@@ -88,13 +211,17 @@ public class CallRequestHelper {
                 field.setAccessible(true);
                 String name = field.getName();
                 if (TextUtils.equals("val$content", name)) {
-                    byte[] bytes = (byte[]) field.get(requestBody);
-
                     Charset charset = UTF8;
                     MediaType contentType = requestBody.contentType();
                     if (contentType != null) {
                         charset = contentType.charset(UTF8);
                     }
+
+                    if (isMultipart(contentType)) {
+                        return "upload file content ...";
+                    }
+
+                    byte[] bytes = (byte[]) field.get(requestBody);
                     return new String(bytes, charset);
                 }
             }
@@ -119,15 +246,18 @@ public class CallRequestHelper {
 
         Buffer buffer = null;
         try {
-            buffer = new Buffer();
-            requestBody.writeTo(buffer);
-
             Charset charset = UTF8;
             MediaType contentType = requestBody.contentType();
             if (contentType != null) {
                 charset = contentType.charset(UTF8);
             }
 
+            if (isMultipart(contentType)) {
+                return "upload file content ...";
+            }
+
+            buffer = new Buffer();
+            requestBody.writeTo(buffer);
             if (isPlaintext(buffer)) {
                 String content = buffer.readString(charset);
                 return content;
@@ -135,11 +265,30 @@ public class CallRequestHelper {
         } catch (Exception e) {
 
         } finally {
-            buffer.clear();
+            if (buffer != null) {
+                buffer.clear();
+            }
             IOUtils.closeQuietly(buffer);
         }
 
         return null;
+    }
+
+    /**
+     * 是否是文件上传
+     *
+     * @param contentType
+     * @return
+     */
+    private static boolean isMultipart(MediaType contentType) {
+        String contentTypeStr = contentType != null ? contentType.toString() : "";
+        if (!TextUtils.isEmpty(contentTypeStr)) {
+            if (contentTypeStr.toLowerCase().contains("multipart/form-data")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /***

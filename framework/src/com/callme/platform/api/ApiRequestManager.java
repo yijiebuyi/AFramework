@@ -53,7 +53,7 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequest(Context context, final Call<T> call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequest(Context context, final Call call, CmRequestImpListener<T> listener) {
         enqueueRequest(context, HttpResponseUi.FLAG_NONE, call, listener);
     }
 
@@ -68,16 +68,16 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequest(Context context, int responseFlag, final Call<T> call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequest(Context context, int responseFlag, final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
         }
         RetrofitHttpResponseUi ui = new RetrofitHttpResponseUi(context, call, listener);
         ui.setHttpResponseUi(responseFlag);
-        ui.onPreStart("");
+        ui.onPreStart();
 
 
-        Request<T> request = new Request<T>(context, mHandler, call, listener);
+        Request request = new Request(context, mHandler, call, listener);
         request.enqueue(ui);
     }
 
@@ -88,12 +88,12 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequestInBackground(final Call<T> call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequestInBackground(final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
         }
 
-        RequestCallback callback = new RequestCallback<>(listener);
+        RequestCallback callback = new RequestCallback(listener);
         call.enqueue(callback);
     }
 
@@ -104,14 +104,14 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public static <T> void executeRequest(final Call<T> call, CmRequestImpListener<T> listener) {
+    public static <T> void executeRequest(final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
         }
 
-        RequestCallback callback = new RequestCallback<>(listener);
+        RequestCallback callback = new RequestCallback(listener);
         try {
-            Response<T> response = call.execute();
+            Response response = call.execute();
             callback.onResponse(null, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,9 +154,9 @@ public class ApiRequestManager {
 
         RetrofitHttpResponseUi ui = new RetrofitHttpResponseUi(context, call, listener);
         ui.setHttpResponseUi(responseFlag);
-        ui.onPreStart("");
+        ui.onPreStart();
 
-        Request<T> request = new Request<T>(context, mHandler, call);
+        Request request = new Request(context, mHandler, call);
         GeneralRequestCallback callback = new GeneralRequestCallback();
         request.enqueue(ui, listener, callback);
     }

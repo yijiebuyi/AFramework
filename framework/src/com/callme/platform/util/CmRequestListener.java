@@ -22,7 +22,7 @@ public abstract class CmRequestListener<T> {
      *
      * @param handlerId
      */
-    public void onStart(String handlerId) {
+    public void onStart() {
     }
 
     /**

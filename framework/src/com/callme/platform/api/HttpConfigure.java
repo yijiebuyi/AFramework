@@ -28,15 +28,12 @@ public class HttpConfigure {
      * @param context
      * @param apiVersion    接口版本号
      * @param channelId     渠道号
+     * @param clientSubType 客户端子类型 {@link com.callme.platform.api.HttpHeader#CLIENT_SUB_TYPE}
      */
     public static void init(@NonNull Context context, String apiVersion, String channelId, String clientSubType) {
         mAppContext = context.getApplicationContext();
-
         //初始化 Http header
-        HttpHeader.API_LEVEL = apiVersion;
-        HttpHeader.CHANNEL_ID = channelId;
-        HttpHeader.CLIENT_VERSION = PkgUtil.getAppVersionName(context);
-        HttpHeader.CLIENT_SUB_TYPE = clientSubType;
+        HttpHeader.init(context, apiVersion, channelId, clientSubType);
     }
 
     /**

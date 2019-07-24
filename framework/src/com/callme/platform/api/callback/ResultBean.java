@@ -4,13 +4,19 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Desc:
- * Created by zhanghui on 2017/11/16.
- * Modify by huangyong 2019/7/16
+ * Copyright (C) 2017 重庆呼我出行网络科技有限公司
+ * 版权所有
+ * <p>
+ * 功能描述：
+ * 作者：zhanghui
+ * 创建时间：2017/11/16
+ * <p>
+ * 修改人： huangyong
+ * 修改描述：兼容3.0前的数据结构
+ * 修改日期 2019/7/16
  */
-
 public class ResultBean<T> implements Serializable {
-    public int code = RequestCallback.CODE_UNSPECIFIED;//异常码
+    public int code = ErrorCode.HTTP_UNSPECIFIC;//异常码
     public String message;//一般用于错误提示
     public T data;
     public String sid;
@@ -24,7 +30,7 @@ public class ResultBean<T> implements Serializable {
     // 0：成功
     // 1：异常
     // -10：提示升级
-    public int error = RequestCallback.CODE_UNSPECIFIED;
+    public int error = ErrorCode.HTTP_UNSPECIFIC;
     public String result;
     public String token;
     public T detail;

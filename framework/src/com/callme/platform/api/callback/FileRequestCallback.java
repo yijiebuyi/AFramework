@@ -26,28 +26,6 @@ import retrofit2.Response;
  * 修改日期
  */
 public class FileRequestCallback implements Callback {
-    //================================LOCAL <0====================================
-    /**
-     * HTTP 不确定
-     */
-    public static final int HTTP_UNSPECIFIC = RequestCallback.CODE_UNSPECIFIED;
-    /**
-     * HTTP失败
-     */
-    public static final int HTTP_EX = RequestCallback.CODE_HTTP_EX;
-    /**
-     * 类型转换失败
-     */
-    public static final int CAST_EX = RequestCallback.CODE_CAST_EX;
-    /**
-     * 下载失败
-     */
-    public final static int FILE_DOWNLOAD_FAIL = -3;
-    /**
-     * 上传失败
-     */
-    public final static int FILE_UPLOAD_FAIL = -4;
-
     private CmRequestImpListener mListener;
     private Handler mHandler;
     private String mFilePath;
@@ -62,7 +40,8 @@ public class FileRequestCallback implements Callback {
     public void onResponse(final Call call, final Response response) {
         final boolean httpError = response == null;
         if (response == null || response.code() != 200) {
-            onFailureCallback(httpError ? HTTP_EX : response.code(), "文件下载失败", httpError);
+            onFailureCallback(httpError ? ErrorCode.HTTP_EX : response.code(), "文件下载失败", httpError);
+            CallRequestHelper.onFailure(call, response);
             onLoadComplete();
             return;
         }
@@ -89,11 +68,13 @@ public class FileRequestCallback implements Callback {
                             if (future.get()) {
                                 mListener.onSuccess(mFilePath);
                             } else {
-                                onFailureCallback(FILE_DOWNLOAD_FAIL, "文件下载失败!", httpError);
+                                onFailureCallback(ErrorCode.FILE_DOWNLOAD_FAIL, "文件下载失败!", httpError);
+                                CallRequestHelper.onFailure(call, response);
                             }
                         } catch (Exception e) {
                             String msg = "文件下载失败";
-                            onFailureCallback(HTTP_UNSPECIFIC, msg, false);
+                            onFailureCallback(ErrorCode.HTTP_UNSPECIFIC, msg, false);
+                            CallRequestHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
                         }
 
                         onLoadComplete();
@@ -105,7 +86,8 @@ public class FileRequestCallback implements Callback {
 
     @Override
     public void onFailure(Call call, Throwable t) {
-        onFailureCallback(HTTP_EX, "文件下载失败", true);
+        onFailureCallback(ErrorCode.HTTP_EX, "文件下载失败", true);
+        CallRequestHelper.onFailure(call, ErrorCode.HTTP_EX, t);
 
         onLoadComplete();
     }
