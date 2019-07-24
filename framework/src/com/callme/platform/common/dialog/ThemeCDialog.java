@@ -17,9 +17,11 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.callme.platform.R;
@@ -39,9 +41,9 @@ import com.callme.platform.util.ResourcesUtil;
  * 修改日期
  */
 
-public class CmDialog extends Dialog implements OnItemClickListener {
+public class ThemeCDialog extends Dialog implements OnItemClickListener {
 
-    public static final String TAG = "CmDialog";
+    public static final String TAG = "ThemeCDialog";
     /**
      * 普通文字对话框
      */
@@ -62,14 +64,14 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     private int subStyle = LIST_SUB_STYLE_NORMAL;
 
     private LinearLayout mContainer;
+    private ScrollView mContentSl;
     private int mBgResId = -1;
-    private FrameLayout mTopContainer;
-    private LinearLayout mContainerWithTitle;
+    private RelativeLayout mTopContainerLl;
     private Spanned message;
     private Spanned title;
     protected Context mContext;
     private TextView mTitle;
-    private TextView mMessageNoTitle;
+    private View mLineTitle;
     private TextView mMessageWithTitle;
     private ListView mListView;
     private Button btnOK;
@@ -86,10 +88,25 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     private TextView mBottomCancel;
     private int mMsgGravity = -1;
     protected View mCustomView;
+    private ImageView mCloseIv;
+    private LinearLayout mCustomLl;
+    private View.OnClickListener mCloseViewListener;
 
     private boolean mCancellable = true;
 
     private boolean mHeightLimit = true;
+
+    /**
+     * 是否显示title
+     *
+     * @param showTitle
+     */
+    public void isShowTitle(boolean showTitle) {
+        this.mHasTitle = showTitle;
+    }
+
+    //是否显示title
+    private boolean mHasTitle = true;
 
     public interface DialogOnClickListener {
         public void onClick();
@@ -99,7 +116,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         public void onItemClick(int position, String text);
     }
 
-    public CmDialog(Context ctx, View customView) {
+    public ThemeCDialog(Context ctx, View customView) {
         super(ctx, R.style.CommonDialog);
         if (customView == null) {
             LogUtil.d(TAG, "customView is null");
@@ -113,7 +130,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 普通文字对话框
      */
-    public CmDialog(Context context, int msg, int title) {
+    public ThemeCDialog(Context context, int msg, int title) {
         super(context, R.style.CommonDialog);
         if (msg <= 0) {
             try {
@@ -129,7 +146,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 普通文字对话框
      */
-    public CmDialog(Context context, int msg, String title) {
+    public ThemeCDialog(Context context, int msg, String title) {
         super(context, R.style.CommonDialog);
         if (msg <= 0) {
             try {
@@ -145,7 +162,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 普通文字对话框
      */
-    public CmDialog(Context context, Spanned msg, int title) {
+    public ThemeCDialog(Context context, Spanned msg, int title) {
         super(context, R.style.CommonDialog);
         if (TextUtils.isEmpty(msg)) {
             try {
@@ -161,7 +178,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 普通文字对话框
      */
-    public CmDialog(Context context, CharSequence msg, int title) {
+    public ThemeCDialog(Context context, CharSequence msg, int title) {
         super(context, R.style.CommonDialog);
         if (TextUtils.isEmpty(msg)) {
             try {
@@ -178,7 +195,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 普通文字对话框
      */
-    public CmDialog(Context context, CharSequence msg, String title) {
+    public ThemeCDialog(Context context, CharSequence msg, String title) {
         super(context, R.style.CommonDialog);
         if (TextUtils.isEmpty(msg)) {
             try {
@@ -195,7 +212,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 列表选项对话框
      */
-    public CmDialog(Context context, int title, int txtsArrayId, int[] images) {
+    public ThemeCDialog(Context context, int title, int txtsArrayId, int[] images) {
         super(context, R.style.CommonDialog);
         if (txtsArrayId <= 0) {
             try {
@@ -211,8 +228,8 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 列表选项对话框
      */
-    public CmDialog(Context context, int title, String[] txtsArray,
-                    int[] images) {
+    public ThemeCDialog(Context context, int title, String[] txtsArray,
+                        int[] images) {
         super(context, R.style.CommonDialog);
         if (txtsArray == null) {
             try {
@@ -228,8 +245,8 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 列表选项对话框
      */
-    public CmDialog(Context context, int title, int txtsArrayId,
-                    int[] images, int subType) {
+    public ThemeCDialog(Context context, int title, int txtsArrayId,
+                        int[] images, int subType) {
         super(context, R.style.CommonDialog);
         this.subStyle = subType;
         if (txtsArrayId <= 0) {
@@ -246,8 +263,8 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     /**
      * 列表选项对话框
      */
-    public CmDialog(Context context, int title, String[] txtsArray,
-                    int[] images, int subType) {
+    public ThemeCDialog(Context context, int title, String[] txtsArray,
+                        int[] images, int subType) {
         super(context, R.style.CommonDialog);
         this.subStyle = subType;
         if (txtsArray == null) {
@@ -353,7 +370,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.base_layout_common_dialog);
+        setContentView(R.layout.base_layout_c_common_dialog);
         /**
          * 设置对话框属性
          */
@@ -367,7 +384,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         } else {
 //            width -= 2 * getContext().getResources().getDimensionPixelSize(
 //                    R.dimen.px30);
-            width = ResourcesUtil.getScreenWidth() * 4 / 5;
+            width = (int) (ResourcesUtil.getScreenWidth() * 4.14 / 5);
             dialogWindow.setGravity(Gravity.CENTER);
         }
 
@@ -389,10 +406,10 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         int height = v.getMeasuredHeight();
         if (mHeightLimit && height > ResourcesUtil.getScreenHeight() * 2 / 3) {
             height = ResourcesUtil.getScreenHeight() * 2 / 3;
-            if (mTopContainer != null) {
+            if (mTopContainerLl != null) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                         LayoutParams.MATCH_PARENT, height);
-                mTopContainer.setLayoutParams(lp);
+                mTopContainerLl.setLayoutParams(lp);
             }
         }
         dialogWindow.setLayout(width, LayoutParams.WRAP_CONTENT);
@@ -408,21 +425,9 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         setBtnStatus();
         switch (currentStyle) {
             case STYLE_WORD_TYPE:
-                if (!TextUtils.isEmpty(title)) {
-                    mMessageWithTitle.setText(message);
-                    mMessageWithTitle.setVisibility(View.VISIBLE);
-                    mContainerWithTitle.setVisibility(View.VISIBLE);
-                    if (mMsgGravity >= 0) {
-                        mMessageWithTitle.setGravity(mMsgGravity);
-                    }
-                } else {
-                    mMessageNoTitle.setText(message);
-                    mMessageNoTitle.setVisibility(View.VISIBLE);
-                    if (mMsgGravity > 0) {
-                        mMessageNoTitle.setGravity(mMsgGravity);
-                    }
+                if (mMsgGravity >= 0) {
+                    mMessageWithTitle.setGravity(mMsgGravity);
                 }
-
                 break;
             case STYLE_LIST_TYPE:
                 mListView.setAdapter(new DialogListAdapter(mContext, this,
@@ -454,29 +459,32 @@ public class CmDialog extends Dialog implements OnItemClickListener {
                 break;
             case CUSTOM_VIEW: {
                 if (mCustomView != null) {
-                    mTopContainer.addView(mCustomView);
+                    mCustomLl.setVisibility(View.VISIBLE);
+                    mCustomLl.addView(mCustomView);
                 }
             }
             default:
                 break;
         }
+
     }
 
     protected void setTitleStatus() {
-        if (mCustomView != null) {
-            return;
-        }
-        if (!TextUtils.isEmpty(title)) {
-            mTitle.setText(title);
-            mContainerWithTitle.setVisibility(View.VISIBLE);
-            if (currentStyle != STYLE_WORD_TYPE) {
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mContainerWithTitle
-                        .getLayoutParams();
-                lp.height = LayoutParams.WRAP_CONTENT;
-                mContainerWithTitle.setLayoutParams(lp);
+        if (mHasTitle) {
+            mTitle.setVisibility(View.VISIBLE);
+            mLineTitle.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(title)) {
+                mTitle.setText(title);
             }
-        } else if (currentStyle == STYLE_WORD_TYPE) {
-            mMessageNoTitle.setVisibility(View.VISIBLE);
+        } else {
+            mTitle.setVisibility(View.GONE);
+            mLineTitle.setVisibility(View.GONE);
+        }
+        if (mCustomView == null) {
+            mMessageWithTitle.setText(message);
+            mContentSl.setVisibility(View.VISIBLE);
+        } else {
+            mContentSl.setVisibility(View.GONE);
         }
     }
 
@@ -511,18 +519,8 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         } else if ((positiveText > 0 && positiveListener != null)
                 || (negativeText > 0 && negativeListener != null)) {
             btnContent.setVisibility(View.VISIBLE);
-//			btnOK.setBackgroundResource(R.drawable.common_white_btn_cornor_selector);
-//			btnCancel
-//					.setBackgroundResource(R.drawable.common_white_btn_cornor_selector);
         } else {
             btnContent.setVisibility(View.GONE);
-        }
-        if (btnCancel.isShown() && btnOK.isShown()) {
-            btnCancel.setBackgroundResource(R.drawable.common_white_bottomleft_cornor_selector);
-            btnOK.setBackgroundResource(R.drawable.common_white_bottomright_cornor_selector);
-        }else {
-            btnCancel.setBackgroundResource(R.drawable.common_white_bottom_cornor_selector);
-            btnOK.setBackgroundResource(R.drawable.common_white_bottom_cornor_selector);
         }
     }
 
@@ -561,18 +559,24 @@ public class CmDialog extends Dialog implements OnItemClickListener {
     }
 
     public void initView() {
+        mTopContainerLl = (RelativeLayout) findViewById(R.id.dialog_top);
         mContainer = (LinearLayout) findViewById(R.id.container);
-        mTopContainer = (FrameLayout) findViewById(R.id.dialog_top);
-        mContainerWithTitle = (LinearLayout) findViewById(R.id.dialog_with_title);
         mMessageWithTitle = (TextView) findViewById(R.id.dialog_msg);
-        mMessageNoTitle = (TextView) findViewById(R.id.dialog_msg_no_title);
         mListView = (ListView) findViewById(R.id.dialog_list);
         btnCancel = (Button) findViewById(R.id.dialog_cancel);
         btnOK = (Button) findViewById(R.id.dialog_ok);
         btnDivider = findViewById(R.id.btn_divider);
         mTitle = (TextView) findViewById(R.id.dialog_title);
+        mLineTitle = (View) findViewById(R.id.line_title);
         btnContent = findViewById(R.id.dialog_btn_content);
         mBottomCancel = (TextView) findViewById(R.id.image_chooser_dialog_cancel);
+        mContentSl = (ScrollView) findViewById(R.id.dialog_content_sl);
+        mCloseIv = (ImageView) findViewById(R.id.close_dialog);
+        mCustomLl = (LinearLayout) findViewById(R.id.custom_ll);
+        if (mCloseViewListener != null) {
+            mCloseIv.setVisibility(View.VISIBLE);
+            mCloseIv.setOnClickListener(mCloseViewListener);
+        }
     }
 
     @Override
@@ -604,11 +608,7 @@ public class CmDialog extends Dialog implements OnItemClickListener {
         return t;
     }
 
-    public Button getBtnOK() {
-        return btnOK;
-    }
-
-    public Button getBtnCancel() {
-        return btnCancel;
+    public void setCloseViewListener(View.OnClickListener listener) {
+        mCloseViewListener = listener;
     }
 }

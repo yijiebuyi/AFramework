@@ -33,8 +33,8 @@ import android.widget.Toast;
 
 import com.callme.platform.R;
 import com.callme.platform.common.activity.NoNetworkGuideActivity;
-import com.callme.platform.common.dialog.CmDialog;
-import com.callme.platform.common.dialog.CmDialog.DialogOnClickListener;
+import com.callme.platform.common.dialog.ThemeDDialog;
+import com.callme.platform.common.dialog.ThemeDDialog.DialogOnClickListener;
 import com.callme.platform.common.dialog.LoadingProgressDialog;
 import com.callme.platform.util.AppCompatUtil;
 import com.callme.platform.util.CmActivityManager;
@@ -95,10 +95,11 @@ public abstract class BaseActivity extends FragmentActivity {
     protected TextView mTvTitle;
     protected View mLeftDot;
     protected View mRightDot;
+    protected View mHeader;
 
     private LoadingProgressDialog mLoadingProgressDialog;
 
-    private boolean mIsCancelable = false;
+    protected boolean mIsCancelable = false;
     private List<String> mRequestList;
     private boolean mShowNetDefault = true;
     private boolean mNetNotConnect = false;
@@ -109,7 +110,7 @@ public abstract class BaseActivity extends FragmentActivity {
     /**
      * 注解
      */
-    private Unbinder mUnbinder;
+    protected Unbinder mUnbinder;
     protected Context mContext;
     protected Context mAppContext;
 
@@ -128,9 +129,6 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mIsDestroyed = false;
         CmActivityManager.getInstance().addActivity(this);
-        if (BaseApplication.getInstance() != null) {
-            BaseApplication.getInstance().onRestoreInstanceState(savedInstanceState);
-        }
         mContext = this;
         mSavedInstanceState = savedInstanceState;
         mAppContext = this.getApplicationContext();
@@ -232,6 +230,8 @@ public abstract class BaseActivity extends FragmentActivity {
         mRightIv = (ImageView) findViewById(R.id.right_image);
         mRightTv = (TextView) findViewById(R.id.right_text);
         mMsgTv = (TextView) findViewById(R.id.select_top);
+
+        mHeader = findViewById(R.id.header);
 
         mLeftDot = findViewById(R.id.circle_left);
         mRightDot = findViewById(R.id.circle_right);
@@ -614,18 +614,6 @@ public abstract class BaseActivity extends FragmentActivity {
         mLeftDot.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mIsCancelable && keyCode == KeyEvent.KEYCODE_BACK) {
-            mIsCancelable = false;
-            closeProgress();
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-
     /**
      * 显示对话框形式的加载提示
      *
@@ -712,7 +700,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (this.isFinishing()) {
             return;
         }
-        final CmDialog dialog = new CmDialog(this, msg, titleRes);
+        final ThemeDDialog dialog = new ThemeDDialog(this, msg, titleRes);
         dialog.setNegativeButton(R.string.common_sure, new DialogOnClickListener() {
 
             @Override
@@ -733,7 +721,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (this.isFinishing()) {
             return;
         }
-        final CmDialog dialog = new CmDialog(this, msg, title);
+        final ThemeDDialog dialog = new ThemeDDialog(this, msg, title);
         dialog.setNegativeButton(R.string.common_sure, new DialogOnClickListener() {
 
             @Override
@@ -754,7 +742,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (this.isFinishing()) {
             return;
         }
-        final CmDialog dialog = new CmDialog(this, msg, title);
+        final ThemeDDialog dialog = new ThemeDDialog(this, msg, title);
         dialog.setCancellable(false);
         dialog.setNegativeButton(R.string.common_sure, new DialogOnClickListener() {
 
@@ -778,7 +766,7 @@ public abstract class BaseActivity extends FragmentActivity {
         if (this.isFinishing()) {
             return;
         }
-        final CmDialog dialog = new CmDialog(this, msg, title);
+        final ThemeDDialog dialog = new ThemeDDialog(this, msg, title);
         dialog.setCancellable(false);
         dialog.setNegativeButton(button, new DialogOnClickListener() {
 
@@ -1014,7 +1002,7 @@ public abstract class BaseActivity extends FragmentActivity {
      */
     public void showToast(String msg) {
         if (!TextUtils.isEmpty(msg)) {
-            ToastUtil.showCustomViewToast(this, msg);
+            ToastUtil.showCustomViewToast(getApplication(), msg);
         }
     }
 

@@ -73,15 +73,15 @@ public class TimerDialog {
             return;
         }
         
-        final CmDialog dialog = new CmDialog(mContext, mMsg, mTitle);
-        dialog.setNegativeButton(mCancelTip, new CmDialog.DialogOnClickListener() {
+        final ThemeDDialog dialog = new ThemeDDialog(mContext, mMsg, mTitle);
+        dialog.setNegativeButton(mCancelTip, new ThemeDDialog.DialogOnClickListener() {
             @Override
             public void onClick() {
                 dialog.dismiss();
             }
         });
 
-        dialog.setPositiveButton(mConfirmTip, new CmDialog.DialogOnClickListener() {
+        dialog.setPositiveButton(mConfirmTip, new ThemeDDialog.DialogOnClickListener() {
             @Override
             public void onClick() {
                 if (listener != null) {

@@ -7,29 +7,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.callme.platform.R;
-import com.callme.platform.common.dialog.CmDialog;
-import com.callme.platform.common.dialog.CmDialog.DialogOnClickListener;
+import com.callme.platform.common.dialog.ThemeDDialog;
+import com.callme.platform.common.dialog.ThemeDDialog.DialogOnClickListener;
 
 public class PhoneUtil {
-
-    public static void takePhone(final Context context, final String num) {
-        final CmDialog dialog = new CmDialog(context, num, 0);
-        dialog.setPositiveButton(R.string.common_dial_telephone,
-                new DialogOnClickListener() {
-                    @Override
-                    public void onClick() {
-                        dialog.dismiss();
-                        callPhone(context, num);
-                    }
-                });
-        dialog.setNegativeButton(R.string.common_cancel, new DialogOnClickListener() {
-            @Override
-            public void onClick() {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
 
     public static void sendMessage(Context context, String num, String content) {
         Uri uri = Uri.parse("smsto:" + num);

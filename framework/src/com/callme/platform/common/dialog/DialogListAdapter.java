@@ -1,5 +1,6 @@
 package com.callme.platform.common.dialog;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +32,10 @@ public class DialogListAdapter extends BaseAdapter {
 	private int[] imageList;
 	private LayoutInflater mInflater;
 	private boolean mIsAlignLeft;
-	private CmDialog mDialog;
+	private AdapterView.OnItemClickListener mDialog;
 
-	public DialogListAdapter(Context context, CmDialog dialog, String[] txts,
-                             int[] images, boolean isAlignLeft) {
+	public DialogListAdapter(Context context, AdapterView.OnItemClickListener dialog, String[] txts,
+							 int[] images, boolean isAlignLeft) {
 		txtList = txts;
 		imageList = images;
 		mInflater = LayoutInflater.from(context);
