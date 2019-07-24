@@ -109,6 +109,10 @@ public class HttpHeader {
      * 纬度
      */
     public static double LATITUDE;
+    /**
+     * cookie
+     */
+    public static String COOKIE_VALUE;
 
     /**
      * 初始化Http Header常量
