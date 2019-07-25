@@ -16,7 +16,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,9 +32,9 @@ import android.widget.Toast;
 
 import com.callme.platform.R;
 import com.callme.platform.common.activity.NoNetworkGuideActivity;
+import com.callme.platform.common.dialog.LoadingProgressDialog;
 import com.callme.platform.common.dialog.ThemeDDialog;
 import com.callme.platform.common.dialog.ThemeDDialog.DialogOnClickListener;
-import com.callme.platform.common.dialog.LoadingProgressDialog;
 import com.callme.platform.util.AppCompatUtil;
 import com.callme.platform.util.CmActivityManager;
 import com.callme.platform.util.LogUtil;
@@ -626,6 +625,9 @@ public abstract class BaseActivity extends FragmentActivity {
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
         }
+        if (mLoadingProgressDialog.isShowing()) {
+            return;
+        }
         mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
 
@@ -658,6 +660,9 @@ public abstract class BaseActivity extends FragmentActivity {
         mIsCancelable = cancelable;
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
+        }
+        if (mLoadingProgressDialog.isShowing()) {
+            return;
         }
         mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
