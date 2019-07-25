@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.callme.platform.util;
+package com.callme.platform.widget.crop;
 
 import android.Manifest;
 import android.content.Context;

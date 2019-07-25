@@ -19,8 +19,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
-import com.callme.platform.util.PermissionHelper;
-
 import java.io.File;
 
 /*
