@@ -36,7 +36,7 @@ import java.util.List;
  * 修改描述：
  * 修改日期
  */
-public final class PermissionUtil {
+final class PermissionUtil {
     /**
      * Turn permissions into text.
      */
