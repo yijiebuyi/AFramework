@@ -10,7 +10,6 @@ import android.os.Build;
 import android.util.Log;
 
 import com.callme.platform.util.ApiHelper;
-import com.callme.platform.util.BitmapPool;
 import com.callme.platform.util.BitmapUtils;
 import com.callme.platform.util.thdpool.ThreadPool.CancelListener;
 import com.callme.platform.util.thdpool.ThreadPool.JobContext;

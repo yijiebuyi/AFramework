@@ -1,4 +1,4 @@
-package com.callme.platform.util;
+package com.callme.platform.glsrender.core;
 
 import android.graphics.Bitmap;
 
