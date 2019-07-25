@@ -93,25 +93,8 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
     @Override
     public void onSuccess(int code) {
         if ((mResponseUiFlag & FLAG_PROGRESS_MANUAL_CLOSE) == 0) {
-            if (mComeFrom != null && mBeShownProgress) {
-                boolean showProgressDialog = (mResponseUiFlag & FLAG_SHOW_PROGRESS_DIALOG) != 0;
-                if (mComeFrom instanceof BaseActivity) {
-                    if (showProgressDialog) {
-                        ((BaseActivity) mComeFrom).closeProgressDialog();
-                    } else {
-                        ((BaseActivity) mComeFrom).closeProgress();
-                    }
-                } else if (mComeFrom instanceof BaseFragment) {
-                    if (showProgressDialog) {
-                        ((BaseFragment) mComeFrom).closeProgressDialog();
-                    } else {
-                        ((BaseFragment) mComeFrom).closeProgress();
-                    }
-                }
-            } else {
-                //关闭所有的对话框
-                closeLoadingProgress();
-            }
+            //关闭所有的对话框
+            closeLoadingProgress();
         } else {
             //加载进度框关闭改为手动
         }

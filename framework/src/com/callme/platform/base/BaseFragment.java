@@ -245,6 +245,7 @@ public abstract class BaseFragment extends Fragment {
 	 *            数据访问的handler
 	 * @param cancelable
 	 *            是否可以取消请求
+	 * @deprecated
 	 */
 	public final void showProgressDialog(final String handlerId,
 			boolean cancelable) {

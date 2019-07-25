@@ -370,6 +370,7 @@ public abstract class BaseActivity extends FragmentActivity {
      * 显示对话框进度
      *
      * @param cancelable
+     * @deprecated
      */
     public final void showProgress(boolean cancelable) {
         mIsCancelable = cancelable;
@@ -383,6 +384,7 @@ public abstract class BaseActivity extends FragmentActivity {
      *
      * @param handlerId
      * @param cancelable
+     * @deprecated
      */
     public final void showProgress(String handlerId, boolean cancelable) {
         mRequestList.add(handlerId);
@@ -649,6 +651,7 @@ public abstract class BaseActivity extends FragmentActivity {
      *
      * @param handlerId  数据访问的handler
      * @param cancelable 是否可以取消请求
+     * @deprecated
      */
     public final void showProgressDialog(final String handlerId, boolean cancelable) {
         mRequestList.add(handlerId);
