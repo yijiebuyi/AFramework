@@ -17,17 +17,17 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
 
-public class CmPopupMenuList extends ListView {
+public class PopupMenuList extends ListView {
 
-	public CmPopupMenuList(Context context) {
+	public PopupMenuList(Context context) {
 		super(context);
 	}
 
-	public CmPopupMenuList(Context context, AttributeSet attrs) {
+	public PopupMenuList(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public CmPopupMenuList(Context context, AttributeSet attrs, int defStyle) {
+	public PopupMenuList(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 	
