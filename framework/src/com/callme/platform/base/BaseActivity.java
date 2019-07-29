@@ -99,7 +99,6 @@ public abstract class BaseActivity extends FragmentActivity {
     private LoadingProgressDialog mLoadingProgressDialog;
 
     protected boolean mIsCancelable = false;
-    private List<String> mRequestList;
     private boolean mShowNetDefault = true;
     private boolean mNetNotConnect = false;
     /**
@@ -148,18 +147,16 @@ public abstract class BaseActivity extends FragmentActivity {
         }
         //3.设置是否屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //4.初始化http请求request集合，保证在activity结束的时候终止http请求
-        mRequestList = new ArrayList<String>();
-        //5.添加view到content容器中，子类实现
+        //4.添加view到content容器中，子类实现
         addIntoContent(getContentView());
-        //6.初始化view，设置onclick监听器
+        //5.初始化view，设置onclick监听器
         //解决继承自BaseActivity且属于当前库(framework)的子类butterknife不能使用Bindview的注解，onclick的注解
         initSubView();
-        //7.register eventbus
+        //6.register eventbus
         if (needRegisterEventBus()) {
             EventBus.getDefault().register(this);
         }
-        //8.view已添加到container
+        //7.view已添加到container
         onContentAdded();
     }
 
@@ -191,7 +188,6 @@ public abstract class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         mIsDestroyed = true;
-        mRequestList.clear();
 
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
@@ -386,7 +382,6 @@ public abstract class BaseActivity extends FragmentActivity {
      * @deprecated
      */
     public final void showProgress(String handlerId, boolean cancelable) {
-        mRequestList.add(handlerId);
         mIsCancelable = cancelable;
         mFailedView.setVisibility(View.GONE);
         mProgressBar.getBackground().setAlpha(100);
@@ -656,7 +651,6 @@ public abstract class BaseActivity extends FragmentActivity {
      * @deprecated
      */
     public final void showProgressDialog(final String handlerId, boolean cancelable) {
-        mRequestList.add(handlerId);
         mIsCancelable = cancelable;
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
