@@ -14,7 +14,8 @@ import retrofit2.Response;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：普通数据接口回调
+ * 功能描述：业务平台数据接口回调
+ * @see ResultBean
  * 作者：huangyong
  * 创建时间：2018/8/29
  * <p>

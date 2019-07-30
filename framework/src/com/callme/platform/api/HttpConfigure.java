@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.callme.platform.common.HttpGlobalListener;
-import com.callme.platform.util.PkgUtil;
 
 /**
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
