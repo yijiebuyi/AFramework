@@ -4,7 +4,7 @@ package com.callme.platform.api.interceptor;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：
+ * 功能描述：Http请求日志拦截器
  * 作者：huangyong
  * 创建时间：2019/5/6
  * <p>

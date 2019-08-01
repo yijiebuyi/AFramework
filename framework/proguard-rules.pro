@@ -40,7 +40,6 @@
 
 
 -keep class com.adjust.sdk.** { *; }
--keep class com.callme.platform.util.permissiongen.** { *; }
 -keep class xlf.nrl.** { *; }
 
 

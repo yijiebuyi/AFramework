@@ -14,7 +14,8 @@ import retrofit2.Response;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：普通数据接口回调
+ * 功能描述：业务平台数据接口回调
+ * @see ResultBean
  * 作者：huangyong
  * 创建时间：2018/8/29
  * <p>
@@ -58,7 +59,7 @@ public class RequestCallback extends BaseCallback {
                                 }
                             }
                             onFailureCallback(errorCode, errorMsg, false);
-                            CallRequestHelper.onFailure(call, response);
+                            CallRequestLogHelper.onFailure(call, response);
                             break;
                     }
                 }
@@ -69,18 +70,18 @@ public class RequestCallback extends BaseCallback {
             } catch (ClassCastException e) {
                 String msg = mDefaultMsg;
                 onFailureCallback(ErrorCode.CAST_EX, msg, false);
-                CallRequestHelper.onFailure(call, ErrorCode.CAST_EX, e);
+                CallRequestLogHelper.onFailure(call, ErrorCode.CAST_EX, e);
             } catch (Exception e) {
                 String msg = DATA_EX_MSG;
                 onFailureCallback(ErrorCode.HTTP_UNSPECIFIC, msg, false);
-                CallRequestHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
+                CallRequestLogHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
             }
         } else {
             boolean httpError = response == null;
             int code = httpError ? ErrorCode.HTTP_EX : response.code() ;
             String msg = mDefaultMsg;
             onFailureCallback(code, msg, httpError);
-            CallRequestHelper.onFailure(call, response);
+            CallRequestLogHelper.onFailure(call, response);
         }
 
         onLoadComplete();
@@ -94,7 +95,7 @@ public class RequestCallback extends BaseCallback {
             String msg = mDefaultMsg;
             onFailureCallback(ErrorCode.HTTP_EX, msg, true);
         }
-        CallRequestHelper.onFailure(call, ErrorCode.HTTP_EX, t);
+        CallRequestLogHelper.onFailure(call, ErrorCode.HTTP_EX, t);
 
         onLoadComplete();
     }

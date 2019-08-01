@@ -37,7 +37,6 @@ public abstract class BaseFragment extends Fragment {
 	private View mFragmentEmpty;
 	// 加载框是否可以取消
 	private boolean isCancelable = false;
-	private List<String> mRequestList;
 	private LoadingProgressDialog mLoadingProgressDialog;
 	protected Context mContext;
 
@@ -50,7 +49,6 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mRequestList = new ArrayList<String>();
 
 		//register eventbus
 		if (needRegisterEventBus()) {
@@ -91,10 +89,6 @@ public abstract class BaseFragment extends Fragment {
 		mContext = activity;
 	}
 
-	public final void addRequestCode(String id) {
-		mRequestList.add(id);
-	}
-
 	private void initDefault() {
 		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT);
@@ -128,7 +122,6 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mRequestList.clear();
 
 		//unregister eventbus
 		if (needRegisterEventBus() && EventBus.getDefault().isRegistered(this)) {
@@ -152,7 +145,6 @@ public abstract class BaseFragment extends Fragment {
 				((BaseActivity) activity).showProgress(handlerId, cancelable);
 			}
 		} else {
-			mRequestList.add(handlerId);
 			isCancelable = cancelable;
 			mFragmentFailed.setVisibility(View.GONE);
 			mFragmentProgress.getBackground().setAlpha(100);
@@ -245,6 +237,7 @@ public abstract class BaseFragment extends Fragment {
 	 *            数据访问的handler
 	 * @param cancelable
 	 *            是否可以取消请求
+	 * @deprecated
 	 */
 	public final void showProgressDialog(final String handlerId,
 			boolean cancelable) {
@@ -256,7 +249,6 @@ public abstract class BaseFragment extends Fragment {
 				((BaseActivity) activity).showProgressDialog(handlerId, cancelable);
 			}
 		} else {
-			mRequestList.add(handlerId);
 			isCancelable = cancelable;
 			if (mLoadingProgressDialog == null) {
 				mLoadingProgressDialog = new LoadingProgressDialog(getActivity());

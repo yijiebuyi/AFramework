@@ -1,4 +1,4 @@
-package com.callme.platform.util;
+package com.callme.platform.widget.crop;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -26,7 +26,7 @@ import java.util.List;
  * 修改描述：
  * 修改日期
  */
-public class PermissionHelper {
+class PermissionHelper {
 
     /**
      * @param permissions 如果应用之前请求过此权限但用户拒绝了请求，shouldShowRequestPermissionRationale()此方法将返回true

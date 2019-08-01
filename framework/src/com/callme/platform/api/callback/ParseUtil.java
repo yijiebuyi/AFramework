@@ -79,6 +79,7 @@ public class ParseUtil {
 
     /**
      * 解析data数据
+     * 数据类型：监听器所带的泛型类型
      *
      * @param data
      * @return

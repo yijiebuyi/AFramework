@@ -41,7 +41,7 @@ public class FileRequestCallback implements Callback {
         final boolean httpError = response == null;
         if (response == null || response.code() != 200) {
             onFailureCallback(httpError ? ErrorCode.HTTP_EX : response.code(), "文件下载失败", httpError);
-            CallRequestHelper.onFailure(call, response);
+            CallRequestLogHelper.onFailure(call, response);
             onLoadComplete();
             return;
         }
@@ -69,12 +69,12 @@ public class FileRequestCallback implements Callback {
                                 mListener.onSuccess(mFilePath);
                             } else {
                                 onFailureCallback(ErrorCode.FILE_DOWNLOAD_FAIL, "文件下载失败!", httpError);
-                                CallRequestHelper.onFailure(call, response);
+                                CallRequestLogHelper.onFailure(call, response);
                             }
                         } catch (Exception e) {
                             String msg = "文件下载失败";
                             onFailureCallback(ErrorCode.HTTP_UNSPECIFIC, msg, false);
-                            CallRequestHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
+                            CallRequestLogHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
                         }
 
                         onLoadComplete();
@@ -87,7 +87,7 @@ public class FileRequestCallback implements Callback {
     @Override
     public void onFailure(Call call, Throwable t) {
         onFailureCallback(ErrorCode.HTTP_EX, "文件下载失败", true);
-        CallRequestHelper.onFailure(call, ErrorCode.HTTP_EX, t);
+        CallRequestLogHelper.onFailure(call, ErrorCode.HTTP_EX, t);
 
         onLoadComplete();
     }

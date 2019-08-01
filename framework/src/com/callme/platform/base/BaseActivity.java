@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,9 +33,9 @@ import android.widget.Toast;
 
 import com.callme.platform.R;
 import com.callme.platform.common.activity.NoNetworkGuideActivity;
+import com.callme.platform.common.dialog.LoadingProgressDialog;
 import com.callme.platform.common.dialog.ThemeDDialog;
 import com.callme.platform.common.dialog.ThemeDDialog.DialogOnClickListener;
-import com.callme.platform.common.dialog.LoadingProgressDialog;
 import com.callme.platform.util.AppCompatUtil;
 import com.callme.platform.util.CmActivityManager;
 import com.callme.platform.util.LogUtil;
@@ -101,7 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private LoadingProgressDialog mLoadingProgressDialog;
 
     protected boolean mIsCancelable = false;
-    private List<String> mRequestList;
     private boolean mShowNetDefault = true;
     private boolean mNetNotConnect = false;
     /**
@@ -150,18 +148,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         //3.设置是否屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //4.初始化http请求request集合，保证在activity结束的时候终止http请求
-        mRequestList = new ArrayList<String>();
-        //5.添加view到content容器中，子类实现
+        //4.添加view到content容器中，子类实现
         addIntoContent(getContentView());
-        //6.初始化view，设置onclick监听器
+        //5.初始化view，设置onclick监听器
         //解决继承自BaseActivity且属于当前库(framework)的子类butterknife不能使用Bindview的注解，onclick的注解
         initSubView();
-        //7.register eventbus
+        //6.register eventbus
         if (needRegisterEventBus()) {
             EventBus.getDefault().register(this);
         }
-        //8.view已添加到container
+        //7.view已添加到container
         onContentAdded();
     }
 
@@ -193,7 +189,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mIsDestroyed = true;
-        mRequestList.clear();
 
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
@@ -371,6 +366,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 显示对话框进度
      *
      * @param cancelable
+     * @deprecated
      */
     public final void showProgress(boolean cancelable) {
         mIsCancelable = cancelable;
@@ -384,9 +380,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param handlerId
      * @param cancelable
+     * @deprecated
      */
     public final void showProgress(String handlerId, boolean cancelable) {
-        mRequestList.add(handlerId);
         mIsCancelable = cancelable;
         mFailedView.setVisibility(View.GONE);
         mProgressBar.getBackground().setAlpha(100);
@@ -625,6 +621,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
         }
+        if (mLoadingProgressDialog.isShowing()) {
+            return;
+        }
         mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
 
@@ -650,12 +649,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param handlerId  数据访问的handler
      * @param cancelable 是否可以取消请求
+     * @deprecated
      */
     public final void showProgressDialog(final String handlerId, boolean cancelable) {
-        mRequestList.add(handlerId);
         mIsCancelable = cancelable;
         if (mLoadingProgressDialog == null) {
             mLoadingProgressDialog = new LoadingProgressDialog(this);
+        }
+        if (mLoadingProgressDialog.isShowing()) {
+            return;
         }
         mLoadingProgressDialog.setCancelable(mIsCancelable);
         mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {

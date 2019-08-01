@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
-import com.callme.platform.util.bitmap.ImageLoader;
 
 import java.io.File;
 
@@ -33,10 +32,6 @@ import java.io.File;
  * 修改日期
  */
 public class CmImageLoader {
-
-    public static void displayImage(Context ctx, String url, ImageView view, int optionIndex) {
-        ImageLoader.getInstance(ctx).displayImage(url, view, BitmapOptions.getOption(optionIndex));
-    }
 
     public static void displayImageWithGlide(Context ctx, String url, ImageView view, int imgId) {
         if (!isCanLoadGlideImg(ctx, view)) {

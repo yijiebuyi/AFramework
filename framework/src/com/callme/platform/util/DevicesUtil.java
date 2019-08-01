@@ -71,16 +71,6 @@ import java.util.List;
  */
 public class DevicesUtil {
 
-    public static boolean isMX3 = false;
-
-    static {
-        String model = Build.MODEL.trim().toLowerCase();
-        if (model.equalsIgnoreCase("m353")
-                || Build.DEVICE.equalsIgnoreCase("mx3")) {
-            isMX3 = true;
-        }
-    }
-
     /**
      * 获取设备Metrics
      *

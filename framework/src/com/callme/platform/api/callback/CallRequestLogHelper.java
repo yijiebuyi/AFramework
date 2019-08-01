@@ -28,7 +28,7 @@ import retrofit2.Response;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：
+ * 功能描述：http请求，日志辅助类
  * 作者：huangyong
  * 创建时间：2019/5/9
  * <p>
@@ -36,7 +36,7 @@ import retrofit2.Response;
  * 修改描述：
  * 修改日期
  */
-public class CallRequestHelper {
+public class CallRequestLogHelper {
     private final static Charset UTF8 = Charset.forName("UTF-8");
 
     /**
@@ -101,7 +101,7 @@ public class CallRequestHelper {
         try {
             Request request = call != null ? call.request() : null;
             if (request == null) {
-                request = getRequest(call);
+                request = getRequestByReflect(call);
             }
 
             StringBuilder sb = new StringBuilder();
@@ -133,7 +133,7 @@ public class CallRequestHelper {
      */
     private final static void handleLog(StringBuilder sb, StackTraceElement[] exStackTrace, boolean connectEx) {
         StackTraceElement[] callSackTrace = Thread.currentThread().getStackTrace();
-        String lineInfo = StackTraceUtil.getStackMsg(callSackTrace, CallRequestHelper.class,
+        String lineInfo = StackTraceUtil.getStackMsg(callSackTrace, CallRequestLogHelper.class,
                 1, 0, exStackTrace);
 
         long millis = System.currentTimeMillis();
@@ -158,7 +158,7 @@ public class CallRequestHelper {
      * @param call
      * @return
      */
-    public static Request getRequest(Call call) {
+    private static Request getRequestByReflect(Call call) {
         if (call == null) {
             return null;
         }
@@ -174,7 +174,7 @@ public class CallRequestHelper {
                 String name = field.getName();
                 if (TextUtils.equals("delegate", name)) {
                     Call delegateCall = (Call) field.get(call);
-                    return getRequest(delegateCall);
+                    return getRequestByReflect(delegateCall);
                 } else if (TextUtils.equals("rawCall", name)) {
                     okhttp3.Call rawCall = (okhttp3.Call) field.get(call);
                     return rawCall.request();
