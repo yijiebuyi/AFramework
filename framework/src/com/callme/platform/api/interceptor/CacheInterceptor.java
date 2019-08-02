@@ -1,7 +1,7 @@
 package com.callme.platform.api.interceptor;
 
 import android.content.Context;
-import android.util.Log;
+import android.text.TextUtils;
 
 import com.callme.platform.util.ApnUtil;
 
@@ -34,29 +34,33 @@ public class CacheInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();//获取请求
-        //有直接获取网络上面的数据，否则去缓存里面取数据
-        if (!ApnUtil.isNetworkAvailable(mContext)) {
-            request = request.newBuilder()
-                    .cacheControl(CacheControl.FORCE_CACHE)
-                    .build();
-            Log.d("CacheInterceptor", "no network");
-        }
-        Response originalResponse = chain.proceed(request);
+        Request request = chain.request();
+        //有直接获取网络上面的数据，否则去缓存里面取数据(如果接口设置缓存的情况下)
+        boolean networkAvailable = ApnUtil.isNetworkAvailable(mContext);
+        String cacheControl = request.cacheControl().toString();
+        if (!TextUtils.isEmpty(cacheControl)) {
+            if (!networkAvailable) {
+                request = request.newBuilder()
+                        .cacheControl(CacheControl.FORCE_CACHE)
+                        .build();
+            }
 
-        if (ApnUtil.isNetworkAvailable(mContext)) {
-            String cacheControl = request.cacheControl().toString();
-            return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, max-age=" + 0)
-                    .removeHeader("Pragma")
-                    .build();
+            Response originalResponse = chain.proceed(request);
+            if (ApnUtil.isNetworkAvailable(mContext)) {
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", cacheControl)
+                        .removeHeader("Pragma")
+                        .build();
+            } else {
+                int maxTime = 2 * 60 * 60; //单位s
+                return originalResponse.newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxTime)
+                        .removeHeader("Pragma")
+                        .build();
+
+            }
         } else {
-            int maxTime = 2 * 60 * 60; //单位s
-            return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + maxTime)
-                    .removeHeader("Pragma")
-                    .build();
-
+            return chain.proceed(request);
         }
     }
 }
