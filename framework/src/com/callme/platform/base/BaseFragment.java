@@ -40,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
 	private LoadingProgressDialog mLoadingProgressDialog;
 	protected Context mContext;
 
-	private Unbinder mBinder;
+	protected Unbinder mBinder;
 
 	public abstract View getContainerView();
 
@@ -77,7 +77,9 @@ public abstract class BaseFragment extends Fragment {
 
 		initDefault();
 		View containerView = getContainerView();
-		mBinder = ButterKnife.bind(this, containerView);
+		if (!delayBind()){
+			mBinder = ButterKnife.bind(this, containerView);
+		}
 		addContainerView(containerView);
 		initData();
 		return view;
@@ -117,6 +119,10 @@ public abstract class BaseFragment extends Fragment {
 			mBinder.unbind();
 		}
 		super.onDestroyView();
+	}
+
+	protected boolean delayBind(){
+		return false;
 	}
 
 	@Override
