@@ -83,14 +83,6 @@ public interface HttpResponseUi {
     public void onSuccess(int code);
 
     /**
-     * http错误响应
-     *
-     * @param errorCode http错误码 如：401 500
-     * @param msg       如：401访问拒绝  500服务器内部错误
-     */
-    public void onError(int errorCode, String msg);
-
-    /**
      * 处理错误
      *
      * @param errorCode

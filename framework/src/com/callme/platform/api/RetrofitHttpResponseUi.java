@@ -116,11 +116,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         }
     }
 
-    @Override
-    public void onError(int errorCode, String msg) {
-        sendErrorLog(errorCode, msg);
-
-        closeLoadingProgress();
+    private void onHttpError(int errorCode, String msg) {
         boolean canShowFailureView = (mResponseUiFlag & FLAG_SHOW_LOAD_FAIL_VIEW) != 0;
         boolean showToast = true;
         if (mComeFrom != null && canShowFailureView) {
@@ -149,7 +145,11 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
 
     @Override
     public void onFailure(int errorCode, String msg, boolean httpError) {
-        onError(errorCode, msg);
+        closeLoadingProgress();
+        if (httpError) {
+            onHttpError(errorCode, msg);
+        }
+        sendErrorLog(errorCode, msg);
     }
 
     @Override
