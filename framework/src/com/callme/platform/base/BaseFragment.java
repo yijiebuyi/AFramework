@@ -138,6 +138,7 @@ public abstract class BaseFragment extends Fragment {
 	 *            数据访问的handler
 	 * @param cancelable
 	 *            是否可以取消请求
+	 * @deprecated
 	 */
 	public final void showProgress(String handlerId, boolean cancelable) {
 		Activity activity = getActivity();
@@ -161,6 +162,7 @@ public abstract class BaseFragment extends Fragment {
 	 *            数据访问的handler
 	 * @param cancelable
 	 *            是否可以取消请求
+	 * @deprecated
 	 */
 	public final void showProgress(boolean cancelable) {
 		Activity activity = getActivity();
@@ -171,6 +173,7 @@ public abstract class BaseFragment extends Fragment {
 
 	/**
 	 * 关闭view形式的加载提示
+	 * @deprecated
 	 */
 	public final void closeProgress() {
 		Activity activity = getActivity();

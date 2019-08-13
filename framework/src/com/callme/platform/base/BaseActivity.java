@@ -387,6 +387,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 关闭对话框进度
+     * @deprecated
      */
     public final void closeProgress() {
         mIsCancelable = false;

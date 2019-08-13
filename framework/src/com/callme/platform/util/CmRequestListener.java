@@ -13,8 +13,16 @@ public abstract class CmRequestListener<T> {
      * http请求前
      *
      * @param handlerId
+     * @deprecated
+     * @see #onPreStart()
      */
     public void onPreStart(String handlerId) {
+    }
+
+    /**
+     * http请求前
+     */
+    public void onPreStart() {
     }
 
     /**

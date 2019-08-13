@@ -71,6 +71,7 @@ public class ApiRequestManager {
     public <T> void enqueueRequest(Context context, int responseFlag, final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
+            listener.onPreStart();
         }
         RetrofitHttpResponseUi ui = new RetrofitHttpResponseUi(context, call, listener);
         ui.setHttpResponseUi(responseFlag);
@@ -91,6 +92,7 @@ public class ApiRequestManager {
     public <T> void enqueueRequestInBackground(final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
+            listener.onPreStart();
         }
 
         RequestCallback callback = new RequestCallback(listener);
@@ -107,6 +109,7 @@ public class ApiRequestManager {
     public static <T> void executeRequest(final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
+            listener.onPreStart();
         }
 
         RequestCallback callback = new RequestCallback(listener);
@@ -129,6 +132,7 @@ public class ApiRequestManager {
     public void download(final Call call, final String filePath, final CmRequestImpListener<String> listener) {
         if (listener != null) {
             listener.onPreStart("");
+            listener.onPreStart();
         }
 
         FileRequestCallback callback = new FileRequestCallback(mHandler, filePath, listener);
@@ -150,6 +154,7 @@ public class ApiRequestManager {
     public <T> void enqueueGeneralRequest(Context context, int responseFlag, final Call call, CmRequestImpListener<T> listener) {
         if (listener != null) {
             listener.onPreStart("");
+            listener.onPreStart();
         }
 
         RetrofitHttpResponseUi ui = new RetrofitHttpResponseUi(context, call, listener);
