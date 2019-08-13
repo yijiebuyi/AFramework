@@ -36,6 +36,8 @@ import java.util.List;
  * @param <B> 数据对象bean
  * @param <H> item对象 holder
  * @author mikeyou 修改描述： 添加swipe list相关支持
+ * @deprecated
+ * @see RAbsSwipeAdapter
  */
 public abstract class AbsSwipeAdapter<B, H> extends BaseAdapter implements
         StickyListHeadersAdapter {

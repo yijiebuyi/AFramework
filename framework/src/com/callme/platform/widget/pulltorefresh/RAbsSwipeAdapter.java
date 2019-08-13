@@ -343,6 +343,15 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
 
     }
 
+    /**
+     * 网络请求完成回调，不管成功或失败
+     * 每次接口请求都会返回
+     * 注：每次下拉刷新、加载更多，请求接口时，该方法都将回调
+     */
+    protected void onLoadComplete() {
+
+    }
+
     public RAbsSwipeAdapter(Context context) {
         mContext = context;
         mInflater = (LayoutInflater) mContext
@@ -536,12 +545,16 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
                         mCurrentPage--;
                         RAbsSwipeAdapter.this.onFailure(-1, "error");
                     }
+
+                    RAbsSwipeAdapter.this.onLoadComplete();
                 }
 
                 @Override
                 public void onFailure(Call<ResultBean<B>> call, Throwable t) {
                     mCurrentPage--;
                     RAbsSwipeAdapter.this.onFailure(-1, "error");
+
+                    RAbsSwipeAdapter.this.onLoadComplete();
                 }
             });
         }
@@ -572,12 +585,16 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
                         mCurrentPage--;
                         RAbsSwipeAdapter.this.onFailure(-1, "error");
                     }
+
+                    RAbsSwipeAdapter.this.onLoadComplete();
                 }
 
                 @Override
                 public void onFailure(Call<ResultBean<List<B>>> call, Throwable t) {
                     mCurrentPage--;
                     RAbsSwipeAdapter.this.onFailure(-1, "error");
+
+                    RAbsSwipeAdapter.this.onLoadComplete();
                 }
             });
         }
