@@ -1,8 +1,8 @@
 package com.callme.platform.api.callback;
 
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -54,8 +54,8 @@ public class GeneralRequestCallback extends BaseCallback {
                 }
             }
         } else {
-            boolean httpError = response == null;
-            int code = httpError ? ErrorCode.HTTP_EX : response.code();
+            boolean httpError = true;
+            int code = response == null ? ErrorCode.HTTP_EX : response.code();
             String msg = mDefaultMsg;
             onFailureCallback(code, msg, httpError);
             CallRequestLogHelper.onFailure(call, response);

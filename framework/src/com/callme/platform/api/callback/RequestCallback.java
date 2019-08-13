@@ -3,9 +3,9 @@ package com.callme.platform.api.callback;
 import android.text.TextUtils;
 
 import com.callme.platform.BuildConfig;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -53,7 +53,8 @@ public class RequestCallback extends BaseCallback {
                         default:
                             if (TextUtils.isEmpty(errorMsg)) {
                                 errorMsg = mDefaultMsg;
-                            } else if (errorMsg.contains("exception") || errorMsg.contains("Exception")) {
+                            } else if (errorMsg.toLowerCase().contains("exception")
+                                    || errorMsg.toLowerCase().contains("throwable")) {
                                 if (!BuildConfig.DEBUG) {
                                     errorMsg = mDefaultMsg;
                                 }
@@ -77,8 +78,8 @@ public class RequestCallback extends BaseCallback {
                 CallRequestLogHelper.onFailure(call, ErrorCode.HTTP_UNSPECIFIC, e);
             }
         } else {
-            boolean httpError = response == null;
-            int code = httpError ? ErrorCode.HTTP_EX : response.code() ;
+            boolean httpError = true;
+            int code = response == null ? ErrorCode.HTTP_EX : response.code();
             String msg = mDefaultMsg;
             onFailureCallback(code, msg, httpError);
             CallRequestLogHelper.onFailure(call, response);

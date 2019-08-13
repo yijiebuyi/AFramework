@@ -26,7 +26,7 @@ public class ParseUtil {
     /**
      * 获取错误码(版本间的兼容)
      * 3.0之前的接口，使用error字段
-     * 3.0只有的接口，使用code字段
+     * 3.0及以后的接口，使用code字段
      *
      * @param response
      * @return
@@ -107,7 +107,7 @@ public class ParseUtil {
 
     /**
      * 解析ResultBean
-     * {@link com.callme.platform.net.callback.ResultBean}
+     * {@link com.callme.platform.api.callback.ResultBean}
      *
      * @param response
      * @return

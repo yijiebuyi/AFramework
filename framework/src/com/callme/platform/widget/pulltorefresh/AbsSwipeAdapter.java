@@ -29,8 +29,6 @@ import com.callme.platform.widget.swipelistview.SwipeListView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -552,21 +550,6 @@ public abstract class AbsSwipeAdapter<B, H> extends BaseAdapter implements
 
     protected RequestListener getListener() {
         return new RequestListener<ResultBean>() {
-            @Override
-            public void onReSendReq() {
-                // 登录态过期后重新登录后再次发出请求
-                request();
-            }
-
-            @Override
-            public void onLoginTimeout() {
-                if (mCurrentState == STATE_DOWN_REFRESH
-                        || mCurrentState == STATE_UP_REFRESH
-                        || mCurrentState == STATE_LOADING) {
-                    changeRequestStatus(STATE_NORMAL);
-                    mRequestId = null;
-                }
-            }
 
             @Override
             public void onSuccess(ResultBean response) {
@@ -580,24 +563,6 @@ public abstract class AbsSwipeAdapter<B, H> extends BaseAdapter implements
                     isLastPage = true;
                 }
                 mHandler.sendMessage(msg);
-            }
-
-            @Override
-            public void onResponse(JSONObject response) {
-                /*mCurrentPage++;
-                mRequestId = null;
-                List<Object> json = null;
-                PageBean<Object> bean = BaseBusiness.parsePageBean(response.toString());
-                if (bean != null) {
-                    json = bean.rows;
-                }
-                Message msg = Message.obtain();
-                if (json != null && json.size() > 0) {
-                    msg.obj = response;
-                } else {
-                    isLastPage = true;
-                }
-                mHandler.sendMessage(msg);*/
             }
 
             @Override
