@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Base64;
 
 import com.callme.platform.base.BaseBean;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.util.JsonUtils;
 
 import org.json.JSONObject;
@@ -50,7 +50,7 @@ public class EncryptUtil {
      * @return
      */
     public static String RSAPost(Context context, String url, Object entry,
-                                 CmRequestImpListener<JSONObject> responseHandler) {
+                                 RequestListener<JSONObject> responseHandler) {
         RsaDataBean data = EncryptUtil.buildRsaData(entry);
         /*RequestParams params = new RequestParams();
         params.put(EncryptUtil.getRsaStrByBase64(data));
@@ -58,7 +58,7 @@ public class EncryptUtil {
         return null;
     }
 
-    public static String RSAPost(Context context, String url, Object entry, CmRequestImpListener<JSONObject> responseHandler,
+    public static String RSAPost(Context context, String url, Object entry, RequestListener<JSONObject> responseHandler,
                                  int type) {
         RsaDataBean data = EncryptUtil.buildRsaData(entry);
         /*RequestParams params = new RequestParams();

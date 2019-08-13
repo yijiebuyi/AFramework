@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.callme.platform.BuildConfig;
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -26,11 +26,11 @@ import retrofit2.Response;
 public class RequestCallback extends BaseCallback {
     private final static String DATA_EX_MSG = "获取数据失败，请重试！";
 
-    public <T> RequestCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
+    public <T> RequestCallback(Request request, RequestListener<T> listener, LifeCycle lifeCycle) {
         super(request, listener, lifeCycle);
     }
 
-    public <T> RequestCallback(CmRequestImpListener<T> listener) {
+    public <T> RequestCallback(RequestListener<T> listener) {
         super(listener);
     }
 

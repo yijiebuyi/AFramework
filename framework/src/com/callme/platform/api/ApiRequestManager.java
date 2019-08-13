@@ -7,9 +7,9 @@ import android.os.Looper;
 import com.callme.platform.api.callback.FileRequestCallback;
 import com.callme.platform.api.callback.GeneralRequestCallback;
 import com.callme.platform.api.callback.RequestCallback;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.api.request.Request;
 import com.callme.platform.common.HttpResponseUi;
-import com.callme.platform.util.CmRequestImpListener;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -53,7 +53,7 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequest(Context context, final Call call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequest(Context context, final Call call, RequestListener<T> listener) {
         enqueueRequest(context, HttpResponseUi.FLAG_NONE, call, listener);
     }
 
@@ -68,9 +68,8 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequest(Context context, int responseFlag, final Call call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequest(Context context, int responseFlag, final Call call, RequestListener<T> listener) {
         if (listener != null) {
-            listener.onPreStart("");
             listener.onPreStart();
         }
         RetrofitHttpResponseUi ui = new RetrofitHttpResponseUi(context, call, listener);
@@ -89,9 +88,8 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueRequestInBackground(final Call call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueRequestInBackground(final Call call, RequestListener<T> listener) {
         if (listener != null) {
-            listener.onPreStart("");
             listener.onPreStart();
         }
 
@@ -106,9 +104,8 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public static <T> void executeRequest(final Call call, CmRequestImpListener<T> listener) {
+    public static <T> void executeRequest(final Call call, RequestListener<T> listener) {
         if (listener != null) {
-            listener.onPreStart("");
             listener.onPreStart();
         }
 
@@ -129,9 +126,8 @@ public class ApiRequestManager {
      * @param filePath 保存的文件路径
      * @param listener
      */
-    public void download(final Call call, final String filePath, final CmRequestImpListener<String> listener) {
+    public void download(final Call call, final String filePath, final RequestListener<String> listener) {
         if (listener != null) {
-            listener.onPreStart("");
             listener.onPreStart();
         }
 
@@ -151,9 +147,8 @@ public class ApiRequestManager {
      * @param listener
      * @param <T>
      */
-    public <T> void enqueueGeneralRequest(Context context, int responseFlag, final Call call, CmRequestImpListener<T> listener) {
+    public <T> void enqueueGeneralRequest(Context context, int responseFlag, final Call call, RequestListener<T> listener) {
         if (listener != null) {
-            listener.onPreStart("");
             listener.onPreStart();
         }
 

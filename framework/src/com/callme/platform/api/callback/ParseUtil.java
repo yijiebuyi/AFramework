@@ -2,7 +2,7 @@ package com.callme.platform.api.callback;
 
 import android.text.TextUtils;
 
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.util.JsonUtils;
 
 import java.lang.reflect.ParameterizedType;
@@ -84,7 +84,7 @@ public class ParseUtil {
      * @param data
      * @return
      */
-    public static Object parseData(Object data, CmRequestImpListener listener) {
+    public static Object parseData(Object data, RequestListener listener) {
         if (data == null || TextUtils.isEmpty(data.toString())) {
             return null;
         }
@@ -112,7 +112,7 @@ public class ParseUtil {
      * @param response
      * @return
      */
-    public static ResultBean parseResultBean(Response response, CmRequestImpListener listener) {
+    public static ResultBean parseResultBean(Response response, RequestListener listener) {
         ResultBean result = null;
         Object body = response.body();
         if (body instanceof ResultBean) {

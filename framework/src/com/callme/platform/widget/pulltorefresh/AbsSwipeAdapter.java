@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.callme.platform.R;
 import com.callme.platform.api.callback.ResultBean;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.util.ToastUtil;
 import com.callme.platform.widget.pulltorefresh.PullToRefreshBase.Mode;
 import com.callme.platform.widget.stickylistheaders.StickyListHeadersAdapter;
@@ -550,8 +550,8 @@ public abstract class AbsSwipeAdapter<B, H> extends BaseAdapter implements
 
     protected abstract String initRequest();
 
-    protected CmRequestImpListener getListener() {
-        return new CmRequestImpListener<ResultBean>() {
+    protected RequestListener getListener() {
+        return new RequestListener<ResultBean>() {
             @Override
             public void onReSendReq() {
                 // 登录态过期后重新登录后再次发出请求

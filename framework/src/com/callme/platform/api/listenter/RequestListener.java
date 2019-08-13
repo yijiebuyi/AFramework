@@ -1,23 +1,12 @@
-package com.callme.platform.util;
+package com.callme.platform.api.listenter;
+
 
 import org.json.JSONObject;
 
-/**
- * Cm 监听回调
- *
- * @param <T>
- */
-public abstract class CmRequestListener<T> {
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
-    /**
-     * http请求前
-     *
-     * @param handlerId
-     * @deprecated
-     * @see #onPreStart()
-     */
-    public void onPreStart(String handlerId) {
-    }
+public abstract class RequestListener<T> {
 
     /**
      * http请求前
@@ -28,7 +17,6 @@ public abstract class CmRequestListener<T> {
     /**
      * http请求开始回调
      *
-     * @param handlerId
      */
     public void onStart() {
     }
@@ -66,7 +54,16 @@ public abstract class CmRequestListener<T> {
      *
      * @param response
      */
-    public abstract void onResponse(JSONObject response);
+    public void onResponse(JSONObject response) {
+
+    }
+
+    /**
+     * http成功回调,逻辑正常
+     *
+     * @param response
+     */
+    public abstract void onSuccess(T response);
 
     /**
      * http成功回调,逻辑错误
@@ -103,6 +100,4 @@ public abstract class CmRequestListener<T> {
     public void onLoadComplete() {
 
     }
-
-
 }

@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.callme.platform.R;
-import com.callme.platform.util.CmRequestListener;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.util.ToastUtil;
 import com.callme.platform.widget.pulltorefresh.PullToRefreshBase.Mode;
 import com.callme.platform.widget.stickylistheaders.StickyListHeadersAdapter;
@@ -453,8 +453,8 @@ public abstract class AbsGridViewAdapter<B, H> extends BaseAdapter implements
 
     protected abstract String initRequest();
 
-    protected CmRequestListener getListener() {
-        return new CmRequestListener<JSONObject>() {
+    protected RequestListener getListener() {
+        return new RequestListener<JSONObject>() {
             @Override
             public void onReSendReq() {
                 // 登录态过期后重新登录后再次发出请求
@@ -495,6 +495,11 @@ public abstract class AbsGridViewAdapter<B, H> extends BaseAdapter implements
                     isLastPage = true;
                 }
                 mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+
             }
 
             @Override

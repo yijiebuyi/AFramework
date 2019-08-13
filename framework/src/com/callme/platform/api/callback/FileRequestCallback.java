@@ -2,7 +2,7 @@ package com.callme.platform.api.callback;
 
 import android.os.Handler;
 
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.util.FileUtil;
 import com.callme.platform.util.thdpool.Future;
 import com.callme.platform.util.thdpool.FutureListener;
@@ -26,11 +26,11 @@ import retrofit2.Response;
  * 修改日期
  */
 public class FileRequestCallback implements Callback {
-    private CmRequestImpListener mListener;
+    private RequestListener mListener;
     private Handler mHandler;
     private String mFilePath;
 
-    public <T> FileRequestCallback(Handler handler, String filePath, CmRequestImpListener<T> listener) {
+    public <T> FileRequestCallback(Handler handler, String filePath, RequestListener<T> listener) {
         mHandler = handler;
         mFilePath = filePath;
         mListener = listener;

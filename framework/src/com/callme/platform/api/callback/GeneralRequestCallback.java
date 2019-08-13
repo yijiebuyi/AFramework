@@ -2,7 +2,7 @@ package com.callme.platform.api.callback;
 
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -20,11 +20,11 @@ import retrofit2.Response;
  * 修改日期
  */
 public class GeneralRequestCallback extends BaseCallback {
-    public <T> GeneralRequestCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
+    public <T> GeneralRequestCallback(Request request, RequestListener<T> listener, LifeCycle lifeCycle) {
         super(request, listener, lifeCycle);
     }
 
-    public <T> GeneralRequestCallback(CmRequestImpListener<T> listener) {
+    public <T> GeneralRequestCallback(RequestListener<T> listener) {
         super(listener);
     }
 

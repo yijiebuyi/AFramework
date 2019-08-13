@@ -11,7 +11,7 @@ import com.callme.platform.base.BaseActivity;
 import com.callme.platform.base.BaseFragment;
 import com.callme.platform.common.HttpGlobalListener;
 import com.callme.platform.common.HttpResponseUi;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 
@@ -44,7 +44,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
     private int mResponseUiFlag = FLAG_NONE;
 
     private Call mCall;
-    private CmRequestImpListener mListener;
+    private RequestListener mListener;
 
 
     /**
@@ -54,7 +54,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         mResponseUiFlag = flag;
     }
 
-    public RetrofitHttpResponseUi(Object comeFrom, Call call, CmRequestImpListener listener) {
+    public RetrofitHttpResponseUi(Object comeFrom, Call call, RequestListener listener) {
         mComeFrom = comeFrom;
         mCall = call;
         mListener = listener;

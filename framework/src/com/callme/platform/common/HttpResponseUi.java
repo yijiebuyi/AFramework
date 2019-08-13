@@ -31,6 +31,7 @@ public interface HttpResponseUi {
 
     /**
      * 显示http加载进度条(view形式)
+     * @deprecated
      */
     public final static int FLAG_SHOW_PROGRESS_VIEW = 1 << 2;
 

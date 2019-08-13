@@ -5,7 +5,7 @@ import android.support.annotation.CallSuper;
 import com.callme.platform.api.request.LifeCycle;
 import com.callme.platform.api.request.Request;
 import com.callme.platform.common.HttpResponseUi;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 
 /**
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
@@ -20,20 +20,20 @@ import com.callme.platform.util.CmRequestImpListener;
  * 修改日期
  */
 public abstract class BaseCallback implements retrofit2.Callback {
-    protected CmRequestImpListener mRequestListener;
+    protected RequestListener mRequestListener;
     protected HttpResponseUi mHttpResponseUi;
 
     protected Request mRequest;
     protected LifeCycle mLifeCycle;
     protected String mDefaultMsg = "获取数据失败，请检查您的网络连接！";
 
-    public <T> BaseCallback(Request request, CmRequestImpListener<T> listener, LifeCycle lifeCycle) {
+    public <T> BaseCallback(Request request, RequestListener<T> listener, LifeCycle lifeCycle) {
         mRequest = request;
         mRequestListener = listener;
         mLifeCycle = lifeCycle;
     }
 
-    public <T> BaseCallback(CmRequestImpListener<T> listener) {
+    public <T> BaseCallback(RequestListener<T> listener) {
         mRequestListener = listener;
     }
 
@@ -57,12 +57,12 @@ public abstract class BaseCallback implements retrofit2.Callback {
     }
 
     @CallSuper
-    public void setRequestListener(CmRequestImpListener listener) {
+    public void setRequestListener(RequestListener listener) {
         mRequestListener = listener;
     }
 
     @CallSuper
-    public void set(Request request, LifeCycle lifeCycle, HttpResponseUi responseUi, CmRequestImpListener listener) {
+    public void set(Request request, LifeCycle lifeCycle, HttpResponseUi responseUi, RequestListener listener) {
         mRequest = request;
         mRequestListener = listener;
         mHttpResponseUi = responseUi;

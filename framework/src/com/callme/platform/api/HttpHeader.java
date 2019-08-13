@@ -22,7 +22,7 @@ import okhttp3.Headers;
  * <p>
  * 设置Http header拦截器时引用
  *
- * @see com.callme.platform.net.interceptor.HeaderInterceptor
+ * @see com.callme.platform.api.interceptor.HeaderInterceptor
  * 作者：huangyong
  * 创建时间：2018/8/22
  * <p>

@@ -15,10 +15,9 @@ import android.util.Log;
 
 import com.callme.platform.api.Util;
 import com.callme.platform.api.callback.BaseCallback;
-import com.callme.platform.api.callback.GeneralRequestCallback;
 import com.callme.platform.api.callback.RequestCallback;
 import com.callme.platform.common.HttpResponseUi;
-import com.callme.platform.util.CmRequestImpListener;
+import com.callme.platform.api.listenter.RequestListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class Request implements RequestLifecycle, Handler.Callback {
     /**
      * http callback
      */
-    private CmRequestImpListener mListener;
+    private RequestListener mListener;
 
     /**
      * Pending adds for RequestManagerFragments.
@@ -76,7 +75,7 @@ public class Request implements RequestLifecycle, Handler.Callback {
      * @param call
      * @param listener
      */
-    public <T> Request(Context context, Handler handler, final Call call, CmRequestImpListener<T> listener) {
+    public <T> Request(Context context, Handler handler, final Call call, RequestListener<T> listener) {
         mHandler = handler;
 
         mCall = call;
@@ -268,7 +267,7 @@ public class Request implements RequestLifecycle, Handler.Callback {
      * @param listener
      * @param callback
      */
-    public void enqueue(HttpResponseUi responseUi, CmRequestImpListener listener, BaseCallback callback) {
+    public void enqueue(HttpResponseUi responseUi, RequestListener listener, BaseCallback callback) {
         if (mCall != null) {
             callback.setHttpResponseUi(responseUi);
             callback.setRequest(this);
