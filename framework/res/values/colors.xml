@@ -78,7 +78,7 @@
     <color name="translucent">#b0000000</color>
 
     <!-- 半透明色 -->
-    <color name="transparent_20">#33000000</color>
+    <color name="transparent_50">#80000000</color>
     <color name="transparent_95">#f2000000</color>
     <color name="common_black_half">#7f222222</color>
 
