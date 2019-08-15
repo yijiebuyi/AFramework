@@ -16,21 +16,18 @@ import java.util.HashMap;
  * 修改描述：
  * 修改日期
  */
-public class RequestParamMap extends HashMap<String, String> {
-
-    public static RequestParamMap newInstance() {
-        return new RequestParamMap();
-    }
+public class RequestParamMap<T> extends HashMap<String, T> {
 
     @Override
-    public String put(String key, String value) {
+    public T put(String key, T value) {
         if (TextUtils.isEmpty(key)) {
             throw new IllegalArgumentException("Field map contained null key.");
         }
-        if (value == null) {
-            value = "";
-        }
 
-        return super.put(key, value);
+        if (value != null) {
+            return super.put(key, value);
+        } else {
+            return null;
+        }
     }
 }
