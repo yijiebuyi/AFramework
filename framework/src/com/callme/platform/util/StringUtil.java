@@ -118,7 +118,7 @@ public class StringUtil {
             return false;
         }
     }
-    
+
     /**
      * 是否同时包含字母和数字
      *
@@ -136,5 +136,26 @@ public class StringUtil {
             }
         }
         return false;
+    }
+
+    public static String hideNum(String dest, int start, int end) {
+        if (TextUtils.isEmpty(dest)) {
+            return null;
+        }
+
+        if (end > dest.length()) {
+            end = dest.length();
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(dest.substring(0, start));
+        for (int i = 0; i < end - start; i++) {
+            stringBuilder.append("*");
+        }
+        if (end < dest.length()){
+            stringBuilder.append(dest.substring(end));
+        }
+
+        return stringBuilder.toString();
     }
 }
