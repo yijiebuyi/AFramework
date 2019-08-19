@@ -153,6 +153,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             initSubView();
         } else {
             setContentView(getBaseContentView());
+            if (!delayBind()) {
+                mUnbinder = ButterKnife.bind(this);
+            }
         }
 
         //5.register eventbus
@@ -207,6 +210,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 是否使用框架层的布局，如果不是，子类需要调用 {@link #getBaseContentView()}方法
+     *
      * @return
      */
     protected boolean useBaseContentView() {
@@ -215,6 +219,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 页面需要设置的contentView，{@code #useBaseContentView()} return true时有效;
+     *
      * @return
      */
     protected View getBaseContentView() {
@@ -407,12 +412,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 关闭对话框进度
+     *
      * @deprecated
      */
     public final void closeProgress() {
         mIsCancelable = false;
-        mProgressBar.setVisibility(View.GONE);
-        mFailedView.setVisibility(View.GONE);
+        if (mProgressBar != null) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+        if (mFailedView != null) {
+            mFailedView.setVisibility(View.GONE);
+        }
+
     }
 
     /**
