@@ -244,6 +244,19 @@ public abstract class LocalDataManager extends SQLiteOpenHelper {
         return values;
     }
 
+    /**
+     * 清除所有数据
+     */
+    public void clear() {
+        if (mTableCls != null) {
+            SQLiteDatabase db = mDbHelper.getWritableDatabase();
+            for  (Class clazz : mTableCls) {
+                EntrySchema schema = getEntrySchema(clazz);
+                schema.deleteAll(db);
+            }
+        }
+    }
+
     protected void createTables(Class<? extends Entry> clazz, SQLiteDatabase db) {
         EntrySchema schema = getEntrySchema(clazz);
         schema.createTables(db);

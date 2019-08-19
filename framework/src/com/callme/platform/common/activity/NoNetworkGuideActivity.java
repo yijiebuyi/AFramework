@@ -12,7 +12,6 @@
  */
 package com.callme.platform.common.activity;
 
-import android.view.LayoutInflater;
 import android.view.View;
 
 import com.callme.platform.R;

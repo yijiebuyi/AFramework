@@ -1,15 +1,11 @@
 package com.callme.platform.api.interceptor;
 
-import android.content.Context;
-import android.os.Build;
 import android.text.TextUtils;
 
 import com.callme.platform.api.HttpConfigure;
 import com.callme.platform.api.HttpHeader;
 import com.callme.platform.util.ApnUtil;
 import com.callme.platform.util.DevicesUtil;
-import com.callme.platform.util.OtherUtils;
-import com.callme.platform.util.ResourcesUtil;
 
 import java.io.IOException;
 
