@@ -152,7 +152,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             //解决继承自BaseActivity且属于当前库(framework)的子类butterknife不能使用Bindview的注解，onclick的注解
             initSubView();
         } else {
-            setContentView(getBaseContentView());
+            setContentView(getContentView());
+            if (!delayBind()) {
+                mUnbinder = ButterKnife.bind(this);
+            }
         }
 
         //5.register eventbus
@@ -206,19 +209,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 是否使用框架层的布局，如果不是，子类需要调用 {@link #getBaseContentView()}方法
+     * 是否使用框架层的布局，如果不是，子类需要调用 {@link #getContentView()}方法
      * @return
      */
     protected boolean useBaseContentView() {
         return true;
-    }
-
-    /**
-     * 页面需要设置的contentView，{@code #useBaseContentView()} return true时有效;
-     * @return
-     */
-    protected View getBaseContentView() {
-        return null;
     }
 
     /**
