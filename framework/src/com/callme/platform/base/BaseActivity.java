@@ -134,33 +134,38 @@ public abstract class BaseActivity extends AppCompatActivity {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        setContentView(R.layout.base_activity);
-
-        //1.初始化view
-        initView();
-        //2.设置状态栏样式
-        if (!supportFullScr) {
-            setStatusBarStyle();
-        }
-        //3.设置是否屏幕常亮
+        //设置是否屏幕常亮
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        //4.添加view到content容器中，子类实现
-        addIntoContent(getContentView());
-        //5.初始化view，设置onclick监听器
-        //解决继承自BaseActivity且属于当前库(framework)的子类butterknife不能使用Bindview的注解，onclick的注解
-        initSubView();
-        //6.register eventbus
+
+        boolean flag = useBaseContentView();
+        if (flag) {
+            setContentView(R.layout.base_activity);
+            //1.初始化view
+            initView();
+            //2.设置状态栏样式
+            if (!supportFullScr) {
+                setStatusBarStyle();
+            }
+            //3.添加view到content容器中，子类实现
+            addIntoContent(getContentView());
+            //4.初始化view，设置onclick监听器
+            //解决继承自BaseActivity且属于当前库(framework)的子类butterknife不能使用Bindview的注解，onclick的注解
+            initSubView();
+        } else {
+            setContentView(getBaseContentView());
+        }
+
+        //5.register eventbus
         if (needRegisterEventBus()) {
             EventBus.getDefault().register(this);
         }
-        //7.view已添加到container
+        //6.view已添加到container
         onContentAdded();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        BugtagsUtil.onPause(this, BuildConfig.type);
         StatisticsUtil.onPause(this);
         MobclickAgent.onPause(this);
         unregisterNetReceiver();
@@ -169,7 +174,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        BugtagsUtil.onResume(this, BuildConfig.type);
         StatisticsUtil.onResume(this);
         MobclickAgent.onResume(this);
         registerNetReceiver();
@@ -199,6 +203,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         closeProgressDialog();
         CmActivityManager.getInstance().removeActivity(this);
+    }
+
+    /**
+     * 是否使用框架层的布局，如果不是，子类需要调用 {@link #getBaseContentView()}方法
+     * @return
+     */
+    protected boolean useBaseContentView() {
+        return true;
+    }
+
+    /**
+     * 页面需要设置的contentView，{@code #useBaseContentView()} return true时有效;
+     * @return
+     */
+    protected View getBaseContentView() {
+        return null;
     }
 
     /**
