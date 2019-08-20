@@ -161,7 +161,7 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
         @Override
         public void onClick(View v) {
             if (mComeFrom instanceof Context) {
-                ApiRequestManager.getInstance().enqueueRequest((Context) mComeFrom, mCall,
+                ApiRequestManager.getInstance().enqueueRequest((Context) mComeFrom, mCall.clone(),
                         mListener);
             }
         }
