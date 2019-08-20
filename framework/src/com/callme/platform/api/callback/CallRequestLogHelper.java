@@ -7,6 +7,7 @@ import com.callme.platform.BuildConfig;
 import com.callme.platform.util.IOUtils;
 import com.callme.platform.util.StackTraceUtil;
 import com.callme.platform.util.TimeUtil;
+import com.callme.platform.util.WindowUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -96,7 +97,8 @@ public class CallRequestLogHelper {
      * @param code
      * @param msg
      */
-    private static void loggerOnFailure(Call call, int code, String msg, StackTraceElement[] exStackTrace,
+    private static void loggerOnFailure(Call call, int code, String msg,
+                                        StackTraceElement[] exStackTrace,
                                         boolean connectEx) {
         try {
             Request request = call != null ? call.request() : null;
@@ -131,13 +133,15 @@ public class CallRequestLogHelper {
      *
      * @param sb
      */
-    private final static void handleLog(StringBuilder sb, StackTraceElement[] exStackTrace, boolean connectEx) {
+    private final static void handleLog(StringBuilder sb, StackTraceElement[] exStackTrace,
+                                        boolean connectEx) {
         StackTraceElement[] callSackTrace = Thread.currentThread().getStackTrace();
         String lineInfo = StackTraceUtil.getStackMsg(callSackTrace, CallRequestLogHelper.class,
                 1, 0, exStackTrace);
 
         long millis = System.currentTimeMillis();
-        String time = TimeUtil.formatDate(millis, TimeUtil.TIME_YYYY_MM_DD_HH_MM_SS) + ", ts:" + millis + "\n";
+        String time =
+                TimeUtil.formatDate(millis, TimeUtil.TIME_YYYY_MM_DD_HH_MM_SS) + ", ts:" + millis + "\n";
         sb.insert(0, lineInfo);
         sb.insert(0, time);
         String logBody = sb.toString();
@@ -147,8 +151,7 @@ public class CallRequestLogHelper {
             Logger.addLogAdapter(new AndroidLogAdapter());
             Logger.w(logBody);
         } else {
-            //TODO
-
+            WindowUtils.getInstance().updateMsg(null, true, logBody);
         }
     }
 
