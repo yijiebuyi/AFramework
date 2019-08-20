@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.callme.platform.R;
+import com.callme.platform.util.PkgUtil;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -182,7 +183,7 @@ public class PermissionsHelper {
         if (data.contains(ACCESS_COARSE_LOCATION) || data.contains(ACCESS_FINE_LOCATION)) {
             if (!isLocationEnabled(context)) {
                 showLocationServiceDialog(context, context.getString(R.string.location_info),
-                        context.getString(R.string.is_setting_location_info));
+                        context.getString(R.string.is_setting_location_info, PkgUtil.getAppName(context)));
 
                 //暴力解决，机型太多没法
                 data.remove(ACCESS_FINE_LOCATION);

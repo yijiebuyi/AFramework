@@ -125,7 +125,7 @@
     <string name="system_alert_window">悬浮窗</string>
     <string name="setting">设置</string>
     <string name="location_info">位置信息</string>
-    <string name="is_setting_location_info">呼我司机需要获取位置信息,是否去设置?</string>
+    <string name="is_setting_location_info">%1$s需要获取位置信息,是否去设置?</string>
     <string name="is_gps_location_info">为更好的为您提供服务，建议您打开手机GPS定位服务!</string>
 
     <string name="modify_date">修改日期</string>
