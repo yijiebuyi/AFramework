@@ -21,7 +21,7 @@ dependencies {
     api 'org.greenrobot:eventbus:3.0.0'
 
     //权限请求
-    implementation 'com.yanzhenjie.permission:support:2.0.1'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc11'
 
     //mta 3.3 稳定版
     api 'com.qq.mta:mta:3.3.1-release'
