@@ -5,9 +5,9 @@ import android.util.Log;
 
 import com.callme.platform.BuildConfig;
 import com.callme.platform.util.IOUtils;
+import com.callme.platform.util.LogCacheUtil;
 import com.callme.platform.util.StackTraceUtil;
 import com.callme.platform.util.TimeUtil;
-import com.callme.platform.util.WindowUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -119,6 +119,7 @@ public class CallRequestLogHelper {
                 sb.append(requestBody);
             }
             sb.append(errorMsg);
+            sb.append("connectEx:" + connectEx);
 
             handleLog(sb, exStackTrace, connectEx);
             sb = null;
@@ -150,9 +151,9 @@ public class CallRequestLogHelper {
             Logger.clearLogAdapters();
             Logger.addLogAdapter(new AndroidLogAdapter());
             Logger.w(logBody);
-        } else {
-            WindowUtils.getInstance().updateMsg(null, true, logBody);
         }
+
+        LogCacheUtil.getInstance().updateMsg(null, !BuildConfig.DEBUG, true, "API", logBody);
     }
 
     /**
