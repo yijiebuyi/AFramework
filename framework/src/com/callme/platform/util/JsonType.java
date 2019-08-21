@@ -1,4 +1,7 @@
 package com.callme.platform.util;
+
+import com.alibaba.fastjson.TypeReference;
+
 /*
  * Copyright (C) 2018 重庆呼我出行网络科技有限公司
 
@@ -13,8 +16,5 @@ package com.callme.platform.util;
  * 修改描述：
  * 修改日期
  */
-
-import com.alibaba.fastjson.TypeReference;
-
 public class JsonType<T> extends TypeReference {
 }

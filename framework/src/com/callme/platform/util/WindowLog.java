@@ -29,7 +29,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：通过window显示log， 辅助测试
+ * 功能描述：通过window显示log， 仅用于测试
  * 作者：huangyong
  * 创建时间：2019/8/21
  * <p>

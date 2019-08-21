@@ -1,4 +1,13 @@
 package com.callme.platform.util;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
 /*
  * Copyright (C) 2018 重庆呼我出行网络科技有限公司
 
@@ -13,15 +22,6 @@ package com.callme.platform.util;
  * 修改描述：
  * 修改日期
  */
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
 public class JsonUtils {
 
     /**
