@@ -119,8 +119,8 @@ public class CallRequestLogHelper {
                 sb.append(requestBody);
             }
             sb.append(errorMsg);
-            sb.append("connectEx:" + connectEx);
-
+            sb.append("\n");
+            sb.append("--> connectEx:" + connectEx);
             handleLog(sb, exStackTrace, connectEx);
             sb = null;
         } catch (Exception e) {
@@ -145,15 +145,17 @@ public class CallRequestLogHelper {
                 TimeUtil.formatDate(millis, TimeUtil.TIME_YYYY_MM_DD_HH_MM_SS) + ", ts:" + millis + "\n";
         sb.insert(0, lineInfo);
         sb.insert(0, time);
-        String logBody = sb.toString();
 
         if (BuildConfig.DEBUG) {
             Logger.clearLogAdapters();
             Logger.addLogAdapter(new AndroidLogAdapter());
-            Logger.w(logBody);
+            Logger.w(sb.toString());
         }
 
-        LogCacheUtil.getInstance().updateMsg(null, !BuildConfig.DEBUG, true, "API", logBody);
+        sb.insert(0, "\n");
+        LogCacheUtil.getInstance().updateMsg(null, !BuildConfig.DEBUG, true,
+                LogCacheUtil.LABEL_API, sb.toString());
+        sb = null;
     }
 
     /**

@@ -14,6 +14,9 @@ import android.text.TextUtils;
  * 修改日期
  */
 public class LogCacheUtil {
+    public static final String LABEL_API = "API_ERROR";
+    public static final String GMS_API = "GMS_ERROR";
+
     private static LogCacheUtil mInstance;
 
     private LogCacheUtil() {
@@ -76,7 +79,7 @@ public class LogCacheUtil {
         }
 
         //updateMsgToWindow(context, msgBean);
-        saveMsgToLocalCache(false, msgBean);
+        saveMsgToLocalCache(false, label, msgBean);
     }
 
     /**
@@ -111,16 +114,16 @@ public class LogCacheUtil {
         }
 
         //updateMsgToWindow(context, msgBean);
-        saveMsgToLocalCache(true, msgBean);
+        saveMsgToLocalCache(true, label, msgBean);
     }
 
     public static String getMsg(Exception e) {
         return e != null ? e.getLocalizedMessage() : "";
     }
 
-    private void saveMsgToLocalCache(boolean ex, LogBean msgBean) {
-        //Logger.d("GMS", ex ? "==error==" + msgBean.msg : msgBean.msg);
-        FileLogHelper.getInstance().write(ex ? "==error==" + msgBean.msg : msgBean.msg);
+    private void saveMsgToLocalCache(boolean ex, String label, LogBean msgBean) {
+        boolean partLine = LogCacheUtil.LABEL_API.equals(label);
+        FileLogHelper.getInstance().write(partLine, ex ? "==error==" + msgBean.msg : msgBean.msg);
     }
 
     public static class LogBean {

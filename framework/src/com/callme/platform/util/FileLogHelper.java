@@ -100,26 +100,37 @@ public class FileLogHelper {
 
     /**
      * 写消息
-     *
+     * @param partLine 是否分行
      * @param srcMsg
      */
-    public void write(final String srcMsg) {
+    public void write(final boolean partLine, final String srcMsg) {
         if (mExecutorService != null) {
             mExecutorService.execute(new Runnable() {
                 @Override
                 public void run() {
+                    StringBuilder sb = null;
                     try {
                         String time = TimeUtil.formatDate(System.currentTimeMillis(),
                                 TimeUtil.TIME_YYYY_MM_DD_HH_MM_SS);
-                        String msg = time + ":" + srcMsg + "\n";
-                        checkCacheFileValid();
+                        sb = new StringBuilder();
+                        if (partLine) {
+                            sb.append("\n");
+                        }
+                        sb.append(time);
+                        sb.append(": ");
+                        sb.append(srcMsg);
+                        sb.append("\n");
 
+                        checkCacheFileValid();
                         if (mBufferedWriter != null) {
-                            mBufferedWriter.write(msg);
+                            mBufferedWriter.write(sb.toString());
                             mBufferedWriter.flush();
                         }
+
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        sb = null;
                     }
                 }
             });
