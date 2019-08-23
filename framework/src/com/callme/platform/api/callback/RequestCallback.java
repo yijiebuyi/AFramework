@@ -46,8 +46,10 @@ public class RequestCallback extends BaseCallback {
                         case ErrorCode.SUCCESS:
                             mRequestListener.onSuccess(result);
                             break;
-                        case ErrorCode.FAILURE:
                         case ErrorCode.APP_UPGRADE:
+
+                            break;
+                        case ErrorCode.FAILURE:
                         case ErrorCode.HTTP_UNKNOWN:
                         case ErrorCode.HTTP_UNSPECIFIC:
                         default:
