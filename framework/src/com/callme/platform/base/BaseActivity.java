@@ -192,7 +192,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mIsDestroyed = true;
-
+        onDestroyView();
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
         }
@@ -210,6 +210,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * 是否使用框架层的布局，如果不是，子类需要调用 {@link #getContentView()}方法
+     *
      * @return
      */
     protected boolean useBaseContentView() {
@@ -1061,7 +1062,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         return mIsDestroyed;
     }
 
-    public int getBarHeight(){
+    public int getBarHeight() {
         return mImmersionBar.getBarParams().titleBarHeight;
+    }
+
+    /**
+     * 手动onDestroy的view实现此方法
+     */
+    public void onDestroyView() {
     }
 }
