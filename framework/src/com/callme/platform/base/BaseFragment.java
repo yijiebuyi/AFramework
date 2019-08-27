@@ -112,10 +112,10 @@ public abstract class BaseFragment extends Fragment {
 
 	@Override
 	public void onDestroyView() {
+		super.onDestroyView();
 		if (mBinder != null) {
 			mBinder.unbind();
 		}
-		super.onDestroyView();
 	}
 
 	protected boolean delayBind(){
