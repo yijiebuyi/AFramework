@@ -192,7 +192,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mIsDestroyed = true;
+        closeProgressDialog();
         onDestroyView();
+
         if (mImmersionBar != null) {
             mImmersionBar.destroy();
         }
@@ -204,7 +206,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (needRegisterEventBus() && EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        closeProgressDialog();
         CmActivityManager.getInstance().removeActivity(this);
     }
 
