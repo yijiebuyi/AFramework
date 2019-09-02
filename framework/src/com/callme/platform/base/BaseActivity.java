@@ -707,8 +707,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public final void closeProgressDialog() {
         mIsCancelable = false;
-        if (!isDestroyed() && !isFinishing() && mLoadingProgressDialog != null
-                && mLoadingProgressDialog.isShowing()) {
+        if (mLoadingProgressDialog != null && mLoadingProgressDialog.isShowing()) {
             mLoadingProgressDialog.dismiss();
         }
     }
