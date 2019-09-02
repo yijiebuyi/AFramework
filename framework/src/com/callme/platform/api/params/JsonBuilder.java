@@ -133,17 +133,36 @@ public class JsonBuilder extends ParamsBody<String> implements Builder {
     }
 
     @Override
+    public Builder add(String name, ParamsBody param) {
+        try {
+            params.put(name, param.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    @Override
     public RequestBody build() {
         return create();
     }
 
     @Override
     protected String mediaType() {
-        return "application/json";
+        return MEDIA_TYPE_JSON;
     }
 
     @Override
     protected String body() {
         return params.toString();
+    }
+
+    @Override
+    public String toString() {
+        if (params != null) {
+            return params.toString();
+        }
+
+        return super.toString();
     }
 }

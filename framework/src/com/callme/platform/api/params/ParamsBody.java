@@ -20,6 +20,8 @@ import okio.ByteString;
  * 修改日期
  */
 public abstract class ParamsBody<T> {
+    public static final String MEDIA_TYPE_JSON = "application/json";
+
     protected RequestBody create() {
         T bodyData = body();
         String mediaType = mediaType();
@@ -45,4 +47,7 @@ public abstract class ParamsBody<T> {
         return new JsonBuilder();
     }
 
+    public static Builder jsonArrayBuilder() {
+        return new JsonArrayBuilder();
+    }
 }

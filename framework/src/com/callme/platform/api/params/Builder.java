@@ -34,5 +34,7 @@ public interface Builder {
 
     public Builder add(String name, char value);
 
+    public Builder add(String name, ParamsBody param);
+
     public RequestBody build();
 }
