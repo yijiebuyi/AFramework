@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -21,7 +22,7 @@ import okio.Buffer;
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
  * <p>
- * 功能描述：参数追加(TOKEN, 兼容老版本)
+ * 功能描述：参数追加(token, 兼容老版本)
  * [ref]: https://www.jianshu.com/p/f77d379ebcfa
  * 作者：huangyong
  * 创建时间：2019/8/5
@@ -70,14 +71,17 @@ public class ParamsInterceptor implements Interceptor {
                     List<MultipartBody.Part> oldPartList = oldBodyMultipart.parts();
                     MultipartBody.Builder builder = new MultipartBody.Builder();
                     builder.setType(MultipartBody.FORM);
-                    RequestBody requestBody1 = RequestBody.create(MediaType.parse("text/plain"), HttpHeader.USER_TOKEN);
+                    RequestBody addRequestBody = RequestBody.create(MediaType.parse("text/plain"), HttpHeader.USER_TOKEN);
+                    Headers headers = Headers.of("Content-Disposition", "form-data;name=\"token\"", "Content-Transfer-Encoding", "binary");
+                    MultipartBody.Part addPart = MultipartBody.Part.create(headers, addRequestBody);
                     for (MultipartBody.Part part : oldPartList) {
                         builder.addPart(part);
-                        postBodyString += (bodyToString(part.body()) + "\n");
+                        //postBodyString += (bodyToString(part.body()) + "\n");
                     }
                     //postBodyString += (bodyToString(requestBody1) + "\n");
-                    //builder.addPart(oldBody);  //不能用这个方法，因为不知道oldBody的类型，可能是PartMap过来的，也可能是多个Part过来的，所以需要重新逐个加载进去
-                    builder.addPart(requestBody1);
+                    //builder.addPart(oldBody);  //不能用这个方法，因为不知道oldBody的类型，可能是PartMap过来的，
+                    //也可能是多个Part过来的，所以需要重新逐个加载进去
+                    builder.addPart(addPart);
                     newRequestBuild = request.newBuilder();
                     newRequestBuild.post(builder.build());
                     Log.e("", "MultipartBody," + request.url());
@@ -85,10 +89,7 @@ public class ParamsInterceptor implements Interceptor {
                     newRequestBuild = request.newBuilder();
                 }
 
-                Request newRequest = newRequestBuild
-                        .addHeader("Accept", "application/json")
-                        .addHeader("Accept-Language", "zh")
-                        .build();
+                Request newRequest = newRequestBuild.build();
 
                 Response response = chain.proceed(newRequest);
                 MediaType mediaType = response.body().contentType();
