@@ -24,7 +24,7 @@ import retrofit2.Response;
  * 修改日期
  */
 public class RequestCallback extends BaseCallback {
-    private final static String DATA_EX_MSG = "获取数据失败，请重试！";
+    private final static String DATA_EX_MSG = "获取数据失败，请稍后重试！";
 
     public <T> RequestCallback(Request request, RequestListener<T> listener, LifeCycle lifeCycle) {
         super(request, listener, lifeCycle);
