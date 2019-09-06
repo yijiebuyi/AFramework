@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -142,24 +143,18 @@ public class FileLogHelper {
      */
     public void delFileIfFileExceed() {
         if (CACHE_DIR != null) {
-            String[] fileNameList = CACHE_DIR.list();
-            if (fileNameList != null && fileNameList.length > MAX_CACHE_FILE_COUNT) {
-                Long[] numFileNames = new Long[fileNameList.length];
-                try {
-                    int i = 0;
-                    for (String file : fileNameList) {
-                        numFileNames[i++] = (TimeUtil.getTime(file));
-                    }
-                } catch (Exception e) {
-
-                }
-
-                Arrays.sort(numFileNames);
-
-                String delFileName = TimeUtil.formatDate(numFileNames[0], FILE_NAME_FORMAT);
-                File delFile = new File(CACHE_DIR, delFileName);
-                delFile.delete();
+            File[] files = CACHE_DIR.listFiles();
+            if (files != null && files.length > MAX_CACHE_FILE_COUNT) {
+                Arrays.sort(files, new FileComparator());
+                files[0].delete();
             }
+        }
+    }
+
+    private class FileComparator implements Comparator<File> {
+        @Override
+        public int compare(File o1, File o2) {
+            return o1.lastModified() < o2.lastModified() ? -1 : (o1.lastModified() > o2.lastModified() ? 1 : 0);
         }
     }
 
@@ -262,6 +257,7 @@ public class FileLogHelper {
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 //LogUtil.i("FileLogHelper", "timer run");
+
                 delFileIfFileExceed();
 
                 if (mCurrCacheFile != null) {
