@@ -90,6 +90,8 @@ public class TipsDialog extends DialogFragment implements
         dialogWindow.setAttributes(params);
 
         onViewCreated(view);
+        setDialogStyle((TextView) view.findViewById(R.id.title),
+                (TextView) view.findViewById(R.id.confirm_know));
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -127,6 +129,10 @@ public class TipsDialog extends DialogFragment implements
     }
 
     protected void onViewCreated(View view) {
+
+    }
+
+    protected void setDialogStyle(TextView titleView, TextView confirmView) {
 
     }
 
@@ -195,7 +201,7 @@ public class TipsDialog extends DialogFragment implements
      *
      * @param root
      */
-    private void bindListMsg(View root) {
+    protected void bindListMsg(View root) {
         ListView lv = (ListView) root.findViewById(R.id.list_message);
         if (mListMsgStr != null && mListMsgStr.length > 0) {
             lv.setVisibility(View.VISIBLE);

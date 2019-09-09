@@ -11,10 +11,11 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/px24"
-        android:layout_marginRight="@dimen/px24"
+        android:layout_marginLeft="@dimen/px100"
+        android:layout_marginRight="@dimen/px100"
         android:layout_marginTop="@dimen/px50"
         android:text="@string/kindly_tips"
+        android:gravity="center_horizontal"
         android:textColor="@color/font_blue"
         android:textSize="@dimen/font_40px" />
 
@@ -23,6 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/px20"
+        android:layout_marginLeft="@dimen/px48"
+        android:layout_marginRight="@dimen/px48"
         android:background="@color/hor_divide_line" />
 
     <FrameLayout

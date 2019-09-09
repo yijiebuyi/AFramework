@@ -102,8 +102,10 @@
 
     <!--font color-->
     <color name="font_black">#333333</color>
+    <color name="font_white">#ffffff</color>
     <color name="font_gray">#999999</color>
     <color name="font_blue">#0190dc</color>
+    <color name="font_red">#FA5867</color>
     <color name="font_light_gray">#ffbfbfbf</color>
 
     <!--horizontal divide line-->
