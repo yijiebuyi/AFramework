@@ -501,8 +501,11 @@
     <dimen name="px498">249.0dp</dimen>
     <dimen name="px499">249.5dp</dimen>
     <dimen name="px500">250.0dp</dimen>
+    <dimen name="px506">253.0dp</dimen>
     <dimen name="px538">269.0dp</dimen>
+    <dimen name="px550">275.0dp</dimen>
     <dimen name="px660">330.0dp</dimen>
+    <dimen name="px788">394.0dp</dimen>
 
     <!-- 下拉刷新专用 -->
     <dimen name="indicator_right_padding">10dp</dimen>
