@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.io.File;
@@ -50,6 +51,30 @@ public class CmImageLoader {
 
         Glide.with(ctx).load(url).bitmapTransform(new GlideCircleTransform(ctx))
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).placeholder(placeHolderResId).error(errorResId).into(view);
+    }
+
+    /**
+     *
+     * @param ctx
+     * @param url
+     * @param view
+     * @param round 单位是dp
+     * @param placeHolderResId
+     * @param errorResId
+     */
+    public static void displayRoundedImageWithGlide(Context ctx, String url, ImageView view,
+                                             int round, int placeHolderResId, int errorResId) {
+        if (!isCanLoadGlideImg(ctx, view)) {
+            return;
+        }
+
+        Glide.with(ctx)
+                .load(url)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .placeholder(placeHolderResId)
+                .error(errorResId)
+                .transform(new CenterCrop(ctx), new GlideRoundTransform(ctx, round))
+                .into(view);
     }
 
     public static void displayCircleImageWithGlide(Context ctx, String url, ImageView view,
