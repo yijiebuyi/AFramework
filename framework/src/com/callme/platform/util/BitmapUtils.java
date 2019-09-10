@@ -21,11 +21,13 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -736,5 +738,37 @@ public class BitmapUtils {
     private static int getSingleMixtureWhite(int color, int alpha) {
         int newColor = color * alpha / 255 + 255 - alpha;
         return newColor > 255 ? 255 : newColor;
+    }
+
+    /**
+     * 保存图片
+     *
+     * @param bitmap
+     * @param filePath
+     * @return
+     */
+    public static boolean saveBitmap(Bitmap bitmap, String filePath) {
+        File file = new File(filePath);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs(); // 创建文件夹
+        }
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos); // 向缓冲区之中压缩图片
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.flush();
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
