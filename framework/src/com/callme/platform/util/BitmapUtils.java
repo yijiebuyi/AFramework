@@ -771,4 +771,37 @@ public class BitmapUtils {
             }
         }
     }
+
+
+    /**
+     * 根据图片字节数组，对图片可能进行二次采样，不致于加载过大图片出现内存溢出
+     *
+     * @param bytes
+     * @return
+     */
+    public static Bitmap getBitmapByBytes(byte[] bytes, int reqWidth, int reqHeight) {
+        //默认缩放为1
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;    //仅仅解码边缘区域
+        //如果指定了inJustDecodeBounds，decodeByteArray将返回为空
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+
+        options.inSampleSize = caculateSampleSize(options, reqWidth, reqHeight);
+        //不再只加载图片实际边缘
+        options.inJustDecodeBounds = false;
+        //并且制定缩放比例
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+    }
+
+    public static int caculateSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        int oWidth = options.outWidth;
+        int oHeight = options.outHeight;
+        int sampleSize = 1;
+        if (oWidth > reqWidth || oHeight > reqHeight) {
+            float widthRation = oWidth * 1.0f / reqWidth;
+            float heightRation = oHeight * 1.0f / reqHeight;
+            sampleSize = Math.round(Math.max(widthRation, heightRation));
+        }
+        return sampleSize;
+    }
 }
