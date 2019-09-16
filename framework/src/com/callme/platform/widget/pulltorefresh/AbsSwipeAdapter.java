@@ -557,9 +557,9 @@ public abstract class AbsSwipeAdapter<B, H> extends BaseAdapter implements
             public void onSuccess(ResultBean response) {
                 mCurrentPage++;
                 mRequestId = null;
-                List json = response.rows;
+                Object json = response.data;
                 Message msg = Message.obtain();
-                if (json != null && json.size() > 0) {
+                if (json != null) {
                     msg.obj = response;
                 } else {
                     isLastPage = true;
