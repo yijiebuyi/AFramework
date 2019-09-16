@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -127,15 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         mSavedInstanceState = savedInstanceState;
         mAppContext = this.getApplicationContext();
-
-        boolean supportFullScr = supportFullScreen();
-        if (supportFullScr) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
-        //设置是否屏幕常亮
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        boolean supportFullScr = setWindowStyle();
 
         boolean flag = useBaseContentView();
         if (flag) {
@@ -164,6 +157,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         //6.view已添加到container
         onContentAdded();
+    }
+
+    /**
+     * 设置窗口样式，super.onCreate()方法之后，setContentView之前
+     *
+     * @return 是否支持全屏
+     */
+    @CallSuper
+    protected boolean setWindowStyle() {
+        boolean supportFullScr = supportFullScreen();
+        if (supportFullScr) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        return supportFullScr;
     }
 
     @Override
