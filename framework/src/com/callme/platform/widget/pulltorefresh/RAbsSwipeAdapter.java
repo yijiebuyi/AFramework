@@ -336,6 +336,10 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
 
     }
 
+    protected void onDataItemLongClick(View view, int position, B bean) {
+
+    }
+
     /**
      * 数据为空时，被调用。
      */
@@ -402,6 +406,18 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
                         onDataItemClick(position, mBeanList.get(idx));
                     }
                 }
+
+                @Override
+                public void onItemLongClickListener(View view, int position) {
+                    int idx = position;
+                    if (list.getHeaderViewsCount() > 0 || list.getFooterViewsCount() > 0) {
+                        // 由于设置headView，位置要减
+                        idx = position - list.getHeaderViewsCount();
+                    }
+                    if (idx >= 0 && idx < mBeanList.size()) {
+                        onDataItemLongClick(view, position, mBeanList.get(idx));
+                    }
+                }
             });
         } else {
             mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -418,6 +434,21 @@ public abstract class RAbsSwipeAdapter<B, H> extends BaseAdapter implements
                     if (idx >= 0 && idx < mBeanList.size()) {
                         onDataItemClick(position, mBeanList.get(idx));
                     }
+                }
+            });
+
+            mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    int idx = position;
+                    if (list.getHeaderViewsCount() > 0 || list.getFooterViewsCount() > 0) {
+                        // 由于设置headView，位置要减
+                        idx = position - list.getHeaderViewsCount();
+                    }
+                    if (idx >= 0 && idx < mBeanList.size()) {
+                        onDataItemLongClick(view, position, mBeanList.get(idx));
+                    }
+                    return true;
                 }
             });
         }
