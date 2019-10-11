@@ -129,6 +129,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         mSavedInstanceState = savedInstanceState;
         mAppContext = this.getApplicationContext();
         boolean supportFullScr = setWindowStyle();
+        //设置是否屏幕常亮
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         boolean flag = useBaseContentView();
         if (flag) {
