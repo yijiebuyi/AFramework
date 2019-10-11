@@ -2,18 +2,20 @@ package com.callme.platform.util;
 
 import android.text.TextUtils;
 
+import com.callme.platform.R;
+
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 
 /*
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司 版权所有
- * 
+ *
  * 功能描述： 数字工具类
  * 添加日期：2017.10.6
  * 作者：mikeyou
- * 
- * 修改人： 
+ *
+ * 修改人：
  * 修改描述：
  * 修改日期
  */
@@ -193,5 +195,28 @@ public class NumberUtil {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 分转为元,无单位
+     *
+     * @param value
+     * @param precision
+     * @return
+     */
+    public static String toPrice(int value, int precision) {
+        return doubleToString(value / 100.0, precision);
+    }
+
+    /**
+     * 分转为元,有单位
+     *
+     * @param value
+     * @param precision
+     * @return
+     */
+    public static String priceWithUnit(int value, int precision) {
+        return ResourcesUtil.getString(R.string.price_with_unit,
+                doubleToString(value / 100.0, precision));
     }
 }
