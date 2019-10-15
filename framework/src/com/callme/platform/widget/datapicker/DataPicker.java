@@ -365,15 +365,15 @@ public class DataPicker {
         bottomSheet.setRightBtnText(context.getString(R.string.common_sure));
         showBootSheet(context, bottomSheet);
     }
-    
+
     /**
      * 选择时间
      *
      * @param context
      */
-    public static void pickTime(Context context, String title, final List<String> timeDay, List<ArrayList<String>> time,
-                                final MultipleTextWheelPicker.OnMultiPickListener listener) {
-        pickTime(context, title, null, timeDay, time, listener);
+    public static BottomSheet pickTime(Context context, String title, final List<String> timeDay, List<ArrayList<String>> time,
+                                       final MultipleTextWheelPicker.OnMultiPickListener listener) {
+        return pickTime(context, title, null, timeDay, time, listener);
     }
 
     /**
@@ -381,9 +381,9 @@ public class DataPicker {
      *
      * @param context
      */
-    public static void pickTime(Context context, String title, List<String> selectTime,
-                                final List<String> timeDay, List<ArrayList<String>> time,
-                                final MultipleTextWheelPicker.OnMultiPickListener listener) {
+    public static BottomSheet pickTime(Context context, String title, List<String> selectTime,
+                                       final List<String> timeDay, List<ArrayList<String>> time,
+                                       final MultipleTextWheelPicker.OnMultiPickListener listener) {
         BottomSheet bottomSheet = new BottomSheet(context);
         bottomSheet.setMiddleText(title);
 
@@ -421,6 +421,7 @@ public class DataPicker {
         bottomSheet.setContent(picker);
         bottomSheet.setRightBtnText(context.getString(R.string.common_sure));
         showBootSheet(context, bottomSheet);
+        return bottomSheet;
     }
 
     /**
@@ -469,10 +470,10 @@ public class DataPicker {
         bottomSheet.setRightBtnText(context.getString(R.string.common_sure));
         showBootSheet(context, bottomSheet);
     }
-    
-        public static void pickData(Context context, String title,final List<String> data,
-                                final OnDataPickListener pickedListener){
-        DataPicker.pickData(context,title,null,data,pickedListener);
+
+    public static void pickData(Context context, String title, final List<String> data,
+                                final OnDataPickListener pickedListener) {
+        DataPicker.pickData(context, title, null, data, pickedListener);
     }
 
     /**
@@ -529,16 +530,16 @@ public class DataPicker {
      * @param data           字符串数组
      * @param pickedListener
      */
-    public static void pickData(Context context, String title, String content,final List<String> data,
-                                final OnDataPickListener pickedListener) {
+    public static BottomSheet pickData(Context context, String title, String content, final List<String> data,
+                                       final OnDataPickListener pickedListener) {
         if (data == null || data.isEmpty()) {
-            return;
+            return null;
         }
 
         BottomSheet bottomSheet = new BottomSheet(context);
         bottomSheet.setMiddleText(title);
         if (content != null) {
-            bottomSheet.setContentText(content,R.color.common_orange_des_text);
+            bottomSheet.setContentText(content);
         }
         final TextWheelPicker picker = new TextWheelPicker(context);
         setTextPickerStyle(context, picker);
@@ -564,6 +565,7 @@ public class DataPicker {
                 }
             }
         });
+        return bottomSheet;
     }
 
     public static void setTextPickerStyle(Context context, Object picker) {
@@ -613,7 +615,7 @@ public class DataPicker {
     private static void showBootSheet(Context context, BottomSheet bottomSheet) {
         boolean showBottom = true;
         if (context instanceof Activity) {
-            showBottom = !((Activity)context).isDestroyed() && !((Activity)context).isFinishing();
+            showBottom = !((Activity) context).isDestroyed() && !((Activity) context).isFinishing();
         }
         if (showBottom) {
             bottomSheet.show();
