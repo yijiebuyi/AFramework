@@ -203,11 +203,11 @@ public class BottomSheet extends Dialog implements DialogInterface.OnCancelListe
         public void onDismiss();
     }
 
-    public void setLeftBtnTextColor(@ColorInt int textColor) {
+    public void setLeftBtnTextColor(@ColorRes int textColor) {
         mLeftBtn.setTextColor(ResourcesUtil.getColor(textColor));
     }
 
-    public void setRightBtnTextColor(@ColorInt int textColor) {
+    public void setRightBtnTextColor(@ColorRes int textColor) {
         mRightBtn.setTextColor(ResourcesUtil.getColor(textColor));
     }
 
