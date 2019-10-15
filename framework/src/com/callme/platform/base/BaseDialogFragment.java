@@ -15,9 +15,6 @@ import android.view.WindowManager;
 import com.callme.platform.R;
 import com.callme.platform.util.OtherUtils;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
 /*
  * Copyright (C) 2017 重庆呼我出行网络科技有限公司
  * 版权所有
@@ -84,10 +81,10 @@ public abstract class BaseDialogFragment extends DialogFragment implements
         return dialog;
     }
 
-    protected void showProgress() {
+    protected void showProgressDialog(boolean cancelable) {
         Activity ac = getActivity();
         if (ac instanceof BaseActivity) {
-            ((BaseActivity) ac).showProgressDialog(null, true);
+            ((BaseActivity) ac).showProgressDialog(cancelable);
         }
     }
 

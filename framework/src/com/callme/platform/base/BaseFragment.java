@@ -162,47 +162,6 @@ public abstract class BaseFragment extends Fragment {
 
 	/**
 	 * 显示对话框形式的加载提示
-	 * 
-	 *            数据访问的handler
-	 * @param cancelable
-	 *            是否可以取消请求
-	 * @deprecated
-	 */
-	public final void showProgressDialog(final String handlerId,
-			boolean cancelable) {
-		Activity activity = getActivity();
-		if (activity instanceof BaseActivity) {
-			if (TextUtils.isEmpty(handlerId)) {
-				((BaseActivity) activity).showProgressDialog(cancelable);
-			} else {
-				((BaseActivity) activity).showProgressDialog(handlerId, cancelable);
-			}
-		} else {
-			isCancelable = cancelable;
-			if (mLoadingProgressDialog == null) {
-				mLoadingProgressDialog = new LoadingProgressDialog(getActivity());
-			}
-			mLoadingProgressDialog.setCancelable(isCancelable);
-			mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
-
-				@Override
-				public void onDismiss(DialogInterface dialog) {
-					isCancelable = false;
-				}
-			});
-			mLoadingProgressDialog.setOnCancelListener(new OnCancelListener() {
-
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					isCancelable = false;
-				}
-			});
-			mLoadingProgressDialog.show();
-		}
-	}
-
-	/**
-	 * 显示对话框形式的加载提示
 	 * <p>
 	 * 数据访问的handler
 	 *

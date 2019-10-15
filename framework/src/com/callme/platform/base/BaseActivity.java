@@ -624,44 +624,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 显示对话框形式的加载提示
-     *
-     * @param handlerId  数据访问的handler
-     * @param cancelable 是否可以取消请求
-     * @deprecated
-     */
-    public final void showProgressDialog(final String handlerId, boolean cancelable) {
-        mIsCancelable = cancelable;
-        if (mLoadingProgressDialog == null) {
-            mLoadingProgressDialog = new LoadingProgressDialog(this);
-        }
-        if (mLoadingProgressDialog.isShowing()) {
-            return;
-        }
-        mLoadingProgressDialog.setCancelable(mIsCancelable);
-        mLoadingProgressDialog.setOnDismissListener(new OnDismissListener() {
-
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                //cancelSingleRequest(handlerId);
-                mIsCancelable = false;
-            }
-        });
-        mLoadingProgressDialog.setOnCancelListener(new OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                //cancelSingleRequest(handlerId);
-                mIsCancelable = false;
-
-            }
-        });
-        if (!isDestroyed() && !isFinishing() && !mLoadingProgressDialog.isShowing()) {
-            mLoadingProgressDialog.show();
-        }
-    }
-
-    /**
      * 取消加载对话框
      */
     public final void closeProgressDialog() {
