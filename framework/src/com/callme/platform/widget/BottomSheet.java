@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +39,7 @@ public class BottomSheet extends Dialog implements DialogInterface.OnCancelListe
     private String mTitleText;
     private Button mLeftBtn;
     private Button mRightBtn;
+    private TextView mTitleTv;
     private View.OnClickListener mLeftBtnClickListener;
     private View.OnClickListener mRightBtnClickListener;
 
@@ -81,6 +83,7 @@ public class BottomSheet extends Dialog implements DialogInterface.OnCancelListe
         mLeftBtn = (Button) dialogWindow.findViewById(R.id.left_btn);
         mRightBtn = (Button) dialogWindow.findViewById(R.id.right_btn);
         mContentTv = dialogWindow.findViewById(R.id.content_tv);
+        mTitleTv = dialogWindow.findViewById(R.id.middle_txt);
 
         mLeftBtn.setOnClickListener(this);
         mRightBtn.setOnClickListener(this);
@@ -122,14 +125,18 @@ public class BottomSheet extends Dialog implements DialogInterface.OnCancelListe
     }
 
     public void setMiddleText(String text) {
-        ((TextView) getWindow().findViewById(R.id.middle_txt)).setText(text);
+        mTitleTv.setText(text);
     }
 
-    public void setContentText(String content,int colorId) {
-        if (colorId > 0) {
-            mContentTv.setTextColor(ResourcesUtil.getColor(colorId));
-        }
+    public void setContentText(String content) {
         mContentTv.setText(content);
+        int paddingTop = ResourcesUtil.getDimensionPixelOffset(R.dimen.px28);
+        mLeftBtn.setPadding(mLeftBtn.getPaddingLeft(), paddingTop, mLeftBtn.getPaddingRight(), 0);
+        mRightBtn.setPadding(mRightBtn.getPaddingLeft(), paddingTop, mRightBtn.getPaddingRight(), 0);
+        mTitleTv.setPadding(0, paddingTop, 0, 0);
+        mTitleTv.setTextColor(ResourcesUtil.getColor(R.color.font_black));
+        mLeftBtn.setTextColor(ResourcesUtil.getColor(R.color.font_gray));
+        mRightBtn.setTextColor(ResourcesUtil.getColor(R.color.blue_light_575bfc));
         mContentTv.setVisibility(View.VISIBLE);
     }
 
@@ -198,6 +205,10 @@ public class BottomSheet extends Dialog implements DialogInterface.OnCancelListe
 
     public void setLeftBtnTextColor(@ColorInt int textColor) {
         mLeftBtn.setTextColor(ResourcesUtil.getColor(textColor));
+    }
+
+    public void setRightBtnTextColor(@ColorInt int textColor) {
+        mRightBtn.setTextColor(ResourcesUtil.getColor(textColor));
     }
 
     public void setRightBtnTextColor(@ColorInt int textColor, String text) {

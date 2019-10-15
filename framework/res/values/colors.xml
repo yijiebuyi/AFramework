@@ -123,5 +123,7 @@
     <color name="customize_crop_title_gray">#808080</color>
     <color name="customize_crop_edit_color">#808080</color>
     <color name="crop_blue">#32a5e7</color>
+    <color name="font_min_title">#fc7d4a</color>
+    <color name="blue_light_575bfc">#575bfc</color>
 
 </resources>

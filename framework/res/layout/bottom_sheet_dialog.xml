@@ -46,24 +46,24 @@
             android:textSize="@dimen/font_26px" />
     </LinearLayout>
 
-    <View
-        android:id="@+id/divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#DEDEDE"></View>
-
     <TextView
         android:id="@+id/content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="#ffffff"
+        android:background="@color/common_white_bg_color"
         android:gravity="center"
-        android:paddingLeft="@dimen/px20"
-        android:paddingTop="@dimen/px20"
-        android:paddingRight="@dimen/px20"
-        android:text="@dimen/font_26px"
+        android:paddingTop="@dimen/px11"
+        android:paddingBottom="@dimen/px30"
+        android:text="@dimen/font_24px"
+        android:textColor="@color/font_min_title"
         android:visibility="gone" />
+
+    <View
+        android:id="@+id/divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#DEDEDE"></View>
 
     <FrameLayout
         android:id="@+id/content_dialog"
