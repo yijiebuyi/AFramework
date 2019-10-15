@@ -68,7 +68,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected LinearLayout mBaseLayout;
     protected FrameLayout mParentContent;
     protected FrameLayout mBaseContent;
-    private LinearLayout mProgressBar;
     protected LinearLayout mFailedView;
     private TextView mRefreshTv;
 
@@ -258,14 +257,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         mRightDot = findViewById(R.id.circle_right);
 
         mRefreshTv = (TextView) findViewById(R.id.failed_reflesh);
-        mProgressBar = (LinearLayout) findViewById(R.id.base_progress);
-        mProgressBar.setOnTouchListener(new OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
         mFailedView = (LinearLayout) findViewById(R.id.base_failed);
         mFailedView.setOnTouchListener(new OnTouchListener() {
 
@@ -388,56 +379,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 显示对话框进度
-     *
-     * @param cancelable
-     * @deprecated
-     */
-    public final void showProgress(boolean cancelable) {
-        mIsCancelable = cancelable;
-        mFailedView.setVisibility(View.GONE);
-        mProgressBar.getBackground().setAlpha(100);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 显示对话框进度
-     *
-     * @param handlerId
-     * @param cancelable
-     * @deprecated
-     */
-    public final void showProgress(String handlerId, boolean cancelable) {
-        mIsCancelable = cancelable;
-        mFailedView.setVisibility(View.GONE);
-        mProgressBar.getBackground().setAlpha(100);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 关闭对话框进度
-     *
-     * @deprecated
-     */
-    public final void closeProgress() {
-        mIsCancelable = false;
-        if (mProgressBar != null) {
-            mProgressBar.setVisibility(View.GONE);
-        }
-        if (mFailedView != null) {
-            mFailedView.setVisibility(View.GONE);
-        }
-
-    }
-
-    /**
      * 显示加载失败view
      *
      * @param listener
      */
     public final void showFailedView(OnClickListener listener) {
         mIsCancelable = false;
-        mProgressBar.setVisibility(View.GONE);
         mFailedView.setVisibility(View.VISIBLE);
         if (listener != null) {
             mRefreshTv.setOnClickListener(listener);

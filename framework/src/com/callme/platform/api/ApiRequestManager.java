@@ -8,6 +8,7 @@ import com.callme.platform.api.callback.FileRequestCallback;
 import com.callme.platform.api.callback.GeneralRequestCallback;
 import com.callme.platform.api.callback.RequestCallback;
 import com.callme.platform.api.listenter.RequestListener;
+import com.callme.platform.api.listenter.UiHandler;
 import com.callme.platform.api.request.Request;
 import com.callme.platform.common.HttpResponseUi;
 
@@ -82,60 +83,6 @@ public class ApiRequestManager {
     }
 
     /**
-     * 异步请求(后台运行)
-     *
-     * @param call
-     * @param listener
-     * @param <T>
-     */
-    public <T> void enqueueRequestInBackground(final Call call, RequestListener<T> listener) {
-        if (listener != null) {
-            listener.onPreStart();
-        }
-
-        RequestCallback callback = new RequestCallback(listener);
-        call.enqueue(callback);
-    }
-
-    /**
-     * 同步请求
-     *
-     * @param call
-     * @param listener
-     * @param <T>
-     */
-    public static <T> void executeRequest(final Call call, RequestListener<T> listener) {
-        if (listener != null) {
-            listener.onPreStart();
-        }
-
-        RequestCallback callback = new RequestCallback(listener);
-        try {
-            Response response = call.execute();
-            callback.onResponse(null, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            callback.onFailure(null, e);
-        }
-    }
-
-    /**
-     * 下载文件
-     *
-     * @param call
-     * @param filePath 保存的文件路径
-     * @param listener
-     */
-    public void download(final Call call, final String filePath, final RequestListener<String> listener) {
-        if (listener != null) {
-            listener.onPreStart();
-        }
-
-        FileRequestCallback callback = new FileRequestCallback(mHandler, filePath, listener);
-        call.enqueue(callback);
-    }
-
-    /**
      * 异步请求
      * 非业务的接口请求
      *
@@ -160,4 +107,146 @@ public class ApiRequestManager {
         GeneralRequestCallback callback = new GeneralRequestCallback();
         request.enqueue(ui, listener, callback);
     }
+
+    //==============================================================================================
+
+    /**
+     * 异步请求
+     * <p>
+     * MVVM 网络请求(UiHandler中的方法将不会执行，及默认不会关闭对话框，显示失败view)
+     *
+     * @param context
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public <T> void enqueue(Context context, final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+        HttpResponseUi ui = new HttpResponseUiImpl(call, listener);
+        ui.onPreStart();
+
+        Request request = new Request(context, mHandler, call, listener);
+        request.enqueue(ui);
+    }
+
+    /**
+     * 异步请求
+     * <p>
+     * MVVM 网络请求
+     *
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public <T> void enqueueRequest(UiHandler uiHandler, final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+        HttpResponseUi ui = new HttpResponseUiImpl(uiHandler, call, listener);
+        ui.onPreStart();
+
+        Request request = new Request(uiHandler.getApplicationContext(), mHandler, call, listener);
+        request.enqueue(ui);
+    }
+
+    /**
+     * 异步请求
+     * MVVM 非业务的接口请求(UiHandler中的方法将不会执行，及默认不会关闭对话框，显示失败view)
+     *
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public <T> void enqueueGeneral(Context context, final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+
+        HttpResponseUi ui = new HttpResponseUiImpl(call, listener);
+        ui.onPreStart();
+
+        Request request = new Request(context, mHandler, call);
+        GeneralRequestCallback callback = new GeneralRequestCallback();
+        request.enqueue(ui, listener, callback);
+    }
+
+    /**
+     * 异步请求
+     * MVVM 非业务的接口请求
+     *
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public <T> void enqueueGeneralRequest(UiHandler uiHandler, final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+
+        HttpResponseUi ui = new HttpResponseUiImpl(uiHandler, call, listener);
+        ui.onPreStart();
+
+        Request request = new Request(uiHandler.getApplicationContext(), mHandler, call);
+        GeneralRequestCallback callback = new GeneralRequestCallback();
+        request.enqueue(ui, listener, callback);
+    }
+    //===============================================================================================
+
+
+    /**
+     * 异步请求(后台运行)
+     *
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public <T> void enqueueRequestInBackground(final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+
+        RequestCallback callback = new RequestCallback(listener);
+        call.enqueue(callback);
+    }
+
+    /**
+     * 同步请求(当前线程执行)
+     *
+     * @param call
+     * @param listener
+     * @param <T>
+     */
+    public static <T> void executeRequest(final Call call, RequestListener<T> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+
+        RequestCallback callback = new RequestCallback(listener);
+        try {
+            Response response = call.execute();
+            callback.onResponse(null, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailure(null, e);
+        }
+    }
+
+    /**
+     * 下载文件(后台运行)
+     *
+     * @param call
+     * @param filePath 保存的文件路径
+     * @param listener
+     */
+    public void download(final Call call, final String filePath, final RequestListener<String> listener) {
+        if (listener != null) {
+            listener.onPreStart();
+        }
+
+        FileRequestCallback callback = new FileRequestCallback(mHandler, filePath, listener);
+        call.enqueue(callback);
+    }
+
 }

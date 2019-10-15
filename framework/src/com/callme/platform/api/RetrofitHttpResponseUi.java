@@ -7,11 +7,11 @@ import android.widget.Toast;
 
 import com.callme.platform.R;
 import com.callme.platform.api.callback.ErrorCode;
+import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.base.BaseActivity;
 import com.callme.platform.base.BaseFragment;
 import com.callme.platform.common.HttpGlobalListener;
 import com.callme.platform.common.HttpResponseUi;
-import com.callme.platform.api.listenter.RequestListener;
 
 import retrofit2.Call;
 
@@ -70,17 +70,9 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
 
         if (mComeFrom != null && mBeShownProgress) {
             if (mComeFrom instanceof BaseActivity) {
-                if (showProgressDialog) {
-                    ((BaseActivity) mComeFrom).showProgressDialog(cancelable);
-                } else {
-                    ((BaseActivity) mComeFrom).showProgress(cancelable);
-                }
+                ((BaseActivity) mComeFrom).showProgressDialog(cancelable);
             } else if (mComeFrom instanceof BaseFragment) {
-                if (showProgressDialog) {
-                    ((BaseFragment) mComeFrom).showProgressDialog(cancelable);
-                } else {
-                    ((BaseFragment) mComeFrom).showProgress(cancelable);
-                }
+                ((BaseFragment) mComeFrom).showProgressDialog(cancelable);
             }
         }
     }
@@ -184,10 +176,8 @@ public class RetrofitHttpResponseUi implements HttpResponseUi {
     private void closeLoadingProgress() {
         if (mComeFrom instanceof BaseActivity) {
             ((BaseActivity) mComeFrom).closeProgressDialog();
-            ((BaseActivity) mComeFrom).closeProgress();
         } else if (mComeFrom instanceof BaseFragment) {
             ((BaseFragment) mComeFrom).closeProgressDialog();
-            ((BaseFragment) mComeFrom).closeProgress();
         }
     }
 

@@ -9,10 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
@@ -29,7 +27,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
 	protected LinearLayout mContainer;
-	private View mFragmentProgress;
 	private View mFragmentFailed;
 	private View mFragmentEmpty;
 	// 加载框是否可以取消
@@ -57,14 +54,6 @@ public abstract class BaseFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.base_fragment, null);
 		mContainer = (LinearLayout) view.findViewById(R.id.base_fragment_container);
-		mFragmentProgress = view.findViewById(R.id.base_fragment_progress);
-		mFragmentProgress.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return true;
-			}
-		});
 		mFragmentFailed = view.findViewById(R.id.base_fragment_failed);
 		mFragmentEmpty = view.findViewById(R.id.base_fragment_empty);
 
@@ -91,7 +80,6 @@ public abstract class BaseFragment extends Fragment {
 	private void initDefault() {
 		LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT);
-		mFragmentProgress.setLayoutParams(params);
 		mFragmentFailed.setLayoutParams(params);
 		mContainer.setLayoutParams(params);
 	}
@@ -133,69 +121,6 @@ public abstract class BaseFragment extends Fragment {
 	}
 
 	/**
-	 * 以view的形式显示加载提示
-	 * 
-	 *            数据访问的handler
-	 * @param cancelable
-	 *            是否可以取消请求
-	 * @deprecated
-	 */
-	public final void showProgress(String handlerId, boolean cancelable) {
-		Activity activity = getActivity();
-		if (activity instanceof BaseActivity) {
-			if (TextUtils.isEmpty(handlerId)) {
-				((BaseActivity) activity).showProgress(cancelable);
-			} else {
-				((BaseActivity) activity).showProgress(handlerId, cancelable);
-			}
-		} else {
-			isCancelable = cancelable;
-			mFragmentFailed.setVisibility(View.GONE);
-			mFragmentProgress.getBackground().setAlpha(100);
-			mFragmentProgress.setVisibility(View.VISIBLE);
-		}
-	}
-
-	/**
-	 * 以view的形式显示加载提示
-	 *
-	 *            数据访问的handler
-	 * @param cancelable
-	 *            是否可以取消请求
-	 * @deprecated
-	 */
-	public final void showProgress(boolean cancelable) {
-		Activity activity = getActivity();
-		if (activity instanceof BaseActivity) {
-			((BaseActivity) activity).showProgress(cancelable);
-		}
-	}
-
-	/**
-	 * 关闭view形式的加载提示
-	 * @deprecated
-	 */
-	public final void closeProgress() {
-		Activity activity = getActivity();
-		if (activity instanceof BaseActivity) {
-			((BaseActivity) activity).closeProgress();
-		} else {
-			isCancelable = false;
-			mFragmentFailed.setVisibility(View.GONE);
-			mFragmentProgress.setVisibility(View.GONE);
-		}
-	}
-
-	public final void closeProgress(String handlerId) {
-		if (TextUtils.isEmpty(handlerId)) {
-			return;
-		}
-		isCancelable = false;
-		mFragmentFailed.setVisibility(View.GONE);
-		mFragmentProgress.setVisibility(View.GONE);
-	}
-
-	/**
 	 * 显示view形式的加载失败提示
 	 * 
 	 * @param listener
@@ -203,7 +128,6 @@ public abstract class BaseFragment extends Fragment {
 	 */
 	public final void showFailedView(OnClickListener listener) {
 		isCancelable = false;
-		mFragmentProgress.setVisibility(View.GONE);
 		mFragmentFailed.setVisibility(View.VISIBLE);
 		mFragmentFailed.setOnClickListener(listener);
 	}
@@ -233,7 +157,6 @@ public abstract class BaseFragment extends Fragment {
 			desp.setText(desId);
 		}
 		mFragmentEmpty.setVisibility(View.VISIBLE);
-		mFragmentProgress.setVisibility(View.GONE);
 		mFragmentFailed.setVisibility(View.GONE);
 	}
 
@@ -264,7 +187,6 @@ public abstract class BaseFragment extends Fragment {
 
 				@Override
 				public void onDismiss(DialogInterface dialog) {
-//					cancelSingleRequest(handlerId);
 					isCancelable = false;
 				}
 			});
@@ -272,7 +194,6 @@ public abstract class BaseFragment extends Fragment {
 
 				@Override
 				public void onCancel(DialogInterface dialog) {
-//					cancelSingleRequest(handlerId);
 					isCancelable = false;
 				}
 			});

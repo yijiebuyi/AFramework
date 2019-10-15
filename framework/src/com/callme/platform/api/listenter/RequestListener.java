@@ -4,11 +4,19 @@ package com.callme.platform.api.listenter;
 import org.json.JSONObject;
 
 public abstract class RequestListener<T> {
-
     /**
      * http请求前
      */
     public void onPreStart() {
+    }
+
+    /**
+     * 是否取消自动关闭对话框
+     *
+     * @return
+     */
+    public boolean cancelAutoCloseProgressDialog() {
+        return false;
     }
 
     /**

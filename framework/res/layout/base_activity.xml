@@ -35,22 +35,6 @@
 
         </FrameLayout>
 
-        <!--加载进度条-->
-        <LinearLayout
-            android:id="@+id/base_progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/common_black"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <include
-                android:id="@+id/progress_view"
-                layout="@layout/dialog_progress_loading" />
-
-        </LinearLayout>
-
         <!--加载失败的布局-->
         <include
             android:id="@+id/base_failed"
