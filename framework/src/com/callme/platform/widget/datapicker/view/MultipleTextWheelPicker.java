@@ -30,6 +30,10 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
     protected List<TextWheelPickerAdapter> mTextWheelPickerAdapters;
     protected List<String> mPickedData;
     protected OnMultiPickListener mOnMultiPickListener;
+    private Integer mLineColor;
+    private int mTextColor;
+    private int mTextSize;
+    private boolean mFakeBoldText;
 
     public MultipleTextWheelPicker(Context context) {
         super(context);
@@ -93,11 +97,14 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
                     twp.setTouchable(mp.texts.size() != 1);
                     twp.setOnWheelPickedListener(this);
 
-                    twp.setTextColor(context.getResources().getColor(R.color.font_black));
+                    twp.setTextColor(mTextColor > 0 ? mTextColor : context.getResources().getColor(R.color.font_black));
                     twp.setVisibleItemCount(7);
-                    twp.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_32px));
+                    twp.setTextSize(mTextSize > 0 ? mTextSize : context.getResources().getDimensionPixelSize(R.dimen.font_32px));
                     twp.setItemSpace(context.getResources().getDimensionPixelOffset(R.dimen.px25));
-
+                    if (mLineColor != null) {
+                        twp.setLineColor(mLineColor);
+                    }
+                    twp.getPaint().setFakeBoldText(mFakeBoldText);
                     addView(twp, llParams);
                     mWheelPickers.add(twp);
 
@@ -128,6 +135,7 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
 
     public interface OnMultiPickListener {
         public void onDataPicked(List<String> pickedData);
+
         public void onCancel();
     }
 
@@ -135,7 +143,7 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
         if (textSize < 0) {
             return;
         }
-
+        mTextSize = textSize;
         if (mWheelPickers == null) {
             return;
         }
@@ -146,6 +154,7 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
     }
 
     public void setTextColor(int textColor) {
+        mTextColor = textColor;
         if (mWheelPickers == null) {
             return;
         }
@@ -156,6 +165,7 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
     }
 
     public void setLineColor(int lineColor) {
+        mLineColor = lineColor;
         if (mWheelPickers == null) {
             return;
         }
@@ -192,6 +202,16 @@ public class MultipleTextWheelPicker<T extends MultiplePickerData> extends Linea
 
         for (TextWheelPicker picker : mWheelPickers) {
             picker.setVisibleItemCount(itemCount);
+        }
+    }
+
+    public void setFakeBoldText(boolean fakeBoldText) {
+        if (mWheelPickers == null) {
+            return;
+        }
+        mFakeBoldText = fakeBoldText;
+        for (TextWheelPicker picker : mWheelPickers) {
+            picker.getPaint().setFakeBoldText(fakeBoldText);
         }
     }
 
