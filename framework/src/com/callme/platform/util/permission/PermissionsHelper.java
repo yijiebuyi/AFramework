@@ -120,6 +120,43 @@ public class PermissionsHelper {
                 }).start();
     }
 
+    /**
+     * 权限请求.注意：同时请求多个权限的时候在AbsPermissionCallback.onGranted
+     * 方法中要判断返回的权限集合中是否包有xx权限
+     *
+     * @param context
+     * @param permissions 要申请的权限
+     * @param strict 是否是严苛模式
+     * @param l
+     */
+    public void requestPermissions(final Context context, final String[] permissions,
+            boolean strict, final PermissionCallback l) {
+        if (context == null || permissions == null) {
+            return;
+        }
+
+        AndPermission.with(context)
+                .runtime()
+                .permission(permissions)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        onActionCallback(context, data, l);
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        if (strict) {
+                            onDeniedAction(context, data, l);
+                        } else {
+                            data = new ArrayList<>(Arrays.asList(permissions));
+                            onActionCallback(context, data, l);
+                        }
+                    }
+                }).start();
+    }
+
     public static boolean hasPermissions(Context context, String... permissions) {
         return AndPermission.hasPermissions(context, permissions);
     }
