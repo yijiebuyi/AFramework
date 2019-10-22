@@ -580,7 +580,7 @@ public class DataPicker {
             ((MultipleTextWheelPicker) picker).setTextColor(context.getResources().getColor(R.color.font_black));
             ((MultipleTextWheelPicker) picker).setVisibleItemCount(7);
             ((MultipleTextWheelPicker) picker).setFakeBoldText(true);
-            ((MultipleTextWheelPicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_40px));
+            ((MultipleTextWheelPicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_38px));
             ((MultipleTextWheelPicker) picker).setItemSpace(context.getResources().getDimensionPixelOffset(R.dimen.px25));
             ((MultipleTextWheelPicker) picker).setLineColor(context.getResources().getColor(R.color.common_bar_bg_color));
         } else if (picker instanceof FutureTimePicker) {
@@ -593,7 +593,7 @@ public class DataPicker {
             ((TextWheelPicker) picker).setBackgroundDrawable(new ColorDrawable(Color.WHITE));
             ((TextWheelPicker) picker).setTextColor(context.getResources().getColor(R.color.font_black));
             ((TextWheelPicker) picker).setVisibleItemCount(7);
-            ((TextWheelPicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_40px));
+            ((TextWheelPicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_38px));
             ((TextWheelPicker) picker).getPaint().setFakeBoldText(true);
             ((TextWheelPicker) picker).setItemSpace(context.getResources().getDimensionPixelOffset(R.dimen.px25));
             ((TextWheelPicker) picker).setLineColor(context.getResources().getColor(R.color.common_bar_bg_color));
