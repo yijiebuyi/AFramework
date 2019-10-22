@@ -6,7 +6,7 @@
     android:background="@drawable/common_white_bg_corner"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/px60">
+    android:paddingBottom="@dimen/px50">
 
     <RelativeLayout
         android:id="@+id/dialog_top"
@@ -19,8 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/px20"
             android:layout_marginTop="@dimen/px59"
+            android:layout_marginBottom="@dimen/px20"
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/kindly_tips"
@@ -37,8 +37,8 @@
             android:id="@+id/close_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
             android:padding="@dimen/px16"
             android:src="@drawable/ic_dialog_close"
             android:visibility="gone" />
@@ -59,10 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/custom_ll"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/px50"
             android:layout_marginLeft="@dimen/px54"
+            android:layout_marginTop="@dimen/px56"
             android:layout_marginRight="@dimen/px54"
-            android:layout_marginTop="@dimen/px45">
+            android:layout_marginBottom="@dimen/px50">
 
             <TextView
                 android:id="@+id/dialog_msg"
@@ -81,8 +81,8 @@
         android:id="@+id/dialog_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/px40"
         android:layout_marginTop="@dimen/px20"
+        android:layout_marginBottom="@dimen/px40"
         android:cacheColorHint="@color/transparent"
         android:divider="@null"
         android:visibility="gone"></ListView>
