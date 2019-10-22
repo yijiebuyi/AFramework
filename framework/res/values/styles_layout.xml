@@ -3,38 +3,38 @@
 
     <!-- 水平分割线的style -->
     <style name="divider_horizontal">
-        <item name="android:background">@color/layout_grey3</item>
+        <item name="android:background">@color/dark_hor_divide_line</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px1</item>
     </style>
     <!-- 水平分割线的style2 -->
     <style name="divider_horizontal2">
-        <item name="android:background">@color/layout_grey7</item>
+        <item name="android:background">@color/hor_divide_line</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px1</item>
     </style>
     <!-- 水平分割线的style3 -->
     <style name="divider_horizontal3">
-        <item name="android:background">@color/layout_grey8</item>
+        <item name="android:background">@color/dark_hor_divide_line2</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/px1</item>
     </style>
     <!-- 水平分割线的style之有间隔 -->
     <style name="divider_horizontal_padding">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:src">#cccccc</item>
+        <item name="android:src">@color/dark_ver_divide_line</item>
         <item name="android:background">@color/layout_white</item>
         <item name="android:layout_height">@dimen/px1</item>
         <item name="android:contentDescription">@null</item>
     </style>
     <!-- 垂直分割线的style -->
     <style name="divider_vertical">
-        <item name="android:background">@color/layout_grey3</item>
+        <item name="android:background">@color/dark_ver_divide_line</item>
         <item name="android:layout_width">@dimen/px1</item>
     </style>
     <!-- 垂直分割线的style2 -->
     <style name="divider_vertical2">
-        <item name="android:background">@color/layout_grey7</item>
+        <item name="android:background">@color/ver_divide_line</item>
         <item name="android:layout_width">@dimen/px1</item>
     </style>
 

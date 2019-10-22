@@ -113,6 +113,12 @@
     <color name="hor_divide_line">#E0E0E0</color>
     <!--vertical divide line-->
     <color name="ver_divide_line">#E0E0E0</color>
+    <!--dark horizontal divide line-->
+    <color name="dark_hor_divide_line">#CCCCCC</color>
+    <!--dark horizontal divide line2-->
+    <color name="dark_hor_divide_line2">#BBBBBB</color>
+    <!--dark vertical divide line-->
+    <color name="dark_ver_divide_line">#CCCCCC</color>
 
     <!--crop,image-->
     <color name="crop_background">#fffafafa</color>
