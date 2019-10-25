@@ -131,5 +131,6 @@
     <color name="crop_blue">#32a5e7</color>
     <color name="font_min_title">#fc7d4a</color>
     <color name="blue_light_575bfc">#575bfc</color>
+    <color name="gray_d1e1ea">#d1e1ea</color>
 
 </resources>
