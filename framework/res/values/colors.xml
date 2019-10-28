@@ -110,9 +110,9 @@
     <color name="font_light_gray">#ffbfbfbf</color>
 
     <!--horizontal divide line-->
-    <color name="hor_divide_line">#EEFEF</color>
+    <color name="hor_divide_line">#EFEFEF</color>
     <!--vertical divide line-->
-    <color name="ver_divide_line">#E0E0E0</color>
+    <color name="ver_divide_line">#EFEFEF</color>
     <!--dark horizontal divide line-->
     <color name="dark_hor_divide_line">#CCCCCC</color>
     <!--dark horizontal divide line2-->
