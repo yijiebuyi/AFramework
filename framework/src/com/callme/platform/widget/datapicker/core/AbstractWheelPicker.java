@@ -34,7 +34,10 @@ public abstract class AbstractWheelPicker<T extends WheelPickerAdapter> extends 
     private static final int DEFAULT_COUNT = 5;
     private static final int DEFAULT_SPACE = 20;
     private static final int DEFAULT_COLOR = 0xFF000000;
-    private static final int DEFAULT_LINE_COLOR = 0XFF1F90E8;
+    /**
+     * 默认分割线颜色
+     */
+    private static final int DEFAULT_LINE_COLOR = 0XFFDDDDDD;
 
     protected VelocityTracker mTracker;
 
