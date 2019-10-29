@@ -35,7 +35,7 @@
             android:maxLength="8"
             android:singleLine="true"
             android:textColor="@drawable/common_btn_white_text_selector"
-            android:textSize="@dimen/font_26px"
+            android:textSize="13sp"
             android:visibility="gone" />
 
         <View
@@ -81,7 +81,7 @@
             android:paddingRight="@dimen/px26"
             android:singleLine="true"
             android:textColor="@drawable/common_btn_white_text_selector"
-            android:textSize="@dimen/font_26px"
+            android:textSize="13sp"
             android:visibility="gone" />
 
         <TextView

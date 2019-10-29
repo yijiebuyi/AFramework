@@ -18,7 +18,8 @@
     <color name="common_bar_bg_color">#ffdedfe0</color>
     <!-- 大标题字体颜色 -->
     <color name="common_big_title_text">#ff222222</color>
-    <color name="common_title_text">#565656</color>
+    <color name="common_title_text">#333333</color>
+    <color name="common_title_right_text">#888888</color>
     <!-- 一般的item的背景色 -->
     <color name="common_item_bg">#ffffffff</color>
     <!-- 内容描述字体颜色 -->

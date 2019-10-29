@@ -575,6 +575,7 @@ public class DataPicker {
             ((DateWheelPicker) picker).setVisibleItemCount(7);
             ((DateWheelPicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_36px));
             ((DateWheelPicker) picker).setItemSpace(context.getResources().getDimensionPixelOffset(R.dimen.px25));
+            ((DateWheelPicker) picker).setLineColor(context.getResources().getColor(R.color.common_bar_bg_color));
         } else if (picker instanceof MultipleTextWheelPicker) {
             ((MultipleTextWheelPicker) picker).setBackgroundDrawable(new ColorDrawable(Color.WHITE));
             ((MultipleTextWheelPicker) picker).setTextColor(context.getResources().getColor(R.color.font_black));
@@ -589,6 +590,7 @@ public class DataPicker {
             ((FutureTimePicker) picker).setVisibleItemCount(7);
             ((FutureTimePicker) picker).setTextSize(context.getResources().getDimensionPixelSize(R.dimen.font_36px));
             ((FutureTimePicker) picker).setItemSpace(context.getResources().getDimensionPixelOffset(R.dimen.px25));
+            ((FutureTimePicker) picker).setLineColor(context.getResources().getColor(R.color.common_bar_bg_color));
         } else if (picker instanceof TextWheelPicker) {
             ((TextWheelPicker) picker).setBackgroundDrawable(new ColorDrawable(Color.WHITE));
             ((TextWheelPicker) picker).setTextColor(context.getResources().getColor(R.color.font_black));
