@@ -29,9 +29,6 @@ public abstract class BaseFragment extends Fragment {
 	protected LinearLayout mContainer;
 	private View mFragmentFailed;
 	private View mFragmentEmpty;
-	// 加载框是否可以取消
-	private boolean isCancelable = false;
-	private LoadingProgressDialog mLoadingProgressDialog;
 	protected Context mContext;
 
 	protected Unbinder mBinder;
@@ -84,10 +81,6 @@ public abstract class BaseFragment extends Fragment {
 		mContainer.setLayoutParams(params);
 	}
 
-	public final boolean getProgressCancelable() {
-		return isCancelable;
-	}
-
 	public final void addContainerView(View view) {
 		if (view != null) {
 			LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -127,7 +120,6 @@ public abstract class BaseFragment extends Fragment {
 	 *            数据加载失败的点击事件
 	 */
 	public final void showFailedView(OnClickListener listener) {
-		isCancelable = false;
 		mFragmentFailed.setVisibility(View.VISIBLE);
 		mFragmentFailed.setOnClickListener(listener);
 	}
@@ -181,11 +173,6 @@ public abstract class BaseFragment extends Fragment {
 		Activity activity = getActivity();
 		if (activity instanceof BaseActivity) {
 			((BaseActivity) activity).closeProgressDialog();
-		} else {
-			isCancelable = false;
-			if (mLoadingProgressDialog != null && mLoadingProgressDialog.isShowing()) {
-				mLoadingProgressDialog.dismiss();
-			}
 		}
 	}
 
