@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
  */
 public class TimeUtil {
 
+    public static final String TIME_YYYY_MM = "yyyy-MM";
     public static final String TIME_YYYY_MM_DD = "yyyy-MM-dd";
     public static final String TIME_YYYY_MM_DD2 = "yyyy'/'MM'/'dd";
     public static final String TIME_YYYY_MM_DD3 = "yyyy.MM.dd";
