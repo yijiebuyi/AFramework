@@ -152,10 +152,75 @@ public class StringUtil {
         for (int i = 0; i < end - start; i++) {
             stringBuilder.append("*");
         }
-        if (end < dest.length()){
+        if (end < dest.length()) {
             stringBuilder.append(dest.substring(end));
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * 判断字符串中是否包含中文
+     *
+     * @param str 待校验字符串
+     * @return 是否为中文
+     * @warn 不能校验是否为中文标点符号
+     */
+    public static boolean isContainChinese(String str) {
+        Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判定输入的是否是汉字
+     *
+     * @param c 被校验的字符
+     * @return true代表是汉字
+     */
+    public static boolean isChinese(char c) {
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+        if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 过滤掉中文
+     *
+     * @param str 待过滤中文的字符串
+     * @return 过滤掉后字符串
+     */
+    public static String filterChinese(String str) {
+        boolean flag = isContainChinese(str);
+        if (flag) {// 包含中文
+            // 用于拼接过滤中文后的字符
+            StringBuffer sb = new StringBuffer();
+            // 用于校验是否为中文
+            boolean flag2;
+            // 用于临时存储单字符
+            char chinese = 0;
+            // 5.去除掉文件名中的中文
+            // 将字符串转换成char[]
+            char[] charArray = str.toCharArray();
+            // 过滤到中文及中文字符
+            for (int i = 0; i < charArray.length; i++) {
+                chinese = charArray[i];
+                flag2 = isChinese(chinese);
+                if (flag2) {// 是中日韩文字及标点符号
+                    sb.append(chinese);
+                }
+            }
+            return sb.toString();
+        }
+        return "";
     }
 }
