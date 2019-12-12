@@ -34,6 +34,7 @@ public class TimeUtil {
     public static final String TIME_YYYY_MM_DD2 = "yyyy'/'MM'/'dd";
     public static final String TIME_YYYY_MM_DD3 = "yyyy.MM.dd";
     public static final String TIME_YYYY_MM_DD_T_HH_MM_SS = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String TIME_YYYY_MM_DD_T_HH_MM_SS_SSSZ = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String TIME_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     public static final String TIME_YYYY_MM_DD_HH_MM_SS2 = "yyyyMMddHHmmss";
     public static final String TIME_YYYY_MM_DD_HH_MM_SS3 = "yyyy.MM.dd HH:mm";
