@@ -19,19 +19,28 @@ import retrofit2.Retrofit;
  * 修改日期
  */
 public class RetrofitManager {
+    private static Retrofit mRetrofit;
 
     public static Retrofit getRetrofit(String server, OkHttpClient client) {
         return getRetrofit(server, client, new Retrofit2ConverterFactory());
     }
 
     public static Retrofit getRetrofit(String server, OkHttpClient client, Converter.Factory convertFactory) {
-        Retrofit.Builder builder = new Retrofit.Builder()
+        Retrofit retrofit;
+        Retrofit.Builder builder = mRetrofit == null ? new Retrofit.Builder() : mRetrofit.newBuilder();
+
+       builder = builder
                 .baseUrl(server)
                 .client(client);
         if (convertFactory != null) {
             builder.addConverterFactory(convertFactory);
         }
 
-        return builder.build();
+        retrofit = builder.build();
+        if (mRetrofit == null) {
+            mRetrofit = retrofit;
+        }
+
+        return retrofit;
     }
 }
