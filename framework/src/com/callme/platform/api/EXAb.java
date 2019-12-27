@@ -34,6 +34,13 @@ public class EXAb {
         return txqa;
     }
 
+    public static boolean unavailable(Context ctx) {
+        //SharedPreferences sfd = getSf(ctx);
+        //return sfd.getInt("txqa", 0);
+
+        return txqa == 1;
+    }
+
     private static SharedPreferences getSf(Context ctx) {
         SharedPreferences sfd = ctx
                 .getSharedPreferences(
