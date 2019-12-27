@@ -19,14 +19,19 @@ import com.callme.platform.util.DevicesUtil;
  * 修改日期
  */
 public class EXAb {
+    public static int txqa;
     public static void sv(Context ctx, int f) {
-        SharedPreferences sfd = getSf(ctx);
-        sfd.edit().putInt("txqa", f).commit();
+        //SharedPreferences sfd = getSf(ctx);
+        //sfd.edit().putInt("txqa", f).commit();
+
+        txqa = f;
     }
 
     public static int gt(Context ctx) {
-        SharedPreferences sfd = getSf(ctx);
-        return sfd.getInt("txqa", 0);
+        //SharedPreferences sfd = getSf(ctx);
+        //return sfd.getInt("txqa", 0);
+
+        return txqa;
     }
 
     private static SharedPreferences getSf(Context ctx) {
