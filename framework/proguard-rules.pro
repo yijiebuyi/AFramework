@@ -229,9 +229,11 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
--keep public class [您的应用包名].R$*{
+-keep public class com.huwochuxing.foundations.R$*{
 public static final int *;
 }
 
 -keep class * extends com.callme.platform.util.db.Entry { *; }
+-keep class * extends com.callme.platform.mvvm.model.ResultModel { *; }
+-keep class com.callme.platform.mvvm.model.ResultModel { *; }
 
