@@ -39,15 +39,8 @@
 -keep public class * extends android.app.Fragment
 
 
--keep class com.adjust.sdk.** { *; }
--keep class xlf.nrl.** { *; }
-
 
 # For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
 -keepclasseswithmembernames class * {
     native <methods>;
 }
@@ -81,25 +74,6 @@
 -keepattributes JavascriptInterface
 -keepattributes *Annotation*
 
-
--dontwarn com.bumptech.glide.**
-
-
-#高德
--dontwarn com.amap.api.**
--keep class com.amap.api.**{*;}
-
--dontwarn com.autonavi.**
--keep class com.autonavi.**{*;}
-
-# gettui
--dontwarn com.igexin.**
--keep class com.igexin.**{*;}
-
-#讯飞语音
--keep class com.iflytek.**{*;}
--keepattributes Signature
-
 -keepnames class * implements java.io.Serializable
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
@@ -112,52 +86,6 @@
     java.lang.Object writeReplace();
     java.lang.Object readResolve();
 }
-
--dontwarn com.tencent.bugly.**
--keep public class com.tencent.bugly.**{*;}
-
-#okhttputils
--dontwarn com.zhy.http.**
--keep class com.zhy.http.**{*;}
-
-#okhttp
--dontwarn okhttp3.**
--keep class okhttp3.**{*;}
-
-#okio Okio库是一个由square公司开发的，它补充了java.io和java.nio的不足，以便能够更加方便，快速的访问、存储和处理你的数据。而OkHttp的底层也使用该库作为支持。
--dontwarn okio.**
--keep class okio.**{*;}
-
-##---------------Begin: proguard configuration for Gson ----------
--keep public class com.google.gson.**
--keep public class com.google.gson.** {public private protected *;}
--keepattributes Signature
--keepattributes *Annotation*
--keep public class com.project.mocha_patient.login.SignResponseData { private *; }
-##---------------End: proguard configuration for Gson ----------
-
--keep class com.tencent.mm.opensdk.** {
-   *;
-}
--keep class com.tencent.wxop.** {
-   *;
-}
--keep class com.tencent.mm.sdk.** {
-   *;
-}
-
--dontwarn com.tencent.smtt.export.external.**
--keep class com.tencent.smtt.export.external.**{*;}
-
- #fastjson
--keepattributes Signature
--dontwarn com.alibaba.fastjson.**
--keep class com.alibaba.fastjson.**{*;}
-
-#灵云语音
--dontwarn com.sinovoice.hcicloudsdk.**
--keep class com.sinovoice.hcicloudsdk.**{*;}
-
 
 #------------------  下方是共性的排除项目         ----------------
 # 方法名中含有“JNI”字符的，认定是Java Native Interface方法，自动排除
@@ -177,15 +105,8 @@
 
 -keep class **Bean* {*;}
 
--keep class **BaseResponse* {*;}
-
 # ------------------  下方UI层需要排除的项目，UI层的都这里加     ----------------
 
--keepclassmembers class ** {
-     @com.callme.platform.util.view.** *;
- }
-
--keep class * extends com.callme.platform.base.BaseBean { *; }
 
 -keep class com.callme.platform.util.view.** { *; }
 
@@ -199,41 +120,142 @@
     *;
 }
 
--keep public class com.hyhwak.android.callmed.express.trip.MyTripFragment{
-	public void setArgmentType(com.hyhwak.android.callmed.express.trip.ReqTripBean);
+-keep class android.support.multidex.**{*;}
+
+-keep public class com.huwochuxing.foundations.R$*{
+    public static final int *;
 }
 
--keep class android.support.multidex.**{*;}
+
+#======================================================
+#Glide
+-dontwarn com.bumptech.glide.**
+
+#高德
+-dontwarn com.amap.api.**
+-keep class com.amap.api.**{*;}
+-dontwarn com.autonavi.**
+-keep class com.autonavi.**{*;}
+
+#gettui
+-dontwarn com.igexin.**
+-keep class com.igexin.**{*;}
+
+#讯飞语音
+-keep class com.iflytek.**{*;}
+-keepattributes Signature
+
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+#okio Okio库是一个由square公司开发的，它补充了java.io和java.nio的不足，
+#以便能够更加方便，快速的访问、存储和处理你的数据。而OkHttp的底层也使用该库作为支持。
+-dontwarn okio.**
+-keep class okio.**{*;}
+
+#Gson
+-keep public class com.google.gson.**
+-keep public class com.google.gson.** {public private protected *;}
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep public class com.project.mocha_patient.login.SignResponseData { private *; }
+
+#腾讯开发平台
+-keep class com.tencent.mm.opensdk.** {
+   *;
+}
+-keep class com.tencent.wxop.** {
+   *;
+}
+-keep class com.tencent.mm.sdk.** {
+   *;
+}
+-dontwarn com.tencent.smtt.export.external.**
+-keep class com.tencent.smtt.export.external.**{*;}
+
+#腾讯mta
+-keep class com.tencent.stat.*{*;}
+-keep class com.tencent.mid.*{*;}
+
+ #fastjson
+-keepattributes Signature
+-dontwarn com.alibaba.fastjson.**
+-keep class com.alibaba.fastjson.**{*;}
+
+#灵云语音
+-dontwarn com.sinovoice.hcicloudsdk.**
+-keep class com.sinovoice.hcicloudsdk.**{*;}
 
 #灵云混淆
 -dontwarn com.sinovoice.hcicloudsdk.**
 -keep class com.sinovoice.hcicloudsdk.** {*;}
-
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
-
-# Only required if you use AsyncExecutor
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
 
 #友盟
 -keep class com.umeng.** {*;}
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
 }
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
+
+# Retrofit
+# Retrofit does reflection on generic parameters and InnerClass is required to use Signature.
+-keepattributes Signature, InnerClasses
+# Retain service method parameters when optimizing.
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
 }
--keep public class com.huwochuxing.foundations.R$*{
-public static final int *;
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+# Ignore JSR 305 annotations for embedding nullability information.
+-dontwarn javax.annotation.**
+# Guarded by a NoClassDefFoundError try/catch and only used when on the classpath.
+-dontwarn kotlin.Unit
+# Top-level functions that can only be used by Kotlin.
+-dontwarn retrofit2.-KotlinExtensions
+-keep class retrofit2.** { *; }
+
+#EventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
 }
 
--keep class * extends com.callme.platform.util.db.Entry { *; }
--keep class * extends com.callme.platform.mvvm.model.ResultModel { *; }
--keep class com.callme.platform.mvvm.model.ResultModel { *; }
+#沉浸式状态栏
+-keep class com.gyf.barlibrary.* {*;}
+
+#butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+#===================================================
+-keep class com.callme.platform.widget.**{ *;}
+-keep class com.callme.platform.util.**{ *;}
+-keep class com.callme.platform.mvvm.**{ *;}
+-keep class com.callme.platform.listener.**{ *;}
+-keep class com.callme.platform.common.**{ *;}
+-keep class com.callme.platform.base.**{ *;}
+-keep class com.callme.platform.ApiRequestManager { *;}
+-keep class com.callme.platform.ApiRequestManager { *;}
+-keep class com.callme.platform.HttpConfigure { *;}
+-keep class com.callme.platform.HttpHeader { *;}
+-keep class com.callme.platform.RetrofitManager { *;}
+
+-keep class com.callme.platform.listener.*{*;}
+-keep class com.callme.platform.api.listener.*{*;}
+
 
