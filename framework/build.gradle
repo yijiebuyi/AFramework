@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.yijiebuyi'
+//apply plugin: 'com.github.dcendents.android-maven'
+//group='com.github.yijiebuyi'
 
 dependencies {
     api fileTree(dir: 'libs', include: '*.jar')
