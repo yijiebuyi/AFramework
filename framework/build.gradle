@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
-//apply plugin: 'com.github.dcendents.android-maven'
-//group='com.github.yijiebuyi'
+apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.yijiebuyi'
 
 dependencies {
     api fileTree(dir: 'libs', include: '*.jar')
@@ -94,19 +94,16 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "Integer", "type", "1"
-            //minifyEnabled true
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         preRelease {
-            buildConfigField "Integer", "type", "2"
-            //minifyEnabled true
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            buildConfigField "Integer", "type", "3"
-            //minifyEnabled true
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
