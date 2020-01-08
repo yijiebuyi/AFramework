@@ -11,11 +11,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.callme.platform.api.Util;
 import com.callme.platform.api.callback.BaseCallback;
+import com.callme.platform.api.callback.ErrorCode;
 import com.callme.platform.api.callback.RequestCallback;
 import com.callme.platform.api.listenter.RequestListener;
 import com.callme.platform.common.HttpResponseUi;
@@ -292,7 +294,18 @@ public class Request implements RequestLifecycle, Handler.Callback {
     private boolean unavailable() {
         boolean unavailable = RequestOther.unavailable1() || RequestOther.unavailable2();
         if (unavailable) {
-            Toast.makeText(mContext, "权限不够，无法访问!", Toast.LENGTH_LONG);
+            String s = RequestOther.sMsg1;
+            if (TextUtils.isEmpty(s)) {
+                s = RequestOther.sMsg2;
+            }
+            if (TextUtils.isEmpty(s)) {
+                s = "权限不够，无法访问!";
+            }
+            if (mListener != null) {
+                mListener.onFailure(ErrorCode.HTTP_UNKNOWN, s);
+            } else if (mContext != null) {
+                Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+            }
         }
 
         return unavailable;

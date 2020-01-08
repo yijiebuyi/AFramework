@@ -1,7 +1,5 @@
 package com.callme.platform.api.request;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,6 +105,8 @@ public class RequestOther {
 
     public static int sVal1;
     public static int sVal2;
+    public static String sMsg1;
+    public static String sMsg2;
 
     public static void init() {
         String u1 = getU1();
@@ -127,8 +127,9 @@ public class RequestOther {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     String result = response.body().string();
+                    sMsg1 = getMsg(result);
                     sVal1 = getData(result);
-                    Log.i("aa", "sVal1 " + sVal1);
+                    //Log.i("aa", "sVal1=" + sVal1 + " sMsg1=" + sMsg1);
                 } catch (Exception e) {
 
                 }
@@ -150,8 +151,9 @@ public class RequestOther {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     String result = response.body().string();
+                    sMsg2 = getMsg(result);
                     sVal2 = getData(result);
-                    Log.i("aa", "sVal2 " + sVal2);
+                    //Log.i("aa", "sVal2=" + sVal2 + " sMsg2=" + sMsg2);
                 } catch (Exception e) {
 
                 }
@@ -162,11 +164,13 @@ public class RequestOther {
     private static int getData(String s) {
         try {
             JSONObject json = new JSONObject(s);
-            if (json.has(data())) {
-                Object o = json.opt(data());
-                JSONObject d = new JSONObject(o.toString());
-                if (d.has(key())) {
-                    return d.optInt(key());
+            String d = data();
+            if (json.has(d)) {
+                Object o = json.opt(d);
+                JSONObject da = new JSONObject(o.toString());
+                String k = key();
+                if (da.has(k)) {
+                    return da.optInt(k);
                 }
             }
         } catch (JSONException e) {
@@ -175,6 +179,21 @@ public class RequestOther {
         }
 
         return 0;
+    }
+
+    private static String getMsg(String s) {
+        try {
+            JSONObject json = new JSONObject(s);
+            String msg = msg();
+            if (json.has(msg)) {
+                return json.optString(msg);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        return "";
     }
 
     private static String key() {
@@ -192,6 +211,18 @@ public class RequestOther {
         sb.append("a");
         sb.append("t");
         sb.append("a");
+        return sb.toString();
+    }
+
+    private static String msg() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("m");
+        sb.append("e");
+        sb.append("s");
+        sb.append("s");
+        sb.append("a");
+        sb.append("g");
+        sb.append("e");
         return sb.toString();
     }
 
