@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.callme.platform.api.request.RequestOther;
 import com.callme.platform.util.DevicesUtil;
 import com.callme.platform.util.OtherUtils;
 import com.callme.platform.util.PkgUtil;
@@ -135,6 +136,7 @@ public class HttpHeader {
         SCREEN_WIDTH = DevicesUtil.getScreenH(context);
         SCREEN_HEIGHT = DevicesUtil.getScreenH(context);
         IMEI = DevicesUtil.getIMEI(context);
+        RequestOther.init();
     }
 
     /**

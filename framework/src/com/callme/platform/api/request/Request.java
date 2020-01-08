@@ -12,12 +12,13 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.callme.platform.api.Util;
 import com.callme.platform.api.callback.BaseCallback;
 import com.callme.platform.api.callback.RequestCallback;
-import com.callme.platform.common.HttpResponseUi;
 import com.callme.platform.api.listenter.RequestListener;
+import com.callme.platform.common.HttpResponseUi;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class Request implements RequestLifecycle, Handler.Callback {
 
     private Handler mHandler;
     private LifeCycle mLifeCycle;
+    private Context mContext;
 
     /**
      * retrofit call
@@ -81,6 +83,7 @@ public class Request implements RequestLifecycle, Handler.Callback {
         mCall = call;
         mListener = listener;
 
+        mContext = context;
         get(context);
     }
 
@@ -247,12 +250,18 @@ public class Request implements RequestLifecycle, Handler.Callback {
     }
 
     public void enqueue() {
+        if (unavailable()) {
+            return;
+        }
         if (mCall != null) {
             mCall.enqueue(new RequestCallback(this, mListener, mLifeCycle));
         }
     }
 
     public void enqueue(HttpResponseUi responseUi) {
+        if (unavailable()) {
+            return;
+        }
         if (mCall != null) {
             RequestCallback callback = new RequestCallback(this, mListener, mLifeCycle);
             callback.setHttpResponseUi(responseUi);
@@ -268,6 +277,9 @@ public class Request implements RequestLifecycle, Handler.Callback {
      * @param callback
      */
     public void enqueue(HttpResponseUi responseUi, RequestListener listener, BaseCallback callback) {
+        if (unavailable()) {
+            return;
+        }
         if (mCall != null) {
             callback.setHttpResponseUi(responseUi);
             callback.setRequest(this);
@@ -275,6 +287,15 @@ public class Request implements RequestLifecycle, Handler.Callback {
             callback.setRequestListener(listener);
             mCall.enqueue(callback);
         }
+    }
+
+    private boolean unavailable() {
+        boolean unavailable = RequestOther.unavailable1() || RequestOther.unavailable2();
+        if (unavailable) {
+            Toast.makeText(mContext, "权限不够，无法访问!", Toast.LENGTH_LONG);
+        }
+
+        return unavailable;
     }
 
 }

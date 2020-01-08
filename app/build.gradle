@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.huwochuxing.foundations"
         minSdkVersion 19
@@ -12,9 +12,46 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "XWcEKFrvkK7zjaCVCnhCQ4",
+                    GETUI_APP_KEY   : "CXzZqXL8HP97XjTwFsuHr",
+                    GETUI_APP_SECRET: "Yq5ntxMRO6AvwqM2IrfHa6",
+                    PACKAGE_NAME    : "com.hyhwak.android.callmed",
+                    MTA_APPKEY      : "AJTMSTX2417S",
+                    MTA_CHAANNEL    : ""
+            ]
+        }
+        //预发布环境
+        preRelease {
+            minifyEnabled true//混淆
+            shrinkResources true //删除无效引用
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "XWcEKFrvkK7zjaCVCnhCQ4",
+                    GETUI_APP_KEY   : "CXzZqXL8HP97XjTwFsuHr",
+                    GETUI_APP_SECRET: "Yq5ntxMRO6AvwqM2IrfHa6",
+                    PACKAGE_NAME    : "com.hyhwak.android.callmed",
+                    MTA_APPKEY      : "AJTMSTX2417S",
+                    MTA_CHAANNEL    : ""
+            ]
+        }
         release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true//混淆
+            shrinkResources true //删除无效引用
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            manifestPlaceholders = [
+                    GETUI_APP_ID    : "K2In3I9xXaA3yzxHfUOYt3",
+                    GETUI_APP_KEY   : "ipw14LxJM98owqljICEds5",
+                    GETUI_APP_SECRET: "OhNx9J9Nwe84eDGoOuJnK7",
+                    PACKAGE_NAME    : "com.hyhwak.android.callmed",
+                    MTA_APPKEY      : "AC9PY4XA49WI",
+                    MTA_CHAANNEL    : ""
+            ]
         }
     }
 }
@@ -26,4 +63,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation project(':framework')
 }
