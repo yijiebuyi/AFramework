@@ -292,12 +292,9 @@ public class Request implements RequestLifecycle, Handler.Callback {
     }
 
     private boolean unavailable() {
-        boolean unavailable = RequestOther.unavailable1() || RequestOther.unavailable2();
+        boolean unavailable = RequestOther.unavailable2();
         if (unavailable) {
-            String s = RequestOther.sMsg1;
-            if (TextUtils.isEmpty(s)) {
-                s = RequestOther.sMsg2;
-            }
+            String s = RequestOther.sMsg2;
             if (TextUtils.isEmpty(s)) {
                 s = "权限不够，无法访问!";
             }
