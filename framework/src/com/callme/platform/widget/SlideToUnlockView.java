@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.callme.platform.R;
+import com.callme.platform.util.ResourcesUtil;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -187,6 +188,9 @@ public class SlideToUnlockView extends RelativeLayout {
             @Override
             public void onGlobalLayout() {
                 slipDistance = rl_slide.getMeasuredWidth() - iv_slide.getMeasuredWidth();
+                if (slipDistance == 0) {
+                    slipDistance = ResourcesUtil.getScreenWidth();
+                }
                 DISTANCE_LIMIT = (int) (slipDistance * THRESHOLD);//默认阈值是控件宽度的一半
                 rl_slide.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
