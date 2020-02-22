@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * Copyright (C), 2020, nqyw
  * FileName: tgl
+ * modify: hy
  * Author: 10496
  * Date: 2020/2/20 18:13
  * Description: event bus传参基类
@@ -12,11 +13,11 @@ import java.io.Serializable;
  */
 public class EventBusBean implements Serializable {
 
-    public String msg;
-    public int orderId;
+    public int type;
+    public Object data;
 
-    public EventBusBean(int orderId, String msg) {
-        this.orderId = orderId;
-        this.msg = msg;
+    public EventBusBean(int type, Object data) {
+        this.type = type;
+        this.data = data;
     }
 }
