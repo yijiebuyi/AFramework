@@ -42,7 +42,6 @@ import com.callme.platform.util.LogUtil;
 import com.callme.platform.util.StatisticsUtil;
 import com.callme.platform.util.ToastUtil;
 import com.gyf.barlibrary.ImmersionBar;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -181,7 +180,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         StatisticsUtil.onPause(this);
-        MobclickAgent.onPause(this);
         unregisterNetReceiver();
     }
 
@@ -189,14 +187,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         StatisticsUtil.onResume(this);
-        MobclickAgent.onResume(this);
         registerNetReceiver();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        StatisticsUtil.onStop(this);
     }
 
     @Override

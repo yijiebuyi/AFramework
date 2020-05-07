@@ -258,4 +258,6 @@
 -keep class com.callme.platform.listener.*{*;}
 -keep class com.callme.platform.api.listener.*{*;}
 
-
+#baidu统计
+-keep class com.baidu.bottom.** { *; }
+-keep class com.baidu.mobstat.** { *; }
