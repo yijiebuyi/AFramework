@@ -32,6 +32,10 @@ public class StatisticsUtil {
         UMConfigure.init(context, null, channel, UMConfigure.DEVICE_TYPE_PHONE, null);
         UMConfigure.setLogEnabled(BuildConfig.DEBUG);
         UMConfigure.setEncryptEnabled(true);
+        initBaiDu(context, channel);
+    }
+
+    public static void initBaiDu(Application context, String channel) {
         StatService.start(context);
         StatService.setDebugOn(BuildConfig.DEBUG);
         StatService.setAppChannel(channel);
