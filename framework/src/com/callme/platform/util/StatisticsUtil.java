@@ -2,6 +2,7 @@ package com.callme.platform.util;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
 import com.baidu.mobstat.StatService;
 import com.callme.platform.BuildConfig;
@@ -62,4 +63,14 @@ public class StatisticsUtil {
         MobclickAgent.onPause(activity);
     }
 
+    /**
+     * 统计点击事件
+     *
+     * @param context
+     * @param clickId
+     */
+    public static void trackClickEvent(Context context, String clickId) {
+        MobclickAgent.onEvent(context, clickId);
+        StatService.onEvent(context, clickId, "");
+    }
 }
