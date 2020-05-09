@@ -2,22 +2,25 @@
 
 buildscript {
     repositories {
+        maven { url "http://bin.huwo.io/artifactory/libs-snapshot-local/" }
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.1'
-        
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
         classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-rc2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1' // Add this line
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.1"
     }
 }
 
 allprojects {
     repositories {
+        maven { url "http://bin.huwo.io/artifactory/libs-snapshot-local/" }
         maven { url "https://jitpack.io" }
         google()
         jcenter()
