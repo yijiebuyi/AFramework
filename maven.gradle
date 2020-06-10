@@ -1,7 +1,7 @@
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 
-def packageName = 'com.callme.platform'
+def packageName = 'android.com.callme.platform'
 def libraryVersion = '1.0.0'
 
 publishing {
@@ -20,7 +20,7 @@ artifactory {
     contextUrl = 'http://bin.huwo.io/artifactory'
     publish {
         repository {
-            repoKey = 'libs-android-snapshot'
+            repoKey = 'libs-release-local'
             username = "release"
             password = "s2UiRCvHrQUbcDH6"
         }
