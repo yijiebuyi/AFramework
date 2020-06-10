@@ -1,8 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'maven-publish'
-apply from: '../artifactory.gradle'
+ext.alwaysLib = true
+apply from: 'http://bin.huwo.io/artifactory/libs-release-local/com/example/framework/framework/cc-settings-2.gradle'
+apply from: '../maven.gradle'
 apply plugin: 'com.jakewharton.butterknife'
+
 
 dependencies {
     api fileTree(include: '*.jar', dir: 'libs')
